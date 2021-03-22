@@ -1,0 +1,13 @@
+{
+    "name": "postscripton/money",
+    "description": "A convenient way to convert numbers from DB or inputs into money strings for humans",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "PostScripton",
+            "email": "postscripton.sp@gmail.com"
+        }
+    ],
+    "require": {}
+}
