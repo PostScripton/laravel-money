@@ -1,7 +1,7 @@
 {
     "name": "postscripton/money",
     "description": "A convenient way to convert numbers from DB or inputs into money strings for humans",
-  	"version": "1.0.0",
+  	"version": "1.0.1",
   	"type": "library",
     "license": "MIT",
     "authors": [
@@ -11,9 +11,11 @@
         }
     ],
     "require": {
-	  	"php": ">=7.1",
-        "orchestra/testbench": "^6.15"
+	  	"php": ">=7.1"
     },
+  	"require-dev": {
+        "orchestra/testbench": "^6.15"
+	},
 	"autoload": {
 		"psr-4": {
 			"PostScripton\\Money\\": "src/"
