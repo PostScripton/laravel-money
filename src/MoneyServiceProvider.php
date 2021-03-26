@@ -27,7 +27,7 @@ class MoneyServiceProvider extends ServiceProvider
 	protected function registerPublishing()
 	{
 		$this->publishes([
-			__DIR__ . '/../config/money.php' => config_path('money.php'),
+			__DIR__ . '/config/money.php' => config_path('money.php'),
 		], 'money');
 	}
 }
