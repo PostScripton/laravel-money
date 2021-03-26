@@ -1,11 +1,10 @@
 <?php
 
-namespace PostScripton\Money\ServiceProviders;
+namespace PostScripton\Money;
 
 use Illuminate\Support\ServiceProvider;
-use PostScripton\Money\Currency;
 use PostScripton\Money\Exceptions\CurrencyDoesNotExistException;
-use PostScripton\Money\Money;
+use PostScripton\Money\Exceptions\ShouldPublishConfigFileException;
 
 class MoneyServiceProvider extends ServiceProvider
 {
@@ -15,7 +14,7 @@ class MoneyServiceProvider extends ServiceProvider
 
 		try {
 			Money::set(' ', '.', 1, false, Currency::code('RUB'));
-		} catch (CurrencyDoesNotExistException $e) {
+		} catch (CurrencyDoesNotExistException | ShouldPublishConfigFileException $e) {
 			dd($e->getMessage());
 		}
 	}

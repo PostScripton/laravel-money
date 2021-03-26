@@ -2,7 +2,7 @@
 
 namespace PostScripton\Money\Tests;
 
-use PostScripton\Money\ServiceProviders\MoneyServiceProvider;
+use PostScripton\Money\MoneyServiceProvider;
 
 class TestCase extends \Orchestra\Testbench\TestCase
 {
