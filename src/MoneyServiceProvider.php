@@ -13,7 +13,13 @@ class MoneyServiceProvider extends ServiceProvider
 		$this->registerPublishing();
 
 		try {
-			Money::set(' ', '.', 1, false, Currency::code('RUB'));
+			Money::set(
+				config('money.thousands_separator', ' '),
+				config('money.decimal_separator', '.'),
+				config('money.decimals', 1),
+				config('money.ends_with_0', false),
+				Currency::code(config('money.default_currency', 'RUB'))
+			);
 		} catch (CurrencyDoesNotExistException | ShouldPublishConfigFileException $e) {
 			dd($e->getMessage());
 		}
