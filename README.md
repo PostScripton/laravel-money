@@ -68,7 +68,7 @@ use PostScripton\Money\Money;
 
 $money = Money::format(12345);      // "$ 1 234.5"
 $number = Money::purify($money);    // "1234.5"
-Money::integer((float)$number);     // 1234.5
+Money::integer((float)$number);     // 12345
 ```
 
 ---
