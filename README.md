@@ -3,7 +3,7 @@
 [![Total Downloads](https://img.shields.io/packagist/dt/postscripton/money.svg)](https://packagist.org/packages/postscripton/money)
 [![License](https://img.shields.io/packagist/l/postscripton/money)](https://packagist.org/packages/postscripton/money)
 
-This package provides a convenient way to convert numbers from database like (`'balance': 123450`) into money strings for humans.
+This package provides a convenient way to convert numbers from a database like (`'balance': 123450`) into money strings for humans.
 
 ## Requirements
 + PHP 7.1+
