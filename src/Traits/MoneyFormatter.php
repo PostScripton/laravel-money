@@ -25,9 +25,12 @@ trait MoneyFormatter
 	{
 		$money = str_replace(self::$thousands_separator, '', $money);
 		$money = str_replace(self::$decimal_separator, '.', $money);
-		$amount = ((float)$money) * $diff;
 
-		return self::format(self::integer($amount), $into);
+		$pattern = '/\d+\.?\d+/';
+		preg_match($pattern, $money, $money);
+		$money = $money[0];
+
+		return self::format(self::integer($money * $diff), $into);
 	}
 
 	public static function purify(string $money): string
@@ -35,8 +38,8 @@ trait MoneyFormatter
 		$money = str_replace(self::$thousands_separator, '', $money);
 		$money = str_replace(self::$decimal_separator, '.', $money);
 
-		# /\d+(\.\d+)?/ - берёт только числа (целые и дробные)
-		$pattern = '/\d+(\.\d+)?/';
+		# /\d+\.?\d+/ - берёт только числа (целые и дробные)
+		$pattern = '/\d+\.?\d+/';
 		preg_match($pattern, $money, $money);
 
 		return $money[0];
