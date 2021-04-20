@@ -1,4 +1,4 @@
-# Money Formatter for PHP
+# Money Formatter for Laravel
 [![Latest Stable Version](https://img.shields.io/packagist/v/postscripton/money.svg)](https://packagist.org/packages/postscripton/money)
 [![Total Downloads](https://img.shields.io/packagist/dt/postscripton/money.svg)](https://packagist.org/packages/postscripton/money)
 [![License](https://img.shields.io/packagist/l/postscripton/money)](https://packagist.org/packages/postscripton/money)
