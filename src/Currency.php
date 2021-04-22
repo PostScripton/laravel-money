@@ -7,80 +7,86 @@ use PostScripton\Money\Exceptions\ShouldPublishConfigFileException;
 
 class Currency
 {
-	protected static $currencies = [];
+    protected static array $currencies = [];
 
-	public const POS_START = 'start';
-	public const POS_END = 'end';
+    public const POS_START = 'start';
+    public const POS_END = 'end';
 
-	public static function code(string $code): ?Currency
-	{
-		$code = strtoupper($code);
-		if (!array_key_exists($code, self::all())) {
-			throw new CurrencyDoesNotExistException("The currency '{$code}' doesn't exist.");
-		}
+    public static function code(string $code): ?Currency
+    {
+        $code = strtoupper($code);
 
-		$currency = self::all()[$code];
+        if (!array_key_exists($code, self::all())) {
+            throw new CurrencyDoesNotExistException(__METHOD__, 1, '$code', $code);
+        }
 
-		return new Currency($code, $currency['symbol'], $currency['countries'], $currency['position']);
-	}
+        $currency = self::all()[$code];
 
-	protected static function all(): array
-	{
-		if (!static::$currencies) {
-			static::$currencies = require __DIR__ . '/List/currencies.php';
-		}
-		return static::$currencies;
-	}
+        return new Currency($code, $currency['symbol'], $currency['countries'], $currency['position']);
+    }
 
-	// ==================== ОБЪЕКТ ==================== //
+    protected static function all(): array
+    {
+        if (!static::$currencies) {
+            static::$currencies = require __DIR__ . '/List/currencies.php';
+        }
+        return static::$currencies;
+    }
 
-	private $code;
-	private $symbol;
-	private $countries;
-	private $position;
+    // ==================== OBJECT ==================== //
 
-	public function __construct(string $code, string $symbol, array $countries = [], ?string $position = null)
-	{
-		$this->code = $code;
-		$this->symbol = $symbol;
-		$this->countries = $countries;
-		$this->position = $position ?? self::POS_START;
-	}
+    private string $code;
+    private string $symbol;
+    private array $countries;
+    private string $position;
 
-	/**
-	 * @throws ShouldPublishConfigFileException
-	 */
-	public static function getConfigCurrency()
-	{
-		if (Money::configNotPublished()) {
-			throw new ShouldPublishConfigFileException();
-		}
+    public function __construct(string $code, string $symbol, array $countries = [], ?string $position = null)
+    {
+        $this->code = $code;
+        $this->symbol = $symbol;
+        $this->countries = $countries;
+        $this->position = $position ?? self::POS_START;
+    }
 
-		return config('money.default_currency');
-	}
+    /**
+     * @throws ShouldPublishConfigFileException
+     */
+    public static function getConfigCurrency(): string
+    {
+        if (Money::configNotPublished()) {
+            throw new ShouldPublishConfigFileException();
+        }
 
-	public function getCode(): string
-	{
-		return $this->code;
-	}
+        return config('money.default_currency', 'USD');
+    }
 
-	public function getSymbol(): string
-	{
-		return $this->symbol;
-	}
+    public function getCode(): string
+    {
+        return $this->code;
+    }
 
-	public function getCountries(): array
-	{
-		return $this->countries;
-	}
+    public function getSymbol(): string
+    {
+        return $this->symbol;
+    }
 
-	public function getPosition(): string
-	{
-		return $this->position;
-	}
+    public function getCountries(): array
+    {
+        return $this->countries;
+    }
 
-	public function setPosition(string $position = self::POS_START)
-	{
-		$this->position = $position;
-	}
+    public function getPosition(): string
+    {
+        return $this->position;
+    }
+
+    public function setPosition(string $position): Currency
+    {
+        if ($position !== self::POS_START || $position !== self::POS_END) {
+            $position = self::POS_START;
+        }
+
+        $this->position = $position;
+        return $this;
+    }
 }
