@@ -8,7 +8,16 @@ use PostScripton\Money\Money;
 
 class MoneyTest extends TestCase
 {
-	/** @test
+	/** @test */
+	public function Creating()
+	{
+        $money1 = Money::make(12345);
+        $money2 = new Money(12345);
+
+        $this->assertEquals($money1, $money2);
+	}
+
+    /** @test
 	 * @throws CurrencyDoesNotExistException
 	 */
 	public function BaseOfFormatting()
@@ -16,29 +25,14 @@ class MoneyTest extends TestCase
 		$usd = Currency::code('USD');
 		$rub = Currency::code('RUB');
 
-		$this->assertEquals('$ 123', Money::format(1230, $usd));
-		$this->assertEquals('$ 123.4', Money::format(1234, $usd));
-		$this->assertEquals('$ 1 234', Money::format(12340, $usd));
-		$this->assertEquals('$ 1 234.5', Money::format(12345, $usd));
+		$this->assertEquals('$ 123', Money::make(1230, $usd));
+		$this->assertEquals('$ 123.4', Money::make(1234, $usd));
+		$this->assertEquals('$ 1 234', Money::make(12340, $usd));
+		$this->assertEquals('$ 1 234.5', Money::make(12345, $usd));
 
-		$this->assertEquals('123 ₽', Money::format(1230, $rub));
-		$this->assertEquals('123.4 ₽', Money::format(1234, $rub));
-		$this->assertEquals('1 234 ₽', Money::format(12340, $rub));
-		$this->assertEquals('1 234.5 ₽', Money::format(12345, $rub));
-	}
-
-	/** @test
-	 * @throws CurrencyDoesNotExistException
-	 */
-	public function ConvertCurrenciesTest()
-	{
-		$diff = 75.32;
-		$rub = Money::format(10000, Currency::code('RUB'));
-
-		$usd = Money::convert($rub, Currency::code('USD'), 1 / $diff);
-		$rub = Money::convert($usd, Currency::code('RUB'), $diff / 1);
-
-		$this->assertEquals('$ 13.2', $usd);
-		$this->assertEquals('994.2 ₽', $rub);
+		$this->assertEquals('123 ₽', Money::make(1230, $rub));
+		$this->assertEquals('123.4 ₽', Money::make(1234, $rub));
+		$this->assertEquals('1 234 ₽', Money::make(12340, $rub));
+		$this->assertEquals('1 234.5 ₽', Money::make(12345, $rub));
 	}
 }
