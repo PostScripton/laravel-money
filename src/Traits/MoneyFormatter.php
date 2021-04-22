@@ -3,74 +3,47 @@
 namespace PostScripton\Money\Traits;
 
 use PostScripton\Money\Currency;
+use PostScripton\Money\Money;
+use PostScripton\Money\MoneySettings;
 
 trait MoneyFormatter
 {
-	public static function format(int $amount, ?Currency $currency = null): string
-	{
-		$amount = (float)($amount / self::getDivisor());
-		$money = number_format($amount, self::$decimals, self::$decimal_separator, self::$thousands_separator);
+    public static function make(float $number, ?Currency $currency = null, ?MoneySettings $settings = null): Money
+    {
+        return new Money($number, $currency, $settings);
+    }
 
-		if (!self::$ends_with_0) {
-			# /^((\d+|\s*)*\.\d*[1-9]|(\d+|\s*)*)/ - берёт всё число, кроме 0 и .*0 на конце
-			$pattern = '/^((\d+|' . self::$thousands_separator . '*)*\\' . self::$decimal_separator . '\d*[1-9]|(\d+|' . self::$thousands_separator . '*)*)/';
-			preg_match($pattern, $money, $money);
-			$money = $money[0];
-		}
+    public static function convertOffline(Money $money, Currency $into, float $coeff): Money
+    {
+        $new_amount = $money->getPureNumber() * $coeff;
 
-		return self::bindMoneyWithCurrency($money, $currency ?? self::getDefaultCurrency());
-	}
+        return self::make($new_amount, $into);
+    }
 
-	public static function convert(string $money, Currency $into, float $diff): string
-	{
-		$money = str_replace(self::$thousands_separator, '', $money);
-		$money = str_replace(self::$decimal_separator, '.', $money);
+    public static function purify(Money $money): string
+    {
+        return $money->getNumber();
+    }
 
-		$pattern = '/\d+\.?\d+/';
-		preg_match($pattern, $money, $money);
-		$money = $money[0];
+    public static function integer(Money $money): int
+    {
+        return floor($money->getPureNumber());
+    }
 
-		return self::format(self::integer($money * $diff), $into);
-	}
+    public static function correctInput(string $input): string
+    {
+        if (!str_contains($input, '.')) {
+            return $input;
+        }
 
-	public static function purify(string $money): string
-	{
-		$money = str_replace(self::$thousands_separator, '', $money);
-		$money = str_replace(self::$decimal_separator, '.', $money);
+        return substr($input, 0, strpos($input, '.') + self::$default_decimals + 1);
+    }
 
-		# /\d+\.?\d+/ - берёт только числа (целые и дробные)
-		$pattern = '/\d+\.?\d+/';
-		preg_match($pattern, $money, $money);
-
-		return $money[0];
-	}
-
-	public static function integer(float $number): int
-	{
-		return floor(self::getDivisor() * $number);
-	}
-
-	public static function correctInput(string $input): string
-	{
-		if (!str_contains($input, '.')) return $input;
-
-		return substr($input, 0, strpos($input, '.') + self::$decimals + 1);
-	}
-
-	/**
-	 * Связывает денежную строку (простые отформатированые числа) с валютным знаком
-	 * @param string $money <p>
-	 * Денежная строка без валютного знака
-	 * </p>
-	 * @param Currency $currency <p>
-	 * Валюта (константа)
-	 * </p>
-	 * @return string Денежная строка со знаком валюты
-	 */
-	private static function bindMoneyWithCurrency(string $money, Currency $currency): string
-	{
-		return $currency->getPosition() === Currency::POS_START
-			? "{$currency->getSymbol()} {$money}"
-			: "{$money} {$currency->getSymbol()}";
-	}
+    private static function bindMoneyWithCurrency(string $money, Currency $currency, bool $space = true): string
+    {
+        $space = $space ? ' ' : '';
+        return $currency->getPosition() === Currency::POS_START
+            ? $currency->getSymbol() . $space . $money
+            : $money . $space . $currency->getSymbol();
+    }
 }
