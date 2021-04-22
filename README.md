@@ -80,11 +80,11 @@ converts money from one currency to another
 use PostScripton\Money\Currency;
 use PostScripton\Money\Money;
 
-$diff = 75.32;
+$coeff = 75.32;
 $rub = Money::format(10000, Currency::code('RUB'));             // "1 000 ₽"
 
-$usd = Money::convert($rub, Currency::code('USD'), 1 / $diff);  // "$ 13.2"
-$rub = Money::convert($usd, Currency::code('RUB'), $diff);      // "994.2 ₽"
+$usd = Money::convert($rub, Currency::code('USD'), 1 / $coeff);  // "$ 13.2"
+$rub = Money::convert($usd, Currency::code('RUB'), $coeff);      // "994.2 ₽"
 ```
 As you can see, in converting currencies there is a small calculation error, which has been caused by the small decimal digits
 
