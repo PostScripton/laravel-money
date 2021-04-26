@@ -22,7 +22,7 @@ class Currency
 
         $currency = self::all()[$code];
 
-        return new Currency($code, $currency['symbol'], $currency['countries'], $currency['position']);
+        return new Currency($code, $currency['symbol'], $currency['position']);
     }
 
     protected static function all(): array
@@ -37,14 +37,12 @@ class Currency
 
     private string $code;
     private string $symbol;
-    private array $countries;
     private string $position;
 
-    public function __construct(string $code, string $symbol, array $countries = [], ?string $position = null)
+    public function __construct(string $code, string $symbol, ?string $position = null)
     {
         $this->code = $code;
         $this->symbol = $symbol;
-        $this->countries = $countries;
         $this->position = $position ?? self::POS_START;
     }
 
@@ -68,11 +66,6 @@ class Currency
     public function getSymbol(): string
     {
         return $this->symbol;
-    }
-
-    public function getCountries(): array
-    {
-        return $this->countries;
     }
 
     public function getPosition(): string

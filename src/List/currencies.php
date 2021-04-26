@@ -1,25 +1,18 @@
 <?php
 
-const START = 'start';
-const END = 'end';
+use PostScripton\Money\Currency;
 
 return [
 	'RUB' => [
 		'symbol' => '₽',
-		'position' => END,
-		'countries' => ['Russian Federation'],
+		'position' => Currency::POS_END,
 	],
 	'USD' => [
 		'symbol' => '$',
-		'position' => START,
-		'countries' => [
-			'The United State of America',
-			'Russian Federation', //...
-		],
+		'position' => Currency::POS_START,
 	],
 	'EUR' => [
 		'symbol' => '€',
-		'position' => START,
-		'countries' => [],
+		'position' => Currency::POS_START,
 	],
 ];
