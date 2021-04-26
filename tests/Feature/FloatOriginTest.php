@@ -15,10 +15,10 @@ class FloatOriginTest extends TestCase
      */
     public function FloatOrigin()
     {
-        $settings = new MoneySettings();
+        $settings = new MoneySettings;
         $settings->setOrigin(MoneySettings::ORIGIN_FLOAT);
 
-        $money = Money::make(1234.56, null, $settings);
+        $money = Money::make(1234.56, $settings);
 
         $this->assertEquals('1 234.6', $money->getNumber());
         $this->assertEquals(1234.56, $money->getPureNumber());

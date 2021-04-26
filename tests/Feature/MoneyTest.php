@@ -35,4 +35,15 @@ class MoneyTest extends TestCase
 		$this->assertEquals('1 234 ₽', Money::make(12340, $rub));
 		$this->assertEquals('1 234.5 ₽', Money::make(12345, $rub));
 	}
+
+	/** @test */
+	public function String()
+	{
+	    $money = Money::make(1234);
+
+	    $this->assertEquals('$ 123.4', $money->toString());
+	    $this->assertEquals('$ 123.4', strval($money));
+	    $this->assertEquals('$ 123.4', '' . $money);
+	    $this->assertEquals('$ 123.4', $money);
+	}
 }
