@@ -1,5 +1,5 @@
 {
-    "name": "postscripton/money",
+    "name": "postscripton/laravel-money",
     "description": "A convenient way to convert numbers from DB or inputs into money strings for humans",
   	"version": "1.1.0",
   	"type": "library",
