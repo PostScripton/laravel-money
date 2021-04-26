@@ -13,16 +13,25 @@ class Money implements MoneyInterface
     private float $number;
     public ?MoneySettings $settings;
 
-    public function __construct(float $number, ?Currency $currency = null, ?MoneySettings $settings = null)
+    public function __construct(float $number, $currency = null, $settings = null)
     {
         $this->number = $number;
 
-        if (is_null($settings)) {
+        if (is_null($settings) && !($currency instanceof MoneySettings)) {
             $settings = new MoneySettings;
         }
 
-        if (!is_null($currency)) {
+        // No parameters passed
+        if (is_null($currency)) {
+            $this->settings = $settings;
+            return;
+        }
+
+        // Only one passed. It may be Currency or Settings
+        if ($currency instanceof Currency) {
             $settings->setCurrency($currency);
+        } elseif ($currency instanceof MoneySettings) {
+            $settings = $currency;
         }
 
         $this->settings = $settings;
