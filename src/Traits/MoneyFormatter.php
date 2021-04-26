@@ -4,11 +4,10 @@ namespace PostScripton\Money\Traits;
 
 use PostScripton\Money\Currency;
 use PostScripton\Money\Money;
-use PostScripton\Money\MoneySettings;
 
 trait MoneyFormatter
 {
-    public static function make(float $number, ?Currency $currency = null, ?MoneySettings $settings = null): Money
+    public static function make(float $number, $currency = null, $settings = null): Money
     {
         return new Money($number, $currency, $settings);
     }
@@ -16,8 +15,9 @@ trait MoneyFormatter
     public static function convertOffline(Money $money, Currency $into, float $coeff): Money
     {
         $new_amount = $money->getPureNumber() * $coeff;
+        $settings = clone $money->settings;
 
-        return self::make($new_amount, $into);
+        return self::make($new_amount, $into, $settings->setCurrency($into));
     }
 
     public static function purify(Money $money): string

@@ -19,8 +19,8 @@ class ConvertCurrenciesTest extends TestCase
         $usd = Money::convertOffline($rub, Currency::code('USD'), 1 / $coeff);
         $rub = Money::convertOffline($usd, Currency::code('RUB'), $coeff / 1);
 
-        $this->assertEquals('$ 13.3', $usd);
-        $this->assertEquals('1 000 ₽', $rub);
+        $this->assertEquals('$ 13.3', $usd->toString());
+        $this->assertEquals('1 000 ₽', $rub->toString());
     }
 
     /** @test
@@ -34,7 +34,7 @@ class ConvertCurrenciesTest extends TestCase
         $usd = $rub->convertOfflineInto(Currency::code('USD'), 1 / $coeff);
         $rub = $usd->convertOfflineInto(Currency::code('RUB'), $coeff / 1);
 
-        $this->assertEquals('$ 13.3', $usd);
-        $this->assertEquals('1 000 ₽', $rub);
+        $this->assertEquals('$ 13.3', $usd->toString());
+        $this->assertEquals('1 000 ₽', $rub->toString());
     }
 }

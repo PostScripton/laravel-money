@@ -70,8 +70,9 @@ class Money implements MoneyInterface
     public function convertOfflineInto(Currency $currency, float $coeff): Money
     {
         $new_amount = $this->getPureNumber() * $coeff;
+        $settings = clone $this->settings;
 
-        return new self($new_amount, $currency);
+        return new self($new_amount, $currency, $settings->setCurrency($currency));
     }
 
     public function toInteger(): int
