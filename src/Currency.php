@@ -9,8 +9,8 @@ class Currency
 {
     protected static array $currencies = [];
 
-    public const POS_START = 'start';
-    public const POS_END = 'end';
+    public const POS_START = 0;
+    public const POS_END = 1;
 
     public static function code(string $code): ?Currency
     {
