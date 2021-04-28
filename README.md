@@ -1,7 +1,7 @@
 # 💵 Money for Laravel PHP
-[![Latest Stable Version](https://img.shields.io/packagist/v/postscripton/money.svg)](https://packagist.org/packages/postscripton/money)
-[![Total Downloads](https://img.shields.io/packagist/dt/postscripton/money.svg)](https://packagist.org/packages/postscripton/money)
-[![License](https://img.shields.io/packagist/l/postscripton/money)](https://packagist.org/packages/postscripton/money)
+[![Latest Stable Version](https://img.shields.io/packagist/v/postscripton/laravel-money.svg)](https://packagist.org/packages/postscripton/laravel-money)
+[![Total Downloads](https://img.shields.io/packagist/dt/postscripton/laravel-money.svg)](https://packagist.org/packages/postscripton/laravel-money)
+[![License](https://img.shields.io/packagist/l/postscripton/laravel-money)](https://packagist.org/packages/postscripton/laravel-money)
 
 This package provides a convenient way to convert numbers from a database like (`'balance': 123450`) into money strings for humans.
 
