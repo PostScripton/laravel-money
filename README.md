@@ -11,7 +11,7 @@ This package provides a convenient way to convert numbers from a database like (
 ## Installation
 ### via composer
 ```console
-composer require postscripton/money 
+composer require postscripton/laravel-money 
 ```
 ### Publishing
 Publish the config file through:
