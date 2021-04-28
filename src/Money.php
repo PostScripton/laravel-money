@@ -2,59 +2,102 @@
 
 namespace PostScripton\Money;
 
-use PostScripton\Money\Exceptions\CurrencyDoesNotExistException;
-use PostScripton\Money\Exceptions\ShouldPublishConfigFileException;
 use PostScripton\Money\Traits\MoneyFormatter;
+use PostScripton\Money\Traits\MoneyStatic;
 
 class Money implements MoneyInterface
 {
-	use MoneyFormatter;
+    use MoneyFormatter;
+    use MoneyStatic;
 
-	private static $default_currency;
-	private static $thousands_separator = ' ';
-	private static $decimal_separator = '.';
-	private static $decimals = 1;
-	private static $ends_with_0 = false;
+    private float $number;
+    public ?MoneySettings $settings;
 
-	/**
-	 * @param string $thousands_separator
-	 * @param string $decimal_separator
-	 * @param int $decimals
-	 * @param bool $ends_with_0
-	 * @param Currency|null $default_currency
-	 * @throws CurrencyDoesNotExistException|ShouldPublishConfigFileException
-	 */
-	public static function set(string $thousands_separator, string $decimal_separator, int $decimals, bool $ends_with_0 = false, ?Currency $default_currency = null): void
-	{
-		self::$thousands_separator = $thousands_separator;
-		self::$decimal_separator = $decimal_separator;
-		self::$decimals = $decimals;
-		self::$ends_with_0 = $ends_with_0;
-		self::$default_currency = $default_currency ?? Currency::code(Currency::getConfigCurrency());
-	}
+    public function __construct(float $number, $currency = null, $settings = null)
+    {
+        $this->number = $number;
 
-	/** Получить десятичный делитель
-	 * @return int
-	 */
-	public static function getDivisor(): int
-	{
-		return 10 ** self::$decimals;
-	}
+        if (is_null($settings) && !($currency instanceof MoneySettings)) {
+            $settings = new MoneySettings;
+        }
 
-	/** Возвращает валюту по умолчанию
-	 * @return Currency
-	 * @throws CurrencyDoesNotExistException|ShouldPublishConfigFileException
-	 */
-	public static function getDefaultCurrency(): Currency
-	{
-		return self::$default_currency ?? Currency::code(Currency::getConfigCurrency());
-	}
+        // No parameters passed
+        if (is_null($currency)) {
+            $this->settings = $settings;
+            return;
+        }
 
-	/** Проверяет, был ли опубликован конфиг
-	 * @return bool
-	 */
-	public static function configNotPublished(): bool
-	{
-		return is_null(config('money'));
-	}
+        // Only one passed. It may be Currency or Settings
+        if ($currency instanceof Currency) {
+            $settings->setCurrency($currency);
+        } elseif ($currency instanceof MoneySettings) {
+            $settings = $currency;
+        }
+
+        $this->settings = $settings;
+    }
+
+    public function getPureNumber(): float
+    {
+        return $this->number;
+    }
+
+    public function getNumber(): string
+    {
+        $amount = $this->settings->getOrigin() === MoneySettings::ORIGIN_INT
+            ? (float)($this->number / $this->getDivisor())
+            : $this->number;
+
+        $money = number_format(
+            $amount,
+            $this->settings->getDecimals(),
+            $this->settings->getDecimalSeparator(),
+            $this->settings->getThousandsSeparator()
+        );
+
+        if (!$this->settings->endsWith0()) {
+            # /^((\d+|\s*)*\.\d*[1-9]|(\d+|\s*)*)/ - берёт всё число, кроме 0 и .*0 на конце
+            $pattern = '/^((\d+|' . ($this->settings->getThousandsSeparator() ?: '\s') . '*)*\\' .
+                ($this->settings->getDecimalSeparator() ?: '\s') . '\d*[1-9]|(\d+|' .
+                ($this->settings->getThousandsSeparator() ?: '\s') . '*)*)/';
+            preg_match($pattern, $money, $money);
+            $money = $money[0];
+        }
+
+        return $money;
+    }
+
+    public function convertOfflineInto(Currency $currency, float $coeff): Money
+    {
+        $new_amount = $this->getPureNumber() * $coeff;
+        $settings = clone $this->settings;
+
+        return new self($new_amount, $currency, $settings->setCurrency($currency));
+    }
+
+    public function toInteger(): int
+    {
+        return $this->settings->getOrigin() === MoneySettings::ORIGIN_INT
+            ? floor($this->getPureNumber())
+            : floor($this->getPureNumber() * $this->getDivisor());
+    }
+
+    public function toString(): string
+    {
+        return self::bindMoneyWithCurrency(
+            $this->getNumber(),
+            $this->settings->getCurrency(),
+            $this->settings->hasSpaceBetween()
+        );
+    }
+
+    private function getDivisor(): int
+    {
+        return 10 ** $this->settings->getDecimals();
+    }
+
+    public function __toString(): string
+    {
+        return $this->toString();
+    }
 }

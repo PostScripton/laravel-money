@@ -15,7 +15,7 @@ class CurrencyTest extends TestCase
 		$cur = Currency::code('RUB');
 		$this->assertEquals('₽', $cur->getSymbol());
 		$this->assertEquals('RUB', $cur->getCode());
-		$this->assertEquals('end', $cur->getPosition());
+		$this->assertEquals(Currency::POS_END, $cur->getPosition());
 	}
 
 	/** @test */
