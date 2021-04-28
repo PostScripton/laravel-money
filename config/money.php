@@ -1,5 +1,7 @@
 <?php
 
+use PostScripton\Money\MoneySettings;
+
 return [
 	/*
     |--------------------------------------------------------------------------
@@ -53,9 +55,41 @@ return [
     |--------------------------------------------------------------------------
     |
     | This option controls whether a money string ends with 0 or not.
-	| When true is provided: 123()
-	| When false is provided: 123(.0)
+	| When true is provided: 123(.0)
+	| When false is provided: 123()
     |
     */
-	'ends_with_0' => false
+	'ends_with_0' => false,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Space between currency and number
+    |--------------------------------------------------------------------------
+    |
+    | This option controls whether there is a space between currency symbol and number
+	| When true is provided: $( )100
+	| When false is provided: $()100
+    |
+    */
+	'space_between' => true,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Origin number from database
+    |--------------------------------------------------------------------------
+    |
+    | This option controls the default origin for any number that will be passed
+    | for creating a Money object.
+    | It is used, for instance, if all of your money numbers from database are
+    | represented as integer or float.
+    |
+    | For integer you would save money like: 1234, and would like to get "$ 123.4"
+    | For float you would save money line: 123.4, and you would get "$ 123.4"
+    |
+    | Now only two values are provided:
+    | MoneySettings::ORIGIN_INT
+    | MoneySettings::ORIGIN_FLOAT
+    |
+    */
+    'origin' => MoneySettings::ORIGIN_INT
 ];

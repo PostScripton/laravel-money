@@ -2,13 +2,14 @@
 
 namespace PostScripton\Money\Exceptions;
 
-class CurrencyDoesNotExistException extends ValueErrorException
+use PostScripton\Money\MoneySettings;
+
+class UndefinedOriginException extends ValueErrorException
 {
     public function __construct(
         string $method,
         int $arg_num,
         string $arg_name = null,
-        string $message = null,
         $code = 0,
         BaseException $previous = null
     ) {
@@ -16,8 +17,8 @@ class CurrencyDoesNotExistException extends ValueErrorException
             $method,
             $arg_num,
             $arg_name,
-            'must have standard currency code: alphabetical or numeric',
-            "The currency \"{$message}\" doesn't exist",
+            'has wrong value',
+            'Use ' . MoneySettings::class . '::ORIGIN_* to be sure you use correct one',
             $code,
             $previous
         );
