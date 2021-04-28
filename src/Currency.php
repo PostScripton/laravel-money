@@ -39,7 +39,7 @@ class Currency
     private string $symbol;
     private string $position;
 
-    public function __construct(string $code, string $symbol, ?string $position = null)
+    public function __construct(string $code, string $symbol, ?int $position = null)
     {
         $this->code = $code;
         $this->symbol = $symbol;
@@ -68,7 +68,7 @@ class Currency
         return $this->symbol;
     }
 
-    public function getPosition(): string
+    public function getPosition(): int
     {
         return $this->position;
     }

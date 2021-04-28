@@ -25,15 +25,15 @@ class MoneyTest extends TestCase
 		$usd = Currency::code('USD');
 		$rub = Currency::code('RUB');
 
-		$this->assertEquals('$ 123', Money::make(1230, $usd));
-		$this->assertEquals('$ 123.4', Money::make(1234, $usd));
-		$this->assertEquals('$ 1 234', Money::make(12340, $usd));
-		$this->assertEquals('$ 1 234.5', Money::make(12345, $usd));
+		$this->assertEquals('$ 123', Money::make(1230, $usd)->toString());
+		$this->assertEquals('$ 123.4', Money::make(1234, $usd)->toString());
+		$this->assertEquals('$ 1 234', Money::make(12340, $usd)->toString());
+		$this->assertEquals('$ 1 234.5', Money::make(12345, $usd)->toString());
 
-		$this->assertEquals('123 ₽', Money::make(1230, $rub));
-		$this->assertEquals('123.4 ₽', Money::make(1234, $rub));
-		$this->assertEquals('1 234 ₽', Money::make(12340, $rub));
-		$this->assertEquals('1 234.5 ₽', Money::make(12345, $rub));
+		$this->assertEquals('123 ₽', Money::make(1230, $rub)->toString());
+		$this->assertEquals('123.4 ₽', Money::make(1234, $rub)->toString());
+		$this->assertEquals('1 234 ₽', Money::make(12340, $rub)->toString());
+		$this->assertEquals('1 234.5 ₽', Money::make(12345, $rub)->toString());
 	}
 
 	/** @test */
