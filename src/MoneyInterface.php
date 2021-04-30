@@ -119,6 +119,41 @@ interface MoneyInterface
     public function getPureNumber(): float;
 
     /**
+     * Adds a number to the money. It's like <p>
+     * `$100 + $50 = $150` </p>
+     * @param $number <p>
+     * A number that will be added </p>
+     * @param int $origin <p>
+     * Origin of the number whether it is integer of float. </p> <p>
+     * Use `Money::ORIGIN_*` to ensure it's correct </p>
+     * @return Money
+     */
+    public function add($number, int $origin = MoneySettings::ORIGIN_INT): Money;
+
+    /**
+     * Subtracts a number from the money. It's like <p>
+     * `$150 - $50 = $100` </p>
+     * @param $number <p>
+     * A number that will be subtracted </p>
+     * @param int $origin <p>
+     * Origin of the number whether it is integer of float. </p> <p>
+     * Use `Money::ORIGIN_*` to ensure it's correct </p>
+     * @return Money
+     */
+    public function subtract($number, int $origin = MoneySettings::ORIGIN_INT): Money;
+
+    /**
+     * Rebases the money on a number
+     * @param $number <p>
+     * A number to which the money will be rebased </p>
+     * @param int $origin <p>
+     * Origin of the number whether it is integer of float. </p> <p>
+     * Use `Money::ORIGIN_*` to ensure it's correct </p>
+     * @return Money
+     */
+    public function rebase($number, int $origin = MoneySettings::ORIGIN_INT): Money;
+
+    /**
      * Converts money into another currency using coefficient between currencies
      * <p>USD -> RUB = 75.79 / 1</p>
      * <p>RUB -> USD = 1 / 75.79</p>

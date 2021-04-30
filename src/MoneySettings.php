@@ -10,7 +10,7 @@ class MoneySettings implements MoneySettingsInterface
 {
     public const ORIGIN_INT = 0;
     public const ORIGIN_FLOAT = 1;
-    private const ORIGIN = [
+    public const ORIGINS = [
         self::ORIGIN_INT,
         self::ORIGIN_FLOAT,
     ];
@@ -89,7 +89,7 @@ class MoneySettings implements MoneySettingsInterface
 
     public function setOrigin(int $origin): MoneySettings
     {
-        if (!in_array($origin, self::ORIGIN)) {
+        if (!in_array($origin, self::ORIGINS)) {
             throw new UndefinedOriginException(__METHOD__, 1, '$origin');
         }
 
