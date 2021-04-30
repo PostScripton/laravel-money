@@ -14,9 +14,9 @@ class ValueErrorException extends BaseException
         BaseException $previous = null
     ) {
         $error = "ValueError: {$method}(): Argument #{$arg_num} ";
-        $error .= is_null($arg_name) ?: "({$arg_name}) ";
+        $error .= is_null($arg_name) ? '' : "({$arg_name}) ";
         $error .= "{$err_msg}.";
-        $error .= is_null($message) ?: " {$message}.";
+        $error .= is_null($message) ? '' : " {$message}.";
 
         parent::__construct($error, $code, $previous);
     }

@@ -2,6 +2,8 @@
 
 namespace PostScripton\Money;
 
+use PostScripton\Money\Exceptions\NotNumericException;
+use PostScripton\Money\Exceptions\UndefinedOriginException;
 use PostScripton\Money\Traits\MoneyFormatter;
 use PostScripton\Money\Traits\MoneyStatic;
 
@@ -45,8 +47,8 @@ class Money implements MoneyInterface
     public function getNumber(): string
     {
         $amount = $this->settings->getOrigin() === MoneySettings::ORIGIN_INT
-            ? (float)($this->number / $this->getDivisor())
-            : $this->number;
+            ? (float)($this->getPureNumber() / $this->getDivisor())
+            : $this->getPureNumber();
 
         $money = number_format(
             $amount,
@@ -65,6 +67,67 @@ class Money implements MoneyInterface
         }
 
         return $money;
+    }
+
+    public function add($number, int $origin = MoneySettings::ORIGIN_INT): Money
+    {
+        // Error handlers
+        if (!is_numeric($number)) {
+            throw new NotNumericException(__METHOD__, 1, '$number');
+        }
+        if (!in_array($origin, MoneySettings::ORIGINS)) {
+            throw new UndefinedOriginException(__METHOD__, 2, '$origin');
+        }
+
+        $this->number += $this->numberIntoCorrectOrigin($number, $origin);
+        return $this;
+    }
+
+    public function subtract($number, int $origin = MoneySettings::ORIGIN_INT): Money
+    {
+        // Error handlers
+        if (!is_numeric($number)) {
+            throw new NotNumericException(__METHOD__, 1, '$number');
+        }
+        if (!in_array($origin, MoneySettings::ORIGINS)) {
+            throw new UndefinedOriginException(__METHOD__, 2, '$origin');
+        }
+
+        $number = $this->numberIntoCorrectOrigin($number, $origin);
+
+        // If less than 0, then result must be 0
+        if ($this->getPureNumber() - $number < 0) {
+            $number = $this->getPureNumber();
+        }
+
+        $this->number -= $number;
+        return $this;
+    }
+
+    public function rebase($number, int $origin = MoneySettings::ORIGIN_INT): Money
+    {
+        // Error handlers
+        if (!is_numeric($number)) {
+            throw new NotNumericException(__METHOD__, 1, '$number');
+        }
+        if (!in_array($origin, MoneySettings::ORIGINS)) {
+            throw new UndefinedOriginException(__METHOD__, 2, '$origin');
+        }
+
+        $this->number = $this->numberIntoCorrectOrigin($number, $origin);
+        return $this;
+    }
+
+    private function numberIntoCorrectOrigin($number, int $origin = MoneySettings::ORIGIN_INT)
+    {
+        // If origins are not the same
+        if ($this->settings->getOrigin() !== $origin) {
+            return $this->settings->getOrigin() === MoneySettings::ORIGIN_INT
+                ? floor($number * $this->getDivisor()) // $origin is float
+                : $number / $this->getDivisor(); // $origin is int
+        }
+
+        return $number;
     }
 
     public function convertOfflineInto(Currency $currency, float $coeff): Money
