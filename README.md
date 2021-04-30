@@ -433,7 +433,71 @@ $money->getPureNumber(); // 132.76686139139672
 
 ---
 
+##### `add()`
+
+adds a number to the money
+
+```php
+use PostScripton\Money\Money;
+
+$money = new Money(1000);   // "$ 100"
+$money->add(500);           // "$ 150"
+```
+
+```php
+use PostScripton\Money\Money;
+use PostScripton\Money\MoneySettings;
+
+$money = new Money(1000);                       // "$ 100"
+$money->add(50.0, MoneySettings::ORIGIN_FLOAT); // "$ 150"
+```
+
+---
+
+##### `subtract()`
+
+subtracts a number from the money
+
+```php
+use PostScripton\Money\Money;
+
+$money = new Money(1500);   // "$ 150"
+$money->subtract(500);      // "$ 100"
+```
+
+```php
+use PostScripton\Money\Money;
+use PostScripton\Money\MoneySettings;
+
+$money = new Money(1500);                               // "$ 150"
+$money->subtract(50.0, MoneySettings::ORIGIN_FLOAT);    // "$ 100"
+```
+
+---
+
+##### `rebase()`
+
+a number to which the money will be rebased
+
+```php
+use PostScripton\Money\Money;
+
+$money = new Money(1500);   // "$ 150"
+$money->rebase(100);        // "$ 10"
+```
+
+```php
+use PostScripton\Money\Money;
+use PostScripton\Money\MoneySettings;
+
+$money = new Money(1500);                           // "$ 150"
+$money->rebase(10.0, MoneySettings::ORIGIN_FLOAT);  // "$ 10"
+```
+
+---
+
 ##### `convertOfflineInto()`
+
 converts Money object into the chosen currency
 
 ```php
