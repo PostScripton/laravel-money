@@ -147,6 +147,11 @@ class Currency
         return $this->position;
     }
 
+    public function getDisplay(): int
+    {
+        return $this->display;
+    }
+
     public function setPosition(int $position = self::POS_START): self
     {
         if ($position !== self::POS_START && $position !== self::POS_END) {
