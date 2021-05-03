@@ -16,6 +16,23 @@ return [
     */
 	'default_currency' => 'USD',
 
+    /*
+    |--------------------------------------------------------------------------
+    | Currency Lists
+    |--------------------------------------------------------------------------
+    |
+    | This option controls which list of currencies will be used.
+    |
+    | For now following lists are provided:
+    | 1. all - all the currencies in the world.
+    | 2. popular - only the most popular ones (35) are used. (default)
+    |
+    | Segregation of currencies is assumed for performance purposes so that
+    | unnecessary ones won't be used.
+    |
+    */
+    'currency_list' => 'popular',
+
 	/*
     |--------------------------------------------------------------------------
     | Thousands separator
