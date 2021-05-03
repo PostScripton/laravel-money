@@ -2,7 +2,7 @@
 
 namespace PostScripton\Money\Exceptions;
 
-class CurrencyDoesNotExistException extends ValueErrorException
+class NoSuchCurrencySymbolException extends ValueErrorException
 {
     public function __construct(
         string $method,
@@ -17,8 +17,8 @@ class CurrencyDoesNotExistException extends ValueErrorException
             $method,
             $arg_num,
             $arg_name,
-            'must have standard currency code: alphabetical or numeric',
-            "The currency \"{$message[0]}\" doesn't exist in the list \"{$message[1]}\"",
+            "[{$message[0]}] is out of bounds. The range [0-{$message[1]}] is supposed",
+            null,
             $code,
             $previous
         );
