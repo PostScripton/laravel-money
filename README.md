@@ -277,9 +277,11 @@ In order to get a specific currency:
 use PostScripton\Money\Currency;
 
 $usd = Currency::code('USD');
+$usd = Currency::code('usd');
+$usd = Currency::code('840');
 ```
 
-❗ Only international codes such as “USD”, “EUR”, “RUB” and so on should be used as a code.
+❗ Only international codes such as USD / 840, EUR / 978, RUB / 643 and so on should be used as a code.
 
 ---
 
@@ -291,9 +293,27 @@ You can also get or change some data from Currency object:
 use PostScripton\Money\Currency;
 
 $usd = Currency::code('USD');
-$usd->getCode();        // USD
+
+$usd->getFullName();    // "United States dollar"
+$usd->getName();        // "dollar"
+$usd->getCode();        // "USD"
+$usd->getNumCode();     // "840"
 $usd->getSymbol();      // "$"
 $usd->getPosition();    // 0 (Currency::POS_START)
+```
+
+`getSymbol()` takes an index as first parameter only if there are more than one symbol for the currency.
+
+```php
+use PostScripton\Money\Currency;
+
+Currency::setCurrencyList(Currency::LIST_ALL);
+
+$currency = Currency::code('EGP');
+
+// ['£', 'ج.م']
+$currency->getSymbol();     // '£'
+$currency->getSymbol(1);    // 'ج.م'
 ```
 
 ---
@@ -315,6 +335,49 @@ $money->settings->getCurrency()->setPosition(Currency::POS_END);
 
 $money->settings->getCurrency()->getPosition(); // 1 (Currency::POS_END)
 $money->toString();                             // "123.4 $"
+```
+
+---
+
+#### Display
+You may specify the way to display the currency whether it will be as an iso-code or a symbol.
+Use following constants:
+
+```php
+use PostScripton\Money\Currency;
+use PostScripton\Money\Money;
+
+$money = new Money(1234);
+
+$money->settings->getCurrency()->getDisplay();  // 10 (Currency::DISPLAY_SYMBOL)
+$money->toString();                             // "$ 123.4"
+
+$money->settings->getCurrency()->setDisplay(Currency::DISPLAY_CODE);
+
+$money->settings->getCurrency()->getDisplay();  // 11 (Currency::DISPLAY_CODE)
+$money->toString();                             // "USD 123.4"
+
+// If you don't like the look of the code at the beginning
+$money->settings->getCurrency()->setPosition(Currency::POS_END);
+$money->toString();                             // "123.4 USD"
+```
+
+---
+
+#### Currency List
+If you wish, you may select another currency list.
+To select currency list by default, go to the `config/money.php` and find there `currency_list`.
+
+All the lists are located at `vendor/postscripton/money/src/List`, so if you want, you can check something up there.
+
+```php
+use PostScripton\Money\Currency;
+
+Currency::setCurrencyList(Currency::LIST_POPULAR);
+Currency::code('USD');
+
+Currency::setCurrencyList(Currency::LIST_ALL);
+Currency::code('EGP');
 ```
 
 ---
