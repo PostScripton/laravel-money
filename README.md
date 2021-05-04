@@ -300,6 +300,7 @@ $usd->getCode();        // "USD"
 $usd->getNumCode();     // "840"
 $usd->getSymbol();      // "$"
 $usd->getPosition();    // 0 (Currency::POS_START)
+$usd->getDisplay();     // 10 (Currency::DISPLAY_SYMBOL)
 ```
 
 `getSymbol()` takes an index as first parameter only if there are more than one symbol for the currency.
