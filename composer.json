@@ -1,7 +1,7 @@
 {
     "name": "postscripton/laravel-money",
     "description": "A convenient way to convert numbers from DB or inputs into money strings for humans",
-  	"version": "2.1.0",
+  	"version": "2.2.0",
   	"type": "library",
     "license": "MIT",
     "authors": [
