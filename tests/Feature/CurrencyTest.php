@@ -5,6 +5,7 @@ namespace PostScripton\Money\Tests;
 use PostScripton\Money\Currency;
 use PostScripton\Money\Exceptions\CurrencyDoesNotExistException;
 use PostScripton\Money\Exceptions\NoSuchCurrencySymbolException;
+use PostScripton\Money\Money;
 
 class CurrencyTest extends TestCase
 {
@@ -61,5 +62,26 @@ class CurrencyTest extends TestCase
 
         // No exception because it has only 1 symbol
         $this->assertEquals('$', Currency::code('USD')->getSymbol(1234));
+    }
+
+    /** @test */
+    public function PreferredSymbol()
+    {
+        Currency::setCurrencyList(Currency::LIST_ALL);
+
+        $money = new Money(1234, Currency::code('CVE'));
+        $this->assertEquals('123.4 Esc', $money->toString());
+
+        $this->assertEquals('Esc', $money->getCurrency()->getSymbol()); // because no preferred
+
+        $money->getCurrency()->setPreferredSymbol(1);
+        $this->assertEquals('123.4 $', $money->toString());
+
+        $this->assertEquals('$', $money->getCurrency()->getSymbol()); // because of preferred
+
+        $this->assertEquals('Esc', $money->getCurrency()->getSymbol(0));
+        $this->assertEquals('$', $money->getCurrency()->getSymbol(1));
+
+        Currency::setCurrencyList(Currency::LIST_CONFIG);
     }
 }
