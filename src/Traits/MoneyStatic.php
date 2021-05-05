@@ -3,6 +3,7 @@
 namespace PostScripton\Money\Traits;
 
 use PostScripton\Money\Currency;
+use PostScripton\Money\Money;
 use PostScripton\Money\MoneySettings;
 
 trait MoneyStatic
@@ -30,6 +31,8 @@ trait MoneyStatic
     {
         return is_null(config('money'));
     }
+
+    // ========== GETTERS ==========
 
     public static function getDefaultDivisor(): int
     {
@@ -69,5 +72,53 @@ trait MoneyStatic
     public static function getDefaultOrigin(): int
     {
         return self::$default_origin;
+    }
+
+    // ========== METHODS ==========
+
+    public static function make(float $number, $currency = null, $settings = null): Money
+    {
+        return new Money($number, $currency, $settings);
+    }
+
+    public static function convertOffline(Money $money, Currency $into, float $coeff): Money
+    {
+        $new_amount = $money->getPureNumber() * $coeff;
+        $settings = clone $money->settings;
+
+        return self::make($new_amount, $into, $settings->setCurrency($into));
+    }
+
+    public static function purify(Money $money): string
+    {
+        return $money->getNumber();
+    }
+
+    public static function integer(Money $money): int
+    {
+        return floor($money->getPureNumber());
+    }
+
+    public static function correctInput(string $input): string
+    {
+        if (!str_contains($input, '.')) {
+            return $input;
+        }
+
+        return substr($input, 0, strpos($input, '.') + self::$default_decimals + 1);
+    }
+
+    private static function bindMoneyWithCurrency(Money $money, Currency $currency): string
+    {
+        $space = $money->settings->hasSpaceBetween() ? ' ' : '';
+
+        // Always has a space
+        if ($currency->getPosition() === Currency::POS_START && $money->isNegative() || $currency->getDisplay() === Currency::DISPLAY_CODE) {
+            $space = ' ';
+        }
+
+        return $currency->getPosition() === Currency::POS_START
+            ? $currency->getSymbol() . $space . $money->getNumber()
+            : $money->getNumber() . $space . $currency->getSymbol();
     }
 }
