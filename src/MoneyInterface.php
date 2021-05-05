@@ -119,6 +119,13 @@ interface MoneyInterface
     public function getPureNumber(): float;
 
     /**
+     * Shortcut for returning the currency <p>
+     * Full: `$money->settings->getCurrency()` </p>
+     * @return Currency
+     */
+    public function getCurrency(): Currency;
+
+    /**
      * Adds a number to the money. It's like <p>
      * `$100 + $50 = $150` </p>
      * @param $money <p>
