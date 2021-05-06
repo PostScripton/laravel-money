@@ -2,15 +2,13 @@
 
 namespace PostScripton\Money;
 
-use PostScripton\Money\Exceptions\NotNumericException;
-use PostScripton\Money\Exceptions\UndefinedOriginException;
-use PostScripton\Money\Traits\MoneyFormatter;
+use PostScripton\Money\Traits\MoneyHelpers;
 use PostScripton\Money\Traits\MoneyStatic;
 
 class Money implements MoneyInterface
 {
-    use MoneyFormatter;
     use MoneyStatic;
+    use MoneyHelpers;
 
     private float $number;
     public ?MoneySettings $settings;
@@ -58,8 +56,8 @@ class Money implements MoneyInterface
         );
 
         if (!$this->settings->endsWith0()) {
-            # /^((\d+|\s*)*\.\d*[1-9]|(\d+|\s*)*)/ - берёт всё число, кроме 0 и .*0 на конце
-            $pattern = '/^((\d+|' . ($this->settings->getThousandsSeparator() ?: '\s') . '*)*\\' .
+            # /^-?((\d+|\s*)*\.\d*[1-9]|(\d+|\s*)*)/ - берёт всё число, кроме 0 и .*0 на конце
+            $pattern = '/^-?((\d+|' . ($this->settings->getThousandsSeparator() ?: '\s') . '*)*\\' .
                 ($this->settings->getDecimalSeparator() ?: '\s') . '\d*[1-9]|(\d+|' .
                 ($this->settings->getThousandsSeparator() ?: '\s') . '*)*)/';
             preg_match($pattern, $money, $money);
@@ -69,65 +67,42 @@ class Money implements MoneyInterface
         return $money;
     }
 
-    public function add($number, int $origin = MoneySettings::ORIGIN_INT): Money
+    public function getCurrency(): Currency
     {
-        // Error handlers
-        if (!is_numeric($number)) {
-            throw new NotNumericException(__METHOD__, 1, '$number');
-        }
-        if (!in_array($origin, MoneySettings::ORIGINS)) {
-            throw new UndefinedOriginException(__METHOD__, 2, '$origin');
-        }
+        return $this->settings->getCurrency();
+    }
 
-        $this->number += $this->numberIntoCorrectOrigin($number, $origin);
+    public function add($money, int $origin = MoneySettings::ORIGIN_INT): Money
+    {
+        $this->number += $this->numberIntoCorrectOrigin($money, $origin, __METHOD__);
         return $this;
     }
 
-    public function subtract($number, int $origin = MoneySettings::ORIGIN_INT): Money
+    public function subtract($money, int $origin = MoneySettings::ORIGIN_INT): Money
     {
-        // Error handlers
-        if (!is_numeric($number)) {
-            throw new NotNumericException(__METHOD__, 1, '$number');
-        }
-        if (!in_array($origin, MoneySettings::ORIGINS)) {
-            throw new UndefinedOriginException(__METHOD__, 2, '$origin');
-        }
-
-        $number = $this->numberIntoCorrectOrigin($number, $origin);
-
-        // If less than 0, then result must be 0
-        if ($this->getPureNumber() - $number < 0) {
-            $number = $this->getPureNumber();
-        }
-
-        $this->number -= $number;
+        $this->number -= $this->numberIntoCorrectOrigin($money, $origin, __METHOD__);
         return $this;
     }
 
-    public function rebase($number, int $origin = MoneySettings::ORIGIN_INT): Money
+    public function rebase($money, int $origin = MoneySettings::ORIGIN_INT): Money
     {
-        // Error handlers
-        if (!is_numeric($number)) {
-            throw new NotNumericException(__METHOD__, 1, '$number');
-        }
-        if (!in_array($origin, MoneySettings::ORIGINS)) {
-            throw new UndefinedOriginException(__METHOD__, 2, '$origin');
-        }
-
-        $this->number = $this->numberIntoCorrectOrigin($number, $origin);
+        $this->number = $this->numberIntoCorrectOrigin($money, $origin, __METHOD__);
         return $this;
     }
 
-    private function numberIntoCorrectOrigin($number, int $origin = MoneySettings::ORIGIN_INT)
+    public function isSameCurrency(self $money): bool
     {
-        // If origins are not the same
-        if ($this->settings->getOrigin() !== $origin) {
-            return $this->settings->getOrigin() === MoneySettings::ORIGIN_INT
-                ? floor($number * $this->getDivisor()) // $origin is float
-                : $number / $this->getDivisor(); // $origin is int
-        }
+        return $this->settings->getCurrency()->getCode() === $money->settings->getCurrency()->getCode();
+    }
 
-        return $number;
+    public function isNegative():bool
+    {
+        return $this->getPureNumber() < 0;
+    }
+
+    public function isPositive():bool
+    {
+        return $this->getPureNumber() > 0;
     }
 
     public function convertOfflineInto(Currency $currency, float $coeff): Money
@@ -147,16 +122,7 @@ class Money implements MoneyInterface
 
     public function toString(): string
     {
-        return self::bindMoneyWithCurrency(
-            $this->getNumber(),
-            $this->settings->getCurrency(),
-            $this->settings->hasSpaceBetween()
-        );
-    }
-
-    private function getDivisor(): int
-    {
-        return 10 ** $this->settings->getDecimals();
+        return self::bindMoneyWithCurrency($this, $this->settings->getCurrency());
     }
 
     public function __toString(): string

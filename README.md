@@ -232,6 +232,14 @@ $money->settings->getCurrency()->getSymbol();   // "₽"
 $money->toString();                             // "123.4 ₽"
 ```
 
+There is a shortcut for getting a currency:
+```php
+use PostScripton\Money\Money;
+
+$money = new Money(1234);
+$money->getCurrency(); // the same as: $money->settings->getCurrency()
+```
+
 ---
 
 #### Origin number
@@ -380,6 +388,14 @@ Currency::code('USD');
 Currency::setCurrencyList(Currency::LIST_ALL);
 Currency::code('EGP');
 ```
+Following constants are provided:
+```php
+use PostScripton\Money\Currency;
+
+Currency::LIST_ALL;
+Currency::LIST_POPULAR;
+Currency::LIST_CONFIG; // returns back to list what you've written in the config
+```
 
 ---
 
@@ -516,6 +532,18 @@ $money = new Money(1000);                       // "$ 100"
 $money->add(50.0, MoneySettings::ORIGIN_FLOAT); // "$ 150"
 ```
 
+```php
+use PostScripton\Money\Money;
+use PostScripton\Money\Currency;
+
+$m1 = new Money(1000);                          // "$ 100"
+$m2 = new Money(500);                           // "$ 50"
+$m3 = new Money(500, Currency::code('RUB'));    // "50 ₽"
+
+$m1->add($m2);                                  // "$ 150"
+$m1->add($m3);                                  // MoneyHasDifferentCurrenciesException
+```
+
 ---
 
 ##### `subtract()`
@@ -537,6 +565,18 @@ $money = new Money(1500);                               // "$ 150"
 $money->subtract(50.0, MoneySettings::ORIGIN_FLOAT);    // "$ 100"
 ```
 
+```php
+use PostScripton\Money\Money;
+use PostScripton\Money\Currency;
+
+$m1 = new Money(1500);                          // "$ 150"
+$m2 = new Money(500);                           // "$ 50"
+$m3 = new Money(500, Currency::code('RUB'));    // "50 ₽"
+
+$m1->subtract($m2);                             // "$ 100"
+$m1->subtract($m3);                             // MoneyHasDifferentCurrenciesException
+```
+
 ---
 
 ##### `rebase()`
@@ -556,6 +596,18 @@ use PostScripton\Money\MoneySettings;
 
 $money = new Money(1500);                           // "$ 150"
 $money->rebase(10.0, MoneySettings::ORIGIN_FLOAT);  // "$ 10"
+```
+
+```php
+use PostScripton\Money\Money;
+use PostScripton\Money\Currency;
+
+$m1 = new Money(1000);                          // "$ 100"
+$m2 = new Money(750);                           // "$ 75"
+$m3 = new Money(750, Currency::code('RUB'));    // "75 ₽"
+
+$m1->rebase($m2);                               // "$ 75"
+$m1->rebase($m3);                               // MoneyHasDifferentCurrenciesException
 ```
 
 ---
