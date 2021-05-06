@@ -2,6 +2,9 @@
 
 namespace PostScripton\Money;
 
+use PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException;
+use PostScripton\Money\Exceptions\NotNumericException;
+
 interface MoneyInterface
 {
     // ========== STATIC ========== //
@@ -128,11 +131,13 @@ interface MoneyInterface
     /**
      * Adds a number to the money. It's like <p>
      * `$100 + $50 = $150` </p>
-     * @param $money <p>
-     * A number that will be added </p>
+     * @param int|float|Money $money <p>
+     * A number or Money that will be added </p>
      * @param int $origin <p>
      * Origin of the number whether it is integer of float. </p> <p>
      * Use `Money::ORIGIN_*` to ensure it's correct </p>
+     * @throws MoneyHasDifferentCurrenciesException
+     * @throws NotNumericException
      * @return Money
      */
     public function add($money, int $origin = MoneySettings::ORIGIN_INT): Money;
@@ -140,22 +145,26 @@ interface MoneyInterface
     /**
      * Subtracts a number from the money. It's like <p>
      * `$150 - $50 = $100` </p>
-     * @param $money <p>
-     * A number that will be subtracted </p>
+     * @param int|float|Money $money <p>
+     * A number or Money that will be subtracted </p>
      * @param int $origin <p>
      * Origin of the number whether it is integer of float. </p> <p>
      * Use `Money::ORIGIN_*` to ensure it's correct </p>
+     * @throws MoneyHasDifferentCurrenciesException
+     * @throws NotNumericException
      * @return Money
      */
     public function subtract($money, int $origin = MoneySettings::ORIGIN_INT): Money;
 
     /**
      * Rebases the money on a number
-     * @param $money <p>
-     * A number to which the money will be rebased </p>
+     * @param int|float|Money $money <p>
+     * A number or Money to which the money will be rebased </p>
      * @param int $origin <p>
      * Origin of the number whether it is integer of float. </p> <p>
      * Use `Money::ORIGIN_*` to ensure it's correct </p>
+     * @throws MoneyHasDifferentCurrenciesException
+     * @throws NotNumericException
      * @return Money
      */
     public function rebase($money, int $origin = MoneySettings::ORIGIN_INT): Money;
