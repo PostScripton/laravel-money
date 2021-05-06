@@ -3,7 +3,7 @@
 namespace PostScripton\Money\Tests;
 
 use PostScripton\Money\Currency;
-use PostScripton\Money\Exceptions\MoneyHasDifferentCurrencies;
+use PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException;
 use PostScripton\Money\Money;
 use PostScripton\Money\MoneySettings;
 use PostScripton\Money\Exceptions\UndefinedOriginException;
@@ -88,7 +88,7 @@ class ManipulatingMoneyNumberTest extends TestCase
     /** @test */
     public function AddMoneyHasDifferentCurrenciesError()
     {
-        $this->expectException(MoneyHasDifferentCurrencies::class);
+        $this->expectException(MoneyHasDifferentCurrenciesException::class);
 
         $usd = new Money(1000);
         $rub = new Money(500, Currency::code('RUB'));
@@ -174,7 +174,7 @@ class ManipulatingMoneyNumberTest extends TestCase
     /** @test */
     public function SubtractMoneyHasDifferentCurrenciesError()
     {
-        $this->expectException(MoneyHasDifferentCurrencies::class);
+        $this->expectException(MoneyHasDifferentCurrenciesException::class);
 
         $usd = new Money(1000);
         $rub = new Money(500, Currency::code('RUB'));
@@ -279,7 +279,7 @@ class ManipulatingMoneyNumberTest extends TestCase
     /** @test */
     public function RebaseMoneyHasDifferentCurrenciesError()
     {
-        $this->expectException(MoneyHasDifferentCurrencies::class);
+        $this->expectException(MoneyHasDifferentCurrenciesException::class);
 
         $usd = new Money(1000);
         $rub = new Money(500, Currency::code('RUB'));

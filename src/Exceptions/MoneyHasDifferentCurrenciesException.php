@@ -2,7 +2,7 @@
 
 namespace PostScripton\Money\Exceptions;
 
-class MoneyHasDifferentCurrencies extends ValueErrorException
+class MoneyHasDifferentCurrenciesException extends ValueErrorException
 {
     public function __construct(
         string $method,

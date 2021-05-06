@@ -2,7 +2,7 @@
 
 namespace PostScripton\Money\Traits;
 
-use PostScripton\Money\Exceptions\MoneyHasDifferentCurrencies;
+use PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException;
 use PostScripton\Money\Exceptions\NotNumericException;
 use PostScripton\Money\Exceptions\UndefinedOriginException;
 use PostScripton\Money\Money;
@@ -41,7 +41,7 @@ trait MoneyHelpers
             // First argument is Money
             if (!$this->isSameCurrency($money)) {
                 // In the future it will be converted automatically with no exceptions
-                throw new MoneyHasDifferentCurrencies($method, 1, '$money');
+                throw new MoneyHasDifferentCurrenciesException($method, 1, '$money');
             }
 
             $origin = $money->settings->getOrigin();
