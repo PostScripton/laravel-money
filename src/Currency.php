@@ -21,7 +21,9 @@ class Currency
 
     public const LIST_ALL = 'all';
     public const LIST_POPULAR = 'popular';
-    private static string $_list;
+    public const LIST_CONFIG = 'config';
+    private const CONFIG_LIST = 'money.currency_list';
+    private static ?string $_list;
 
     public static function code(string $code): ?Currency
     {
@@ -33,30 +35,88 @@ class Currency
             throw new CurrencyDoesNotExistException(__METHOD__, 1, '$code', implode(',', [$code, self::$_list]));
         }
 
-        return new Currency($currency);
+        return new self($currency);
     }
 
     protected static function currencies(): Collection
     {
-        if (!in_array(config('money.currency_list'), [self::LIST_ALL, self::LIST_POPULAR])) {
-            throw new CurrencyListConfigException(config('money.currency_list'));
+        $list = is_array(config(self::CONFIG_LIST))
+            ? self::LIST_CONFIG
+            : config(self::CONFIG_LIST);
+
+        if (self::isIncorrectList($list)) {
+            throw new CurrencyListConfigException($list);
         }
 
         if (!self::$currencies) {
-            self::setCurrencyList(config('money.currency_list'));
+            self::setCurrencyList($list);
         }
 
         return collect(self::$currencies);
     }
 
-    public static function setCurrencyList(string $list = self::LIST_POPULAR)
+    public static function isIncorrectList(string $list): bool
     {
-        if ($list !== self::LIST_ALL && $list !== self::LIST_POPULAR) {
+        return !in_array(
+            $list,
+            [
+                self::LIST_ALL,
+                self::LIST_POPULAR,
+                self::LIST_CONFIG,
+            ]
+        );
+    }
+
+    public static function setCurrencyList(string $list = self::LIST_POPULAR): void
+    {
+        if (self::isIncorrectList($list)) {
             $list = self::LIST_POPULAR;
         }
-
-        self::$currencies = require __DIR__ . "/List/{$list}_currencies.php";
         self::$_list = $list;
+
+        if ($list !== self::LIST_CONFIG) {
+            self::$currencies = self::getList($list);
+            return;
+        }
+
+        // Config list below...
+
+        if (!is_array(config(self::CONFIG_LIST))) {
+            self::$currencies = self::getList(config(self::CONFIG_LIST));
+            return;
+        }
+
+        // Custom currency list
+        $custom_list = config(self::CONFIG_LIST);
+        self::$currencies = self::getList(self::LIST_ALL); // todo смёржить с кастомными валютами
+
+        self::$currencies = array_filter(
+            self::$currencies,
+            function ($currency) use (&$custom_list) {
+                if (empty($custom_list)) {
+                    return false;
+                }
+
+                foreach ($custom_list as $item) {
+                    if ($currency['iso_code'] === $item || $currency['num_code'] === $item) {
+                        $custom_list = array_diff($custom_list, [$item]);
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+        );
+    }
+
+    public static function currentList(): string
+    {
+        return self::$_list ?? self::CONFIG_LIST;
+    }
+
+    private static function getList(string $list)
+    {
+        return require __DIR__ . "/List/" . $list . "_currencies.php";
     }
 
     // ==================== OBJECT ==================== //
@@ -68,6 +128,7 @@ class Currency
     private $symbol; // array or string
     private int $position;
     private int $display;
+    private ?int $preferred_symbol = null;
 
     public function __construct(array $currency)
     {
@@ -86,6 +147,7 @@ class Currency
         $this->symbol = $currency['symbol'];
         $this->position = $currency['position'] ?? self::POS_END;
         $this->display = self::DISPLAY_SYMBOL;
+        $preferred_symbol = null;
     }
 
     /**
@@ -120,20 +182,28 @@ class Currency
         return $this->num_code;
     }
 
-    public function getSymbol(int $index = 0): string
+    public function getSymbol(?int $index = null): string
     {
         if ($this->display === self::DISPLAY_CODE) {
             return $this->iso_code;
         }
 
         if (is_array($this->symbol)) {
-            if (!array_key_exists($index, $this->symbol)) {
+            if (!array_key_exists($index ?? 0, $this->symbol)) {
                 throw new NoSuchCurrencySymbolException(
                     __METHOD__,
                     1,
                     '$index',
-                    implode(',', [$index, count($this->symbol) - 1])
+                    implode(',', [$index ?? 0, count($this->symbol) - 1])
                 );
+            }
+
+            if (is_null($index)) {
+                if (!is_null($this->preferred_symbol)) {
+                    return $this->symbol[$this->preferred_symbol];
+                }
+
+                $index = 0;
             }
 
             return $this->symbol[$index];
@@ -169,6 +239,24 @@ class Currency
         }
 
         $this->display = $display;
+        return $this;
+    }
+
+    public function setPreferredSymbol(int $index = 0): self
+    {
+        if (is_array($this->symbol)) {
+            if (!array_key_exists($index, $this->symbol)) {
+                throw new NoSuchCurrencySymbolException(
+                    __METHOD__,
+                    1,
+                    '$index',
+                    implode(',', [$index, count($this->symbol) - 1])
+                );
+            }
+
+            $this->preferred_symbol = $index;
+        }
+
         return $this;
     }
 }

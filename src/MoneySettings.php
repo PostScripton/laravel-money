@@ -10,10 +10,6 @@ class MoneySettings implements MoneySettingsInterface
 {
     public const ORIGIN_INT = 0;
     public const ORIGIN_FLOAT = 1;
-    public const ORIGINS = [
-        self::ORIGIN_INT,
-        self::ORIGIN_FLOAT,
-    ];
 
     private int $decimals;
     private string $thousands_separator;
@@ -22,6 +18,14 @@ class MoneySettings implements MoneySettingsInterface
     private bool $space_between;
     private Currency $currency;
     private int $origin;
+
+    public static function isIncorrectOrigin(int $origin): bool
+    {
+        return !in_array($origin, [
+            self::ORIGIN_INT,
+            self::ORIGIN_FLOAT,
+        ]);
+    }
 
     public function __construct(
         int $decimals = null,
@@ -89,7 +93,7 @@ class MoneySettings implements MoneySettingsInterface
 
     public function setOrigin(int $origin): MoneySettings
     {
-        if (!in_array($origin, self::ORIGINS)) {
+        if (self::isIncorrectOrigin($origin)) {
             throw new UndefinedOriginException(__METHOD__, 1, '$origin');
         }
 
