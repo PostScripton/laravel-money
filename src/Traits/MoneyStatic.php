@@ -92,7 +92,7 @@ trait MoneyStatic
 
     private static function bindMoneyWithCurrency(Money $money, Currency $currency): string
     {
-        $space = $money->settings->hasSpaceBetween() ? ' ' : '';
+        $space = $money->settings()->hasSpaceBetween() ? ' ' : '';
 
         // Always has a space
         if ($currency->getPosition() === Currency::POS_START && $money->isNegative() || $currency->getDisplay() === Currency::DISPLAY_CODE) {

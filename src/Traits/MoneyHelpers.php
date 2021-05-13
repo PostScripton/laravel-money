@@ -12,7 +12,7 @@ trait MoneyHelpers
 {
     private function getDivisor(): int
     {
-        return 10 ** $this->settings->getDecimals();
+        return 10 ** $this->settings()->getDecimals();
     }
 
     private function numberIntoCorrectOrigin($money, int $origin = MoneySettings::ORIGIN_INT, ?string $method = null)
@@ -22,8 +22,8 @@ trait MoneyHelpers
         $origin = $arr[1];
 
         // If origins are not the same
-        if ($this->settings->getOrigin() !== $origin) {
-            return $this->settings->getOrigin() === MoneySettings::ORIGIN_INT
+        if ($this->settings()->getOrigin() !== $origin) {
+            return $this->settings()->getOrigin() === MoneySettings::ORIGIN_INT
                 ? floor($money * $this->getDivisor()) // $origin is float
                 : $money / $this->getDivisor(); // $origin is int
         }
@@ -44,7 +44,7 @@ trait MoneyHelpers
                 throw new MoneyHasDifferentCurrenciesException($method, 1, '$money');
             }
 
-            $origin = $money->settings->getOrigin();
+            $origin = $money->settings()->getOrigin();
             $money = $money->getPureNumber();
         }
 

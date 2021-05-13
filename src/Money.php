@@ -11,11 +11,12 @@ class Money implements MoneyInterface
     use MoneyHelpers;
 
     private float $number;
-    public ?MoneySettings $settings;
+    private ?MoneySettings $settings;
 
     public function __construct(float $number, $currency = null, $settings = null)
     {
         $this->number = $number;
+        $this->settings = null;
 
         if (is_null($settings) && !($currency instanceof MoneySettings)) {
             $settings = new MoneySettings;
@@ -34,7 +35,31 @@ class Money implements MoneyInterface
             $settings = $currency;
         }
 
+        $this->bind($settings);
+    }
+
+    public function bind(MoneySettings $settings): self
+    {
+        if (!is_null($this->settings)) {
+            $this->settings()->unbind();
+        }
+
         $this->settings = $settings;
+        $this->settings()->bind($this);
+        return $this;
+    }
+
+    public function unbind(): self
+    {
+        // Can't exist without settings
+        $this->settings = clone $this->settings;
+        $this->settings()->bind($this);
+        return $this;
+    }
+
+    public function settings(): MoneySettings
+    {
+        return $this->settings;
     }
 
     public function getPureNumber(): float
@@ -44,22 +69,22 @@ class Money implements MoneyInterface
 
     public function getNumber(): string
     {
-        $amount = $this->settings->getOrigin() === MoneySettings::ORIGIN_INT
+        $amount = $this->settings()->getOrigin() === MoneySettings::ORIGIN_INT
             ? (float)($this->getPureNumber() / $this->getDivisor())
             : $this->getPureNumber();
 
         $money = number_format(
             $amount,
-            $this->settings->getDecimals(),
-            $this->settings->getDecimalSeparator(),
-            $this->settings->getThousandsSeparator()
+            $this->settings()->getDecimals(),
+            $this->settings()->getDecimalSeparator(),
+            $this->settings()->getThousandsSeparator()
         );
 
-        if (!$this->settings->endsWith0()) {
+        if (!$this->settings()->endsWith0()) {
             # /^-?((\d+|\s*)*\.\d*[1-9]|(\d+|\s*)*)/ - берёт всё число, кроме 0 и .*0 на конце
-            $pattern = '/^-?((\d+|' . ($this->settings->getThousandsSeparator() ?: '\s') . '*)*\\' .
-                ($this->settings->getDecimalSeparator() ?: '\s') . '\d*[1-9]|(\d+|' .
-                ($this->settings->getThousandsSeparator() ?: '\s') . '*)*)/';
+            $pattern = '/^-?((\d+|' . ($this->settings()->getThousandsSeparator() ?: '\s') . '*)*\\' .
+                ($this->settings()->getDecimalSeparator() ?: '\s') . '\d*[1-9]|(\d+|' .
+                ($this->settings()->getThousandsSeparator() ?: '\s') . '*)*)/';
             preg_match($pattern, $money, $money);
             $money = $money[0];
         }
@@ -69,7 +94,7 @@ class Money implements MoneyInterface
 
     public function getCurrency(): Currency
     {
-        return $this->settings->getCurrency();
+        return $this->settings()->getCurrency();
     }
 
     public function add($money, int $origin = MoneySettings::ORIGIN_INT): Money
@@ -104,7 +129,7 @@ class Money implements MoneyInterface
 
     public function clear(): self
     {
-        $this->number = $this->settings->getOrigin() === MoneySettings::ORIGIN_INT
+        $this->number = $this->settings()->getOrigin() === MoneySettings::ORIGIN_INT
             ? floor($this->getPureNumber() / $this->getDivisor()) * $this->getDivisor()
             : floor($this->getPureNumber());
 
@@ -113,7 +138,7 @@ class Money implements MoneyInterface
 
     public function isSameCurrency(self $money): bool
     {
-        return $this->settings->getCurrency()->getCode() === $money->settings->getCurrency()->getCode();
+        return $this->settings()->getCurrency()->getCode() === $money->settings()->getCurrency()->getCode();
     }
 
     public function isNegative(): bool
@@ -143,7 +168,7 @@ class Money implements MoneyInterface
 
     public function toString(): string
     {
-        return self::bindMoneyWithCurrency($this, $this->settings->getCurrency());
+        return self::bindMoneyWithCurrency($this, $this->settings()->getCurrency());
     }
 
     public function __toString(): string

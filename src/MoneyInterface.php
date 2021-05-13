@@ -90,7 +90,7 @@ interface MoneyInterface
 
     /**
      * Shortcut for returning the currency <p>
-     * Full: `$money->settings->getCurrency()` </p>
+     * Full: `$money->settings()->getCurrency()` </p>
      * @return Currency
      */
     public function getCurrency(): Currency;

@@ -19,6 +19,8 @@ class MoneySettings implements MoneySettingsInterface
     private Currency $currency;
     private int $origin;
 
+    private ?Money $money;
+
     public static function isIncorrectOrigin(int $origin): bool
     {
         return !in_array($origin, [
@@ -36,6 +38,8 @@ class MoneySettings implements MoneySettingsInterface
         Currency $currency = null,
         int $origin = null
     ) {
+        $this->money = null;
+
         try {
             $this->setDecimals($decimals ?? Money::getDefaultDecimals())
                 ->setThousandsSeparator($thousands_separator ?? Money::getDefaultThousandsSeparator())
@@ -47,6 +51,19 @@ class MoneySettings implements MoneySettingsInterface
         } catch (CurrencyDoesNotExistException | ShouldPublishConfigFileException | UndefinedOriginException $e) {
             dd($e->getMessage());
         }
+    }
+
+    public function bind(Money $money): self
+    {
+        $this->money = $money;
+        return $this;
+    }
+
+    public function unbind(): self
+    {
+        $this->money->unbind();
+        $this->money = null;
+        return $this;
     }
 
     // ========== SETTERS ==========
@@ -97,7 +114,19 @@ class MoneySettings implements MoneySettingsInterface
             throw new UndefinedOriginException(__METHOD__, 1, '$origin');
         }
 
+        $_origin = $this->origin ?? self::ORIGIN_INT;
         $this->origin = $origin;
+
+        if (!is_null($this->money)) {
+            if ($_origin !== $origin) {
+                $number = $_origin === MoneySettings::ORIGIN_INT
+                    ? $this->money->getPureNumber() / $this->getDivisor()
+                    : $this->money->getPureNumber() * $this->getDivisor();
+
+                $this->money->rebase($number, $origin);
+            }
+        }
+
         return $this;
     }
 
