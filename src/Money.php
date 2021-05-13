@@ -35,6 +35,9 @@ class Money implements MoneyInterface
             $settings = $currency;
         }
 
+        if ($settings->bound()) {
+            $settings = clone $settings;
+        }
         $this->bind($settings);
     }
 
@@ -51,7 +54,7 @@ class Money implements MoneyInterface
 
     public function unbind(): self
     {
-        // Can't exist without settings
+        // Can't exist without Settings
         $this->settings = clone $this->settings;
         $this->settings()->bind($this);
         return $this;

@@ -66,6 +66,11 @@ class MoneySettings implements MoneySettingsInterface
         return $this;
     }
 
+    public function bound(): bool
+    {
+        return !is_null($this->money);
+    }
+
     // ========== SETTERS ==========
 
     public function setDecimals(int $decimals = 1): self
