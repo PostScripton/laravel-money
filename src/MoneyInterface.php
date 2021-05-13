@@ -16,39 +16,6 @@ interface MoneyInterface
     public static function set(MoneySettings $setting): void;
 
     /**
-     * Returns just a formatted number <p>
-     * For example, "$ 1 234.56" -> "1234.56" </p>
-     * @param Money $money <p>
-     * Money object: "1 234.56 ₽" </p>
-     * @return string <p>
-     * Formatted number: "1 234.56" </p>
-     */
-    public static function purify(Money $money): string;
-
-    /**
-     * Returns converted the money's value into integer for storing in database
-     * @param Money $money <p>
-     * Money object: 1234.567 (set 2 decimals) </p>
-     * @return int <p>
-     * Integer: 123456 </p>
-     */
-    public static function integer(Money $money): int;
-
-    /**
-     * Converts from one currency to another
-     * @param Money $money <p>
-     * Money object </p>
-     * @param Currency $into <p>
-     * Currency to be converted into </p>
-     * @param float $coeff
-     * <p>Coefficient between one currency and another</p>
-     * <p>USD -> RUB = 75.79 / 1</p>
-     * <p>RUB -> USD = 1 / 75.79</p>
-     * @return Money Денежная строка со знаком валюты
-     */
-    public static function convertOffline(Money $money, Currency $into, float $coeff): Money;
-
-    /**
      * Corrects input &lt;input type="number" /&gt; using default settings
      * @param string $input <p>
      * Input string: "1234.567890" </p>

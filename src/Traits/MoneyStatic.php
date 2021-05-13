@@ -81,24 +81,6 @@ trait MoneyStatic
         return new Money($number, $currency, $settings);
     }
 
-    public static function convertOffline(Money $money, Currency $into, float $coeff): Money
-    {
-        $new_amount = $money->getPureNumber() * $coeff;
-        $settings = clone $money->settings;
-
-        return self::make($new_amount, $into, $settings->setCurrency($into));
-    }
-
-    public static function purify(Money $money): string
-    {
-        return $money->getNumber();
-    }
-
-    public static function integer(Money $money): int
-    {
-        return floor($money->getPureNumber());
-    }
-
     public static function correctInput(string $input): string
     {
         if (!str_contains($input, '.')) {
