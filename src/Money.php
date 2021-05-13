@@ -90,6 +90,15 @@ class Money implements MoneyInterface
         return $this;
     }
 
+    public function clear(): self
+    {
+        $this->number = $this->settings->getOrigin() === MoneySettings::ORIGIN_INT
+            ? floor($this->getPureNumber() / $this->getDivisor()) * $this->getDivisor()
+            : floor($this->getPureNumber());
+
+        return $this;
+    }
+
     public function isSameCurrency(self $money): bool
     {
         return $this->settings->getCurrency()->getCode() === $money->settings->getCurrency()->getCode();

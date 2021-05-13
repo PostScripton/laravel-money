@@ -5,6 +5,7 @@ namespace PostScripton\Money\Tests;
 use PostScripton\Money\Currency;
 use PostScripton\Money\Exceptions\CurrencyDoesNotExistException;
 use PostScripton\Money\Money;
+use PostScripton\Money\MoneySettings;
 
 class MoneyTest extends TestCase
 {
@@ -45,5 +46,34 @@ class MoneyTest extends TestCase
 	    $this->assertEquals('$ 123.4', strval($money));
 	    $this->assertEquals('$ 123.4', '' . $money);
 	    $this->assertEquals('$ 123.4', $money);
+	}
+
+	/** @test */
+	public function origin_int_money_gets_rid_of_decimals_with_clear_method()
+	{
+	    $money = new Money(132.76);
+
+	    $this->assertEquals(132.76, $money->getPureNumber());
+	    $this->assertEquals('$ 13.3', $money->toString());
+
+	    $money->clear();
+
+	    $this->assertEquals(130, $money->getPureNumber());
+	    $this->assertEquals('$ 13', $money->toString());
+	}
+
+	/** @test */
+	public function origin_float_money_gets_rid_of_decimals_with_clear_method()
+	{
+	    $settings = new MoneySettings();
+        $money = new Money(13.276, $settings->setOrigin(MoneySettings::ORIGIN_FLOAT));
+
+        $this->assertEquals(13.276, $money->getPureNumber());
+        $this->assertEquals('$ 13.3', $money->toString());
+
+        $money->clear();
+
+        $this->assertEquals(13, $money->getPureNumber());
+        $this->assertEquals('$ 13', $money->toString());
 	}
 }
