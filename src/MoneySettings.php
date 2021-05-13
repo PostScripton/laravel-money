@@ -68,7 +68,7 @@ class MoneySettings implements MoneySettingsInterface
 
     // ========== SETTERS ==========
 
-    public function setDecimals(int $decimals = 1): MoneySettings
+    public function setDecimals(int $decimals = 1): self
     {
         if ($decimals < 0) {
             $decimals = 0;
@@ -78,48 +78,48 @@ class MoneySettings implements MoneySettingsInterface
         return $this;
     }
 
-    public function setThousandsSeparator(string $separator): MoneySettings
+    public function setThousandsSeparator(string $separator): self
     {
         $this->thousands_separator = $separator;
         return $this;
     }
 
-    public function setDecimalSeparator(string $separator): MoneySettings
+    public function setDecimalSeparator(string $separator): self
     {
         $this->decimal_separator = $separator;
         return $this;
     }
 
-    public function setEndsWith0(bool $ends = false): MoneySettings
+    public function setEndsWith0(bool $ends = false): self
     {
         $this->ends_with_0 = $ends;
         return $this;
     }
 
-    public function setHasSpaceBetween(bool $space = true): MoneySettings
+    public function setHasSpaceBetween(bool $space = true): self
     {
         $this->space_between = $space;
         return $this;
     }
 
-    public function setCurrency(Currency $currency): MoneySettings
+    public function setCurrency(Currency $currency): self
     {
         $this->currency = $currency;
         return $this;
     }
 
-    public function setOrigin(int $origin): MoneySettings
+    public function setOrigin(int $origin): self
     {
         if (self::isIncorrectOrigin($origin)) {
             throw new UndefinedOriginException(__METHOD__, 1, '$origin');
         }
 
-        $_origin = $this->origin ?? self::ORIGIN_INT;
+        $old_origin = $this->origin ?? self::ORIGIN_INT;
         $this->origin = $origin;
 
         if (!is_null($this->money)) {
-            if ($_origin !== $origin) {
-                $number = $_origin === MoneySettings::ORIGIN_INT
+            if ($old_origin !== $origin) {
+                $number = $old_origin === MoneySettings::ORIGIN_INT
                     ? $this->money->getPureNumber() / $this->getDivisor()
                     : $this->money->getPureNumber() * $this->getDivisor();
 
@@ -165,5 +165,10 @@ class MoneySettings implements MoneySettingsInterface
     public function getOrigin(): int
     {
         return $this->origin;
+    }
+
+    private function getDivisor(): int
+    {
+        return 10 ** $this->getDecimals();
     }
 }
