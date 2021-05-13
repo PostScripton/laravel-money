@@ -286,4 +286,24 @@ class ManipulatingMoneyNumberTest extends TestCase
 
         $usd->rebase($rub);
     }
+
+    /** @test */
+    public function money_can_be_multiplied_by_a_number()
+    {
+        $money = new Money(500);
+        $money->multiple(1.5);
+
+        $this->assertEquals(750, $money->getPureNumber());
+        $this->assertEquals('$ 75', $money->toString());
+    }
+
+    /** @test */
+    public function money_can_be_divided_by_a_number()
+    {
+        $money = new Money(1000);
+        $money->divide(2);
+
+        $this->assertEquals(500, $money->getPureNumber());
+        $this->assertEquals('$ 50', $money->toString());
+    }
 }

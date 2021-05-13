@@ -84,6 +84,18 @@ class Money implements MoneyInterface
         return $this;
     }
 
+    public function multiple(float $number): self
+    {
+        $this->number = $this->getPureNumber() * $number;
+        return $this;
+    }
+
+    public function divide(float $number): self
+    {
+        $this->number = $this->getPureNumber() / $number;
+        return $this;
+    }
+
     public function rebase($money, int $origin = MoneySettings::ORIGIN_INT): Money
     {
         $this->number = $this->numberIntoCorrectOrigin($money, $origin, __METHOD__);
@@ -104,12 +116,12 @@ class Money implements MoneyInterface
         return $this->settings->getCurrency()->getCode() === $money->settings->getCurrency()->getCode();
     }
 
-    public function isNegative():bool
+    public function isNegative(): bool
     {
         return $this->getPureNumber() < 0;
     }
 
-    public function isPositive():bool
+    public function isPositive(): bool
     {
         return $this->getPureNumber() > 0;
     }
