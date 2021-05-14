@@ -167,11 +167,11 @@ class Money implements MoneyInterface
         return new self($new_amount, $currency, $settings->setCurrency($currency));
     }
 
-    public function toInteger(): int
+    public function upload()
     {
-        return $this->settings->getOrigin() === MoneySettings::ORIGIN_INT
-            ? floor($this->getPureNumber())
-            : floor($this->getPureNumber() * $this->getDivisor());
+        return $this->settings()->getOrigin() === MoneySettings::ORIGIN_INT
+            ? (int) floor($this->getPureNumber())
+            : (float) floor($this->getPureNumber() * $this->getDivisor()) / $this->getDivisor();
     }
 
     public function toString(): string

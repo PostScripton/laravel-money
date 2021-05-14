@@ -149,11 +149,11 @@ interface MoneyInterface
     public function convertOfflineInto(Currency $currency, float $coeff): Money;
 
     /**
-     * Converts the money into integer for storing in database <p>
-     * For example, "1 234.5" -> 12345 </p>
-     * @return int
+     * Converts the money into the number according to origin for storing in database <p>
+     * For example, "1 234.5" -> 12345, origin INT </p>
+     * @return int|float
      */
-    public function toInteger(): int;
+    public function upload();
 
     /**
      * Returns the money string applying all the settings <p>

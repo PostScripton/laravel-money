@@ -595,8 +595,11 @@ $usd->getPureNumber(); // 132.76686139139672
 
 ---
 
-##### `toInteger()`
-converts the number into integer according to origin settings whether it is integer or float
+##### `upload()`
+casts the money to the origin number way according to origin settings whether it is an integer or float.
+It helps you to save the money back into your database because it gives you a certain number according to the way your database store money data.
+
+You can set the origin for all the money objects.
 
 ```php
 use PostScripton\Money\Money;
@@ -605,11 +608,11 @@ use PostScripton\Money\MoneySettings;
 $settings = (new MoneySettings())
     ->setOrigin(MoneySettings::ORIGIN_FLOAT);
 
-$int = new Money(1234.5);
-$float = new Money(1234.5, $settings);
+$int = new Money(1234.567890);
+$float = new Money(1234.567890, $settings);
 
-$int->toInteger();      // 12345
-$float->toInteger();    // 12345
+$int->upload();       // 12345
+$float->upload();     // 1234.5
 ```
 
 ---
