@@ -100,13 +100,13 @@ class Money implements MoneyInterface
         return $this->settings()->getCurrency();
     }
 
-    public function add($money, int $origin = MoneySettings::ORIGIN_INT): Money
+    public function add($money, int $origin = MoneySettings::ORIGIN_INT): self
     {
         $this->number += $this->numberIntoCorrectOrigin($money, $origin, __METHOD__);
         return $this;
     }
 
-    public function subtract($money, int $origin = MoneySettings::ORIGIN_INT): Money
+    public function subtract($money, int $origin = MoneySettings::ORIGIN_INT): self
     {
         $this->number -= $this->numberIntoCorrectOrigin($money, $origin, __METHOD__);
         return $this;
@@ -124,7 +124,7 @@ class Money implements MoneyInterface
         return $this;
     }
 
-    public function rebase($money, int $origin = MoneySettings::ORIGIN_INT): Money
+    public function rebase($money, int $origin = MoneySettings::ORIGIN_INT): self
     {
         $this->number = $this->numberIntoCorrectOrigin($money, $origin, __METHOD__);
         return $this;
@@ -154,7 +154,12 @@ class Money implements MoneyInterface
         return $this->getPureNumber() > 0;
     }
 
-    public function convertOfflineInto(Currency $currency, float $coeff): Money
+    public function equals(self $money, bool $strict = true): bool
+    {
+        return $strict ? $this === $money : $this == $money;
+    }
+
+    public function convertOfflineInto(Currency $currency, float $coeff): self
     {
         $new_amount = $this->getPureNumber() * $coeff;
         $settings = clone $this->settings;
