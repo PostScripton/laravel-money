@@ -10,7 +10,7 @@ use PostScripton\Money\MoneySettings;
 class MoneyTest extends TestCase
 {
 	/** @test */
-	public function Creating()
+	public function all_the_ways_to_create_money()
 	{
         $money1 = Money::make(12345);
         $money2 = new Money(12345);
@@ -21,7 +21,7 @@ class MoneyTest extends TestCase
     /** @test
 	 * @throws CurrencyDoesNotExistException
 	 */
-	public function BaseOfFormatting()
+	public function base_way_of_formatting_money()
 	{
 		$usd = Currency::code('USD');
 		$rub = Currency::code('RUB');
@@ -37,8 +37,17 @@ class MoneyTest extends TestCase
 		$this->assertEquals('1 234.5 ₽', Money::make(12345, $rub)->toString());
 	}
 
+    /** @test */
+    public function numbers_can_be_fetched_out_of_the_money()
+    {
+        $money = Money::make(12345);
+
+        $this->assertEquals('1 234.5', $money->getNumber());
+        $this->assertEquals(12345.0, $money->getPureNumber());
+    }
+
 	/** @test */
-	public function String()
+	public function all_casts_to_string()
 	{
 	    $money = Money::make(1234);
 
@@ -75,5 +84,35 @@ class MoneyTest extends TestCase
 
         $this->assertEquals(13, $money->getPureNumber());
         $this->assertEquals('$ 13', $money->toString());
+	}
+	
+	/** @test */
+	public function an_error_that_money_objects_are_immutable()
+	{
+	    $johnReward = $bobReward = new Money(1000);
+
+	    // John has additional bonus $50
+	    $winCoupon = new Money(500);
+
+	    $johnReward->add($winCoupon);
+
+	    $this->assertTrue($johnReward->equals($bobReward));
+	}
+
+	/** @test */
+	public function correct_way_to_handle_immutable_money_objects()
+	{
+        $johnReward = new Money(1000);
+        $bobReward = new Money(1000);
+
+        // John has additional bonus $50
+        $winCoupon = new Money(500);
+
+        $johnReward = $johnReward->add($winCoupon);
+
+        $this->assertEquals(1000, $bobReward->getPureNumber());
+        $this->assertEquals(1500, $johnReward->getPureNumber());
+        $this->assertNotTrue($johnReward->equals($bobReward));
+        $this->assertNotTrue($johnReward->settings() === $bobReward->settings());
 	}
 }
