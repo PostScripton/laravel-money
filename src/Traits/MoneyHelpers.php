@@ -17,9 +17,7 @@ trait MoneyHelpers
 
     private function numberIntoCorrectOrigin($money, int $origin = MoneySettings::ORIGIN_INT, ?string $method = null)
     {
-        $arr = $this->numberOrMoney($money, $origin, $method ?? __METHOD__);
-        $money = $arr[0];
-        $origin = $arr[1];
+        list($money, $origin) = $this->numberOrMoney($money, $origin, $method ?? __METHOD__);
 
         // If origins are not the same
         if ($this->settings()->getOrigin() !== $origin) {
