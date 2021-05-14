@@ -2,6 +2,7 @@
 
 namespace PostScripton\Money;
 
+use PostScripton\Money\Exceptions\NotNumericOrMoneyException;
 use PostScripton\Money\Traits\MoneyHelpers;
 use PostScripton\Money\Traits\MoneyStatic;
 
@@ -154,6 +155,79 @@ class Money implements MoneyInterface
         return $this->getPureNumber() > 0;
     }
 
+    public function isEmpty(): bool
+    {
+        return empty($this->getPureNumber());
+    }
+
+    public function lessThan($money, int $origin = MoneySettings::ORIGIN_INT): bool
+    {
+        if (!is_numeric($money) && !$money instanceof self) {
+            throw new NotNumericOrMoneyException(__METHOD__, 1, '$money');
+        }
+
+        if (is_numeric($money)) {
+            $money = $this->numberIntoCorrectOrigin($money, $origin);
+        }
+
+        if ($money instanceof self) {
+            $money = $money->getPureNumber();
+        }
+
+        return $this->getPureNumber() < $money;
+    }
+
+    public function lessThanOrEqual($money, int $origin = MoneySettings::ORIGIN_INT): bool
+    {
+        if (!is_numeric($money) && !$money instanceof self) {
+            throw new NotNumericOrMoneyException(__METHOD__, 1, '$money');
+        }
+
+        if (is_numeric($money)) {
+            $money = $this->numberIntoCorrectOrigin($money, $origin);
+        }
+
+        if ($money instanceof self) {
+            $money = $money->getPureNumber();
+        }
+
+        return $this->getPureNumber() <= $money;
+    }
+
+    public function greaterThan($money, int $origin = MoneySettings::ORIGIN_INT): bool
+    {
+        if (!is_numeric($money) && !$money instanceof self) {
+            throw new NotNumericOrMoneyException(__METHOD__, 1, '$money');
+        }
+
+        if (is_numeric($money)) {
+            $money = $this->numberIntoCorrectOrigin($money, $origin);
+        }
+
+        if ($money instanceof self) {
+            $money = $money->getPureNumber();
+        }
+
+        return $this->getPureNumber() > $money;
+    }
+
+    public function greaterThanOrEqual($money, int $origin = MoneySettings::ORIGIN_INT): bool
+    {
+        if (!is_numeric($money) && !$money instanceof self) {
+            throw new NotNumericOrMoneyException(__METHOD__, 1, '$money');
+        }
+
+        if (is_numeric($money)) {
+            $money = $this->numberIntoCorrectOrigin($money, $origin);
+        }
+
+        if ($money instanceof self) {
+            $money = $money->getPureNumber();
+        }
+
+        return $this->getPureNumber() >= $money;
+    }
+
     public function equals(self $money, bool $strict = true): bool
     {
         return $strict ? $this === $money : $this == $money;
@@ -170,8 +244,8 @@ class Money implements MoneyInterface
     public function upload()
     {
         return $this->settings()->getOrigin() === MoneySettings::ORIGIN_INT
-            ? (int) floor($this->getPureNumber())
-            : (float) floor($this->getPureNumber() * $this->getDivisor()) / $this->getDivisor();
+            ? (int)floor($this->getPureNumber())
+            : (float)floor($this->getPureNumber() * $this->getDivisor()) / $this->getDivisor();
     }
 
     public function toString(): string

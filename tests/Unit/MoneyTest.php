@@ -21,7 +21,7 @@ class MoneyTest extends TestCase
     /** @test
 	 * @throws CurrencyDoesNotExistException
 	 */
-	public function base_way_of_formatting_money()
+	public function base_ways_of_formatting_money()
 	{
 		$usd = Currency::code('USD');
 		$rub = Currency::code('RUB');
