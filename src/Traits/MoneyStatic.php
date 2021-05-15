@@ -3,6 +3,7 @@
 namespace PostScripton\Money\Traits;
 
 use PostScripton\Money\Currency;
+use PostScripton\Money\Exceptions\MoneyShouldHaveSameCurrencyException;
 use PostScripton\Money\Money;
 use PostScripton\Money\MoneySettings;
 
@@ -88,6 +89,89 @@ trait MoneyStatic
         }
 
         return substr($input, 0, strpos($input, '.') + self::$default_decimals + 1);
+    }
+
+    public static function min(Money ...$monies): ?Money
+    {
+        if (empty($monies)) {
+            return null;
+        }
+
+        self::currenciesAreNotSame($monies, Money::class . '::' . __FUNCTION__, 1, '$monies');
+
+        $min = $monies[0];
+
+        for ($i = 1; $i < count($monies); $i++) {
+            if (($money = $monies[$i])->getPureNumber() < $min->getPureNumber()) {
+                $min = $money;
+            }
+        }
+
+        return $min;
+    }
+
+    public static function max(Money ...$monies): ?Money
+    {
+        if (empty($monies)) {
+            return null;
+        }
+
+        self::currenciesAreNotSame($monies, Money::class . '::' . __FUNCTION__, 1, '$monies');
+
+        $max = $monies[0];
+
+        for ($i = 1; $i < count($monies); $i++) {
+            if (($money = $monies[$i])->getPureNumber() > $max->getPureNumber()) {
+                $max = $money;
+            }
+        }
+
+        return $max;
+    }
+
+    public static function avg(Money ...$monies): ?Money
+    {
+        if (empty($monies)) {
+            return null;
+        }
+
+        self::currenciesAreNotSame($monies, Money::class . '::' . __FUNCTION__, 1, '$monies');
+
+        $sum = array_reduce($monies, function (float $acc, Money $money) {
+            return $acc + $money->getPureNumber();
+        }, 0);
+
+        return new Money($sum / count($monies),
+            Currency::code($monies[0]->getCurrency()->getCode()),
+            clone $monies[0]->settings());
+    }
+
+    public static function sum(Money ...$monies): ?Money
+    {
+        if (empty($monies)) {
+            return null;
+        }
+
+        self::currenciesAreNotSame($monies, Money::class . '::' . __FUNCTION__, 1, '$monies');
+
+        $sum = array_reduce($monies, function (float $acc, Money $money) {
+            return $acc + $money->getPureNumber();
+        }, 0);
+
+        return new Money($sum,
+            Currency::code($monies[0]->getCurrency()->getCode()),
+            clone $monies[0]->settings());
+    }
+
+    private static function currenciesAreNotSame(array $monies, string $method, int $arg_num, string $arg_name): void
+    {
+        $main = $monies[0];
+
+        foreach ($monies as $money) {
+            if (!$main->isSameCurrency($money)) {
+                throw new MoneyShouldHaveSameCurrencyException($method, $arg_num, $arg_name);
+            }
+        }
     }
 
     private static function bindMoneyWithCurrency(Money $money, Currency $currency): string
