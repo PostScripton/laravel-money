@@ -3,10 +3,12 @@
 namespace PostScripton\Money;
 
 use PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException;
-use PostScripton\Money\Exceptions\NotNumericException;
+use PostScripton\Money\Exceptions\NotNumericOrMoneyException;
 
 interface MoneyInterface
 {
+    // todo Написать документацию для всех новых объектов
+
     // ========== STATIC ========== //
 
     /**
@@ -104,7 +106,7 @@ interface MoneyInterface
      * Origin of the number whether it is integer of float. </p> <p>
      * Use `Money::ORIGIN_*` to ensure it's correct </p>
      * @throws MoneyHasDifferentCurrenciesException
-     * @throws NotNumericException
+     * @throws NotNumericOrMoneyException
      * @return Money
      */
     public function add($money, int $origin = MoneySettings::ORIGIN_INT): Money;
@@ -118,7 +120,7 @@ interface MoneyInterface
      * Origin of the number whether it is integer of float. </p> <p>
      * Use `Money::ORIGIN_*` to ensure it's correct </p>
      * @throws MoneyHasDifferentCurrenciesException
-     * @throws NotNumericException
+     * @throws NotNumericOrMoneyException
      * @return Money
      */
     public function subtract($money, int $origin = MoneySettings::ORIGIN_INT): Money;
@@ -131,7 +133,7 @@ interface MoneyInterface
      * Origin of the number whether it is integer of float. </p> <p>
      * Use `Money::ORIGIN_*` to ensure it's correct </p>
      * @throws MoneyHasDifferentCurrenciesException
-     * @throws NotNumericException
+     * @throws NotNumericOrMoneyException
      * @return Money
      */
     public function rebase($money, int $origin = MoneySettings::ORIGIN_INT): Money;

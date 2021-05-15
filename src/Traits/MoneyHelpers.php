@@ -3,7 +3,7 @@
 namespace PostScripton\Money\Traits;
 
 use PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException;
-use PostScripton\Money\Exceptions\NotNumericException;
+use PostScripton\Money\Exceptions\NotNumericOrMoneyException;
 use PostScripton\Money\Exceptions\UndefinedOriginException;
 use PostScripton\Money\Money;
 use PostScripton\Money\MoneySettings;
@@ -31,13 +31,12 @@ trait MoneyHelpers
 
     private function numberOrMoney($money, int $origin, string $method): array
     {
-        if (!is_numeric($money)) {
-            if (!($money instanceof Money)) {
-                throw new NotNumericException($method, 1, '$money');
-            }
+        if (!is_numeric($money) && !$money instanceof self) {
+            throw new NotNumericOrMoneyException(__METHOD__, 1, '$money');
+        }
 
-            // First argument is Money
-            if (!$this->isSameCurrency($money)) {
+        if ($money instanceof Money) {
+           if (!$this->isSameCurrency($money)) {
                 // In the future it will be converted automatically with no exceptions
                 throw new MoneyHasDifferentCurrenciesException($method, 1, '$money');
             }
