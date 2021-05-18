@@ -4,6 +4,8 @@ namespace PostScripton\Money\Traits;
 
 use PostScripton\Money\Currency;
 use PostScripton\Money\Exceptions\MoneyShouldHaveSameCurrencyException;
+use PostScripton\Money\Exceptions\NoCurrencyInParserStringException;
+use PostScripton\Money\Exceptions\WrongParserStringException;
 use PostScripton\Money\Money;
 use PostScripton\Money\MoneySettings;
 
@@ -31,6 +33,50 @@ trait MoneyStatic
     public static function configNotPublished(): bool
     {
         return is_null(config('money'));
+    }
+
+    public static function parse(
+        string $money,
+        Currency $currency = null,
+        string $thousands = null,
+        string $decimals = null
+    ): Money {
+        $currency = $currency ?? self::getDefaultCurrency();
+
+        $thousands = preg_quote($thousands ?? self::getDefaultThousandsSeparator());
+        $decimals = preg_quote($decimals ?? self::getDefaultDecimalSeparator());
+        $currencies = implode('|', array_map(function ($sign) {
+                return preg_quote($sign);
+            }, $currency->getSymbols())) . '|' .
+            preg_quote($currency->getCode()) . '|' .
+            preg_quote($currency->getNumCode());
+
+        if (trim($thousands) === '') {
+            $thousands = '\s';
+        }
+
+        if (trim($decimals) === '') {
+            $decimals = '\s';
+        }
+
+        $result = null;
+        $pattern = '/(' . $currencies . ')?\s?(-?[\d' . $thousands . $decimals . ']*)\s?(' . $currencies . ')?/';
+        preg_match($pattern, $money, $result);
+
+        if (empty($result[0])) {
+            throw new WrongParserStringException(Money::class  . '::' . __FUNCTION__, 1, '$money');
+        }
+
+        if (empty($result[1]) && !array_key_exists(3, $result)) {
+            throw new NoCurrencyInParserStringException(Money::class  . '::' . __FUNCTION__, 1, '$money');
+        }
+
+        $amount = preg_replace("/{$thousands}/", '', $result[2]);
+        $amount = (float)preg_replace("/{$decimals}/", '.', $amount);
+
+        $money = Money::make($amount, $currency, (new MoneySettings())->setOrigin(MoneySettings::ORIGIN_FLOAT));
+        $money->settings()->setOrigin(Money::getDefaultOrigin());
+        return $money;
     }
 
     // ========== GETTERS ==========

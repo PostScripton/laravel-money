@@ -212,6 +212,15 @@ class Currency
         return $this->symbol;
     }
 
+    public function getSymbols(): array
+    {
+        if (is_array($this->symbol)) {
+            return $this->symbol;
+        }
+
+        return [$this->symbol];
+    }
+
     public function getPosition(): int
     {
         return $this->position;
