@@ -39,7 +39,7 @@ class MoneySettings implements MoneySettingsInterface
         int $origin = null
     ) {
         $this->money = null;
-        $this-origin = MoneySettings::ORIGIN_INT;
+        $this->origin = MoneySettings::ORIGIN_INT;
 
         try {
             $this->setDecimals($decimals ?? Money::getDefaultDecimals())
