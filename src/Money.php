@@ -85,10 +85,11 @@ class Money implements MoneyInterface
         );
 
         if (!$this->settings()->endsWith0()) {
+            $thousands = preg_quote($this->settings()->getThousandsSeparator());
+            $decimals = preg_quote($this->settings()->getDecimalSeparator());
+
             # /^-?((\d+|\s*)*\.\d*[1-9]|(\d+|\s*)*)/ - берёт всё число, кроме 0 и .*0 на конце
-            $pattern = '/^-?((\d+|' . ($this->settings()->getThousandsSeparator() ?: '\s') . '*)*\\' .
-                ($this->settings()->getDecimalSeparator() ?: '\s') . '\d*[1-9]|(\d+|' .
-                ($this->settings()->getThousandsSeparator() ?: '\s') . '*)*)/';
+            $pattern = '/^-?((\d+|' . $thousands . '*)*' . $decimals . '\d*[1-9]|(\d+|' . $thousands . '*)*)/';
             preg_match($pattern, $money, $money);
             $money = $money[0];
         }
