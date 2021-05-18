@@ -119,6 +119,10 @@ class MoneySettings implements MoneySettingsInterface
             throw new UndefinedOriginException(__METHOD__, 1, '$origin');
         }
 
+        if ($this->origin === $origin) {
+            return $this;
+        }
+
         $old_origin = $this->origin ?? self::ORIGIN_INT;
         $this->origin = $origin;
 
