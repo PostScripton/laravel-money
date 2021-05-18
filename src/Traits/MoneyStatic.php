@@ -3,6 +3,9 @@
 namespace PostScripton\Money\Traits;
 
 use PostScripton\Money\Currency;
+use PostScripton\Money\Exceptions\MoneyShouldHaveSameCurrencyException;
+use PostScripton\Money\Exceptions\NoCurrencyInParserStringException;
+use PostScripton\Money\Exceptions\WrongParserStringException;
 use PostScripton\Money\Money;
 use PostScripton\Money\MoneySettings;
 
@@ -30,6 +33,50 @@ trait MoneyStatic
     public static function configNotPublished(): bool
     {
         return is_null(config('money'));
+    }
+
+    public static function parse(
+        string $money,
+        Currency $currency = null,
+        string $thousands = null,
+        string $decimals = null
+    ): Money {
+        $currency = $currency ?? self::getDefaultCurrency();
+
+        $thousands = preg_quote($thousands ?? self::getDefaultThousandsSeparator());
+        $decimals = preg_quote($decimals ?? self::getDefaultDecimalSeparator());
+        $currencies = implode('|', array_map(function ($sign) {
+                return preg_quote($sign);
+            }, $currency->getSymbols())) . '|' .
+            preg_quote($currency->getCode()) . '|' .
+            preg_quote($currency->getNumCode());
+
+        if (trim($thousands) === '') {
+            $thousands = '\s';
+        }
+
+        if (trim($decimals) === '') {
+            $decimals = '\s';
+        }
+
+        $result = null;
+        $pattern = '/(' . $currencies . ')?\s?(-?[\d' . $thousands . $decimals . ']*)\s?(' . $currencies . ')?/';
+        preg_match($pattern, $money, $result);
+
+        if (empty($result[0])) {
+            throw new WrongParserStringException(Money::class  . '::' . __FUNCTION__, 1, '$money');
+        }
+
+        if (empty($result[1]) && !array_key_exists(3, $result)) {
+            throw new NoCurrencyInParserStringException(Money::class  . '::' . __FUNCTION__, 1, '$money');
+        }
+
+        $amount = preg_replace("/{$thousands}/", '', $result[2]);
+        $amount = (float)preg_replace("/{$decimals}/", '.', $amount);
+
+        $money = Money::make($amount, $currency, (new MoneySettings())->setOrigin(MoneySettings::ORIGIN_FLOAT));
+        $money->settings()->setOrigin(Money::getDefaultOrigin());
+        return $money;
     }
 
     // ========== GETTERS ==========
@@ -81,24 +128,6 @@ trait MoneyStatic
         return new Money($number, $currency, $settings);
     }
 
-    public static function convertOffline(Money $money, Currency $into, float $coeff): Money
-    {
-        $new_amount = $money->getPureNumber() * $coeff;
-        $settings = clone $money->settings;
-
-        return self::make($new_amount, $into, $settings->setCurrency($into));
-    }
-
-    public static function purify(Money $money): string
-    {
-        return $money->getNumber();
-    }
-
-    public static function integer(Money $money): int
-    {
-        return floor($money->getPureNumber());
-    }
-
     public static function correctInput(string $input): string
     {
         if (!str_contains($input, '.')) {
@@ -108,9 +137,92 @@ trait MoneyStatic
         return substr($input, 0, strpos($input, '.') + self::$default_decimals + 1);
     }
 
+    public static function min(Money ...$monies): ?Money
+    {
+        if (empty($monies)) {
+            return null;
+        }
+
+        self::currenciesAreNotSame($monies, Money::class . '::' . __FUNCTION__, 1, '$monies');
+
+        $min = $monies[0];
+
+        for ($i = 1; $i < count($monies); $i++) {
+            if (($money = $monies[$i])->getPureNumber() < $min->getPureNumber()) {
+                $min = $money;
+            }
+        }
+
+        return $min;
+    }
+
+    public static function max(Money ...$monies): ?Money
+    {
+        if (empty($monies)) {
+            return null;
+        }
+
+        self::currenciesAreNotSame($monies, Money::class . '::' . __FUNCTION__, 1, '$monies');
+
+        $max = $monies[0];
+
+        for ($i = 1; $i < count($monies); $i++) {
+            if (($money = $monies[$i])->getPureNumber() > $max->getPureNumber()) {
+                $max = $money;
+            }
+        }
+
+        return $max;
+    }
+
+    public static function avg(Money ...$monies): ?Money
+    {
+        if (empty($monies)) {
+            return null;
+        }
+
+        self::currenciesAreNotSame($monies, Money::class . '::' . __FUNCTION__, 1, '$monies');
+
+        $sum = array_reduce($monies, function (float $acc, Money $money) {
+            return $acc + $money->getPureNumber();
+        }, 0);
+
+        return new Money($sum / count($monies),
+            Currency::code($monies[0]->getCurrency()->getCode()),
+            clone $monies[0]->settings());
+    }
+
+    public static function sum(Money ...$monies): ?Money
+    {
+        if (empty($monies)) {
+            return null;
+        }
+
+        self::currenciesAreNotSame($monies, Money::class . '::' . __FUNCTION__, 1, '$monies');
+
+        $sum = array_reduce($monies, function (float $acc, Money $money) {
+            return $acc + $money->getPureNumber();
+        }, 0);
+
+        return new Money($sum,
+            Currency::code($monies[0]->getCurrency()->getCode()),
+            clone $monies[0]->settings());
+    }
+
+    private static function currenciesAreNotSame(array $monies, string $method, int $arg_num, string $arg_name): void
+    {
+        $main = $monies[0];
+
+        foreach ($monies as $money) {
+            if (!$main->isSameCurrency($money)) {
+                throw new MoneyShouldHaveSameCurrencyException($method, $arg_num, $arg_name);
+            }
+        }
+    }
+
     private static function bindMoneyWithCurrency(Money $money, Currency $currency): string
     {
-        $space = $money->settings->hasSpaceBetween() ? ' ' : '';
+        $space = $money->settings()->hasSpaceBetween() ? ' ' : '';
 
         // Always has a space
         if ($currency->getPosition() === Currency::POS_START && $money->isNegative() || $currency->getDisplay() === Currency::DISPLAY_CODE) {

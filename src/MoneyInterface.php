@@ -3,7 +3,7 @@
 namespace PostScripton\Money;
 
 use PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException;
-use PostScripton\Money\Exceptions\NotNumericException;
+use PostScripton\Money\Exceptions\NotNumericOrMoneyException;
 
 interface MoneyInterface
 {
@@ -14,39 +14,6 @@ interface MoneyInterface
      * @param MoneySettings $setting
      */
     public static function set(MoneySettings $setting): void;
-
-    /**
-     * Returns just a formatted number <p>
-     * For example, "$ 1 234.56" -> "1234.56" </p>
-     * @param Money $money <p>
-     * Money object: "1 234.56 ₽" </p>
-     * @return string <p>
-     * Formatted number: "1 234.56" </p>
-     */
-    public static function purify(Money $money): string;
-
-    /**
-     * Returns converted the money's value into integer for storing in database
-     * @param Money $money <p>
-     * Money object: 1234.567 (set 2 decimals) </p>
-     * @return int <p>
-     * Integer: 123456 </p>
-     */
-    public static function integer(Money $money): int;
-
-    /**
-     * Converts from one currency to another
-     * @param Money $money <p>
-     * Money object </p>
-     * @param Currency $into <p>
-     * Currency to be converted into </p>
-     * @param float $coeff
-     * <p>Coefficient between one currency and another</p>
-     * <p>USD -> RUB = 75.79 / 1</p>
-     * <p>RUB -> USD = 1 / 75.79</p>
-     * @return Money Денежная строка со знаком валюты
-     */
-    public static function convertOffline(Money $money, Currency $into, float $coeff): Money;
 
     /**
      * Corrects input &lt;input type="number" /&gt; using default settings
@@ -108,6 +75,19 @@ interface MoneyInterface
     // ========== OBJECT ========== //
 
     /**
+     * Binds the money object with settings
+     * @param MoneySettings $settings
+     * @return Money
+     */
+    public function bind(MoneySettings $settings): Money;
+
+    /**
+     * Returns settings object
+     * @return MoneySettings
+     */
+    public function settings(): MoneySettings;
+
+    /**
      * Returns a formatted number <p>
      * For example, "$ 1 234.5" -> "1 234.5" </p>
      * @return string
@@ -123,7 +103,7 @@ interface MoneyInterface
 
     /**
      * Shortcut for returning the currency <p>
-     * Full: `$money->settings->getCurrency()` </p>
+     * Full: `$money->settings()->getCurrency()` </p>
      * @return Currency
      */
     public function getCurrency(): Currency;
@@ -137,7 +117,7 @@ interface MoneyInterface
      * Origin of the number whether it is integer of float. </p> <p>
      * Use `Money::ORIGIN_*` to ensure it's correct </p>
      * @throws MoneyHasDifferentCurrenciesException
-     * @throws NotNumericException
+     * @throws NotNumericOrMoneyException
      * @return Money
      */
     public function add($money, int $origin = MoneySettings::ORIGIN_INT): Money;
@@ -151,10 +131,28 @@ interface MoneyInterface
      * Origin of the number whether it is integer of float. </p> <p>
      * Use `Money::ORIGIN_*` to ensure it's correct </p>
      * @throws MoneyHasDifferentCurrenciesException
-     * @throws NotNumericException
+     * @throws NotNumericOrMoneyException
      * @return Money
      */
     public function subtract($money, int $origin = MoneySettings::ORIGIN_INT): Money;
+
+    /**
+     * Multiples a number from the money. It's like <p>
+     * `$100 * 2 = $200` </p>
+     * @param float $number <p>
+     * A number on which the money will be multiplied </p>
+     * @return Money
+     */
+    public function multiple(float $number): Money;
+
+    /**
+     * Divides a number from the money. It's like <p>
+     * `$100 / 2 = $50` </p>
+     * @param float $number <p>
+     * A number on which the money will be divided </p>
+     * @return Money
+     */
+    public function divide(float $number): Money;
 
     /**
      * Rebases the money on a number
@@ -164,10 +162,90 @@ interface MoneyInterface
      * Origin of the number whether it is integer of float. </p> <p>
      * Use `Money::ORIGIN_*` to ensure it's correct </p>
      * @throws MoneyHasDifferentCurrenciesException
-     * @throws NotNumericException
+     * @throws NotNumericOrMoneyException
      * @return Money
      */
     public function rebase($money, int $origin = MoneySettings::ORIGIN_INT): Money;
+
+    /**
+     * Removes decimals. It's like <p>
+     * `$10.25 -> $10.00` </p>
+     * @return Money
+     */
+    public function clear(): Money;
+
+    /**
+     * Checks whether two money objects have the same currency
+     * @param Money $money
+     * @return bool
+     */
+    public function isSameCurrency(Money $money): bool;
+
+    /**
+     * Checks whether the money's number is negative (less than zero)
+     * @return bool
+     */
+    public function isNegative(): bool;
+
+    /**
+     * Checks whether the money's number is positive (greater than zero)
+     * @return bool
+     */
+    public function isPositive(): bool;
+
+    /**
+     * Checks whether the money's number is zero
+     * @return bool
+     */
+    public function isEmpty(): bool;
+
+    /**
+     * Compares with a number or a money object whether it is less than the number or the money object.
+     * @param $money <p>
+     * A number or a money object </p>
+     * @param int $origin <p>
+     * If the previous parameter is the number then it sets an origin for that number </p><p>
+     * 1000, MoneySettings::ORIGIN_INT </p><p>
+     * 100.0, MoneySettings::ORIGIN_FLOAT </p>
+     * @return bool
+     */
+    public function lessThan($money, int $origin = MoneySettings::ORIGIN_INT): bool;
+
+    /**
+     * Compares with a number or a money object whether it is less than or equals to the number or the money object.
+     * @param $money <p>
+     * A number or a money object </p>
+     * @param int $origin <p>
+     * If the previous parameter is the number then it sets an origin for that number </p><p>
+     * 1000, MoneySettings::ORIGIN_INT </p><p>
+     * 100.0, MoneySettings::ORIGIN_FLOAT </p>
+     * @return bool
+     */
+    public function lessThanOrEqual($money, int $origin = MoneySettings::ORIGIN_INT): bool;
+
+    /**
+     * Compares with a number or a money object whether it is greater than the number or the money object.
+     * @param $money <p>
+     * A number or a money object </p>
+     * @param int $origin <p>
+     * If the previous parameter is the number then it sets an origin for that number </p><p>
+     * 1000, MoneySettings::ORIGIN_INT </p><p>
+     * 100.0, MoneySettings::ORIGIN_FLOAT </p>
+     * @return bool
+     */
+    public function greaterThan($money, int $origin = MoneySettings::ORIGIN_INT): bool;
+
+    /**
+     * Compares with a number or a money object whether it is greater than or equals to the number or the money object.
+     * @param $money <p>
+     * A number or a money object </p>
+     * @param int $origin <p>
+     * If the previous parameter is the number then it sets an origin for that number </p><p>
+     * 1000, MoneySettings::ORIGIN_INT </p><p>
+     * 100.0, MoneySettings::ORIGIN_FLOAT </p>
+     * @return bool
+     */
+    public function greaterThanOrEqual($money, int $origin = MoneySettings::ORIGIN_INT): bool;
 
     /**
      * Converts money into another currency using coefficient between currencies
@@ -182,11 +260,11 @@ interface MoneyInterface
     public function convertOfflineInto(Currency $currency, float $coeff): Money;
 
     /**
-     * Converts the money into integer for storing in database <p>
-     * For example, "1 234.5" -> 12345 </p>
-     * @return int
+     * Converts the money into the number according to origin for storing in database <p>
+     * For example, "1 234.5" -> 12345, origin INT </p>
+     * @return int|float
      */
-    public function toInteger(): int;
+    public function upload();
 
     /**
      * Returns the money string applying all the settings <p>

@@ -78,15 +78,20 @@ To set setting:
 use PostScripton\Money\Money;
 use PostScripton\Money\MoneySettings;
 
-// Set #1
+// Method #1
 $money = new Money(1234, new MoneySettings);
 
-// Set #2
+// Method #2
 $money = new Money(1234);
 $settings = new MoneySettings;
-$money->settings = $settings;
+$money->bind($settings);
 
-// Set #3
+// Method #3
+$money = new Money(1234);
+$settings = new MoneySettings;
+$settings->bind($money);
+
+// Method #4
 $money = new Money(1234); // Every Money object has settings by default even if it is not provided
 ```
 
@@ -95,7 +100,7 @@ To get settings:
 use PostScripton\Money\Money;
 
 $money = new Money(1234);
-$money->settings;
+$money->settings();
 ```
 
 ❗ **NOTE**
@@ -115,12 +120,12 @@ use PostScripton\Money\MoneySettings;
 $settings = new MoneySettings;
 $money = new Money(1234, $settings);
 
-$money->settings->getDecimals();    // 1
+$money->settings()->getDecimals();    // 1
 $money->toString();                 // "$ 123.4"
 
-$money->settings->setDecimals(2); 
+$money->settings()->setDecimals(2); 
 
-$money->settings->getDecimals();    // 2
+$money->settings()->getDecimals();    // 2
 $money->toString();                 // "$ 12.34" 
 ```
 
@@ -136,12 +141,12 @@ use PostScripton\Money\MoneySettings;
 $settings = new MoneySettings;
 $money = new Money(10000000, $settings);
 
-$money->settings->getThousandsSeparator();  // " "
+$money->settings()->getThousandsSeparator();  // " "
 $money->toString();                         // "$ 1 000 000"
 
-$money->settings->setThousandsSeparator("'"); 
+$money->settings()->setThousandsSeparator("'"); 
 
-$money->settings->getThousandsSeparator();  // "'"
+$money->settings()->getThousandsSeparator();  // "'"
 $money->toString();                         // "$ 1'000'000"
 ```
 
@@ -157,12 +162,12 @@ use PostScripton\Money\MoneySettings;
 $settings = new MoneySettings;
 $money = new Money(1234, $settings);
 
-$money->settings->getDecimalSeparator();    // "."
+$money->settings()->getDecimalSeparator();    // "."
 $money->toString();                         // "$ 123.4"
 
-$money->settings->setDecimalSeparator(","); 
+$money->settings()->setDecimalSeparator(","); 
 
-$money->settings->getDecimalSeparator();    // ","
+$money->settings()->getDecimalSeparator();    // ","
 $money->toString();                         // "$ 123,4"
 ```
 
@@ -178,12 +183,12 @@ use PostScripton\Money\MoneySettings;
 $settings = new MoneySettings;
 $money = new Money(1000, $settings);
 
-$money->settings->endsWith0();  // false
+$money->settings()->endsWith0();  // false
 $money->toString();             // "$ 100"
 
-$money->settings->setEndsWith0(true); 
+$money->settings()->setEndsWith0(true); 
 
-$money->settings->endsWith0();  // true
+$money->settings()->endsWith0();  // true
 $money->toString();             // "$ 100.0"
 ```
 
@@ -199,12 +204,12 @@ use PostScripton\Money\MoneySettings;
 $settings = new MoneySettings;
 $money = new Money(1234, $settings);
 
-$money->settings->hasSpaceBetween();    // true
+$money->settings()->hasSpaceBetween();    // true
 $money->toString();                     // "$ 100"
 
-$money->settings->setHasSpaceBetween(false);
+$money->settings()->setHasSpaceBetween(false);
 
-$money->settings->hasSpaceBetween();    // false
+$money->settings()->hasSpaceBetween();    // false
 $money->toString();                     // "$100"
 ```
 
@@ -221,14 +226,14 @@ use PostScripton\Money\MoneySettings;
 $settings = new MoneySettings;
 $money = new Money(1234, $settings);
 
-$money->settings->getCurrency();                // PostScripton\Money\Currency class
-$money->settings->getCurrency()->getSymbol();   // "$"
+$money->settings()->getCurrency();                // PostScripton\Money\Currency class
+$money->settings()->getCurrency()->getSymbol();   // "$"
 $money->toString();                             // "$ 123.4"
 
-$money->settings->setCurrency(Currency::code('RUB'));
+$money->settings()->setCurrency(Currency::code('RUB'));
 
-$money->settings->getCurrency();                // PostScripton\Money\Currency class
-$money->settings->getCurrency()->getSymbol();   // "₽"
+$money->settings()->getCurrency();                // PostScripton\Money\Currency class
+$money->settings()->getCurrency()->getSymbol();   // "₽"
 $money->toString();                             // "123.4 ₽"
 ```
 
@@ -237,7 +242,7 @@ There is a shortcut for getting a currency:
 use PostScripton\Money\Money;
 
 $money = new Money(1234);
-$money->getCurrency(); // the same as: $money->settings->getCurrency()
+$money->getCurrency(); // the same as: $money->settings()->getCurrency()
 ```
 
 ---
@@ -253,7 +258,7 @@ use PostScripton\Money\MoneySettings;
 $settings = new MoneySettings;
 $money = new Money(1234, $settings);
 
-$money->settings->getOrigin();  // 0 (MoneySettings::ORIGIN_INT)
+$money->settings()->getOrigin();  // 0 (MoneySettings::ORIGIN_INT)
 $money->toString();             // "$ 123.4"
 ```
 
@@ -264,9 +269,9 @@ use PostScripton\Money\MoneySettings;
 $settings = new MoneySettings;
 $money = new Money(1234.567, $settings);
 
-$money->settings->setOrigin(MoneySettings::ORIGIN_FLOAT);
+$money->settings()->setOrigin(MoneySettings::ORIGIN_FLOAT);
 
-$money->settings->getOrigin();  // 1 (MoneySettings::ORIGIN_FLOAT)
+$money->settings()->getOrigin();  // 1 (MoneySettings::ORIGIN_FLOAT)
 $money->toString();             // "$ 1234.6"
 ```
 
@@ -337,12 +342,12 @@ use PostScripton\Money\Money;
 
 $money = new Money(1234);
 
-$money->settings->getCurrency()->getPosition(); // 0 (Currency::POS_START)
+$money->settings()->getCurrency()->getPosition(); // 0 (Currency::POS_START)
 $money->toString();                             // "$ 123.4"
 
-$money->settings->getCurrency()->setPosition(Currency::POS_END);
+$money->settings()->getCurrency()->setPosition(Currency::POS_END);
 
-$money->settings->getCurrency()->getPosition(); // 1 (Currency::POS_END)
+$money->settings()->getCurrency()->getPosition(); // 1 (Currency::POS_END)
 $money->toString();                             // "123.4 $"
 ```
 
@@ -358,16 +363,16 @@ use PostScripton\Money\Money;
 
 $money = new Money(1234);
 
-$money->settings->getCurrency()->getDisplay();  // 10 (Currency::DISPLAY_SYMBOL)
+$money->settings()->getCurrency()->getDisplay();  // 10 (Currency::DISPLAY_SYMBOL)
 $money->toString();                             // "$ 123.4"
 
-$money->settings->getCurrency()->setDisplay(Currency::DISPLAY_CODE);
+$money->settings()->getCurrency()->setDisplay(Currency::DISPLAY_CODE);
 
-$money->settings->getCurrency()->getDisplay();  // 11 (Currency::DISPLAY_CODE)
+$money->settings()->getCurrency()->getDisplay();  // 11 (Currency::DISPLAY_CODE)
 $money->toString();                             // "USD 123.4"
 
 // If you don't like the look of the code at the beginning
-$money->settings->getCurrency()->setPosition(Currency::POS_END);
+$money->settings()->getCurrency()->setPosition(Currency::POS_END);
 $money->toString();                             // "123.4 USD"
 ```
 
@@ -429,46 +434,6 @@ Money::make(12345, Currency::code('RUB'));    // "1 234.5 ₽"
 
 Method `make()` is a synonym of an object's constructor.
 All the ways to pass parameters have already been discussed at the beginning.
-
----
-
-##### `Money::purify()`
-gives you formatted number from Money object
-
-```php
-use PostScripton\Money\Money;
-
-$money = Money::make(12345);    // "$ 1 234.5"
-Money::purify($money);          // "1 234.5"
-```
-
----
-
-##### `Money::integer()`
-converts Money object back into integer or float according to origin settings
-
-```php
-use PostScripton\Money\Money;
-
-$money = Money::make(12345);    // "$ 1 234.5"
-Money::integer($money);         // 12345
-```
-
----
-
-##### `Money::convert()`
-converts money from one currency to another
-
-```php
-use PostScripton\Money\Currency;
-use PostScripton\Money\Money;
-
-$coeff = 75.32;
-$rub = Money::make(10000, Currency::code('RUB'));                       // "1 000 ₽"
-
-$usd = Money::convertOffline($rub, Currency::code('USD'), 1 / $coeff);  // "$ 13.3"
-$rub = Money::convertOffline($usd, Currency::code('RUB'), $coeff / 1);  // "1 000 ₽"
-```
 
 ---
 
@@ -630,8 +595,11 @@ $usd->getPureNumber(); // 132.76686139139672
 
 ---
 
-##### `toInteger()`
-converts the number into integer according to origin settings whether it is integer or float
+##### `upload()`
+casts the money to the origin number way according to origin settings whether it is an integer or float.
+It helps you to save the money back into your database because it gives you a certain number according to the way your database store money data.
+
+You can set the origin for all the money objects.
 
 ```php
 use PostScripton\Money\Money;
@@ -640,11 +608,11 @@ use PostScripton\Money\MoneySettings;
 $settings = (new MoneySettings())
     ->setOrigin(MoneySettings::ORIGIN_FLOAT);
 
-$int = new Money(1234.5);
-$float = new Money(1234.5, $settings);
+$int = new Money(1234.567890);
+$float = new Money(1234.567890, $settings);
 
-$int->toInteger();      // 12345
-$float->toInteger();    // 12345
+$int->upload();       // 12345
+$float->upload();     // 1234.5
 ```
 
 ---

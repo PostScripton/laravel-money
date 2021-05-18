@@ -7,13 +7,11 @@ use PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException;
 use PostScripton\Money\Money;
 use PostScripton\Money\MoneySettings;
 use PostScripton\Money\Exceptions\UndefinedOriginException;
-use PostScripton\Money\Exceptions\NotNumericException;
+use PostScripton\Money\Exceptions\NotNumericOrMoneyException;
 
 class ManipulatingMoneyNumberTest extends TestCase
 {
-    /** @test
-     * @throws UndefinedOriginException
-     */
+    /** @test */
     public function IntAddInt()
     {
         $settings = (new MoneySettings())
@@ -23,9 +21,7 @@ class ManipulatingMoneyNumberTest extends TestCase
         $this->assertEquals('$ 150', $money->add(500));
     }
 
-    /** @test
-     * @throws UndefinedOriginException
-     */
+    /** @test */
     public function IntAddFloat()
     {
         $settings = (new MoneySettings())
@@ -35,9 +31,7 @@ class ManipulatingMoneyNumberTest extends TestCase
         $this->assertEquals('$ 150', $money->add(50, MoneySettings::ORIGIN_FLOAT));
     }
 
-    /** @test
-     * @throws UndefinedOriginException
-     */
+    /** @test */
     public function FloatAddFloat()
     {
         $settings = (new MoneySettings())
@@ -47,9 +41,7 @@ class ManipulatingMoneyNumberTest extends TestCase
         $this->assertEquals('$ 150', $money->add(50, MoneySettings::ORIGIN_FLOAT));
     }
 
-    /** @test
-     * @throws UndefinedOriginException
-     */
+    /** @test */
     public function FloatAddInt()
     {
         $settings = (new MoneySettings())
@@ -59,12 +51,10 @@ class ManipulatingMoneyNumberTest extends TestCase
         $this->assertEquals('$ 150', $money->add(500));
     }
 
-    /** @test
-     * @throws UndefinedOriginException
-     */
+    /** @test */
     public function AddNumericError()
     {
-        $this->expectException(NotNumericException::class);
+        $this->expectException(NotNumericOrMoneyException::class);
 
         $settings = (new MoneySettings())
             ->setOrigin(MoneySettings::ORIGIN_INT);
@@ -97,9 +87,7 @@ class ManipulatingMoneyNumberTest extends TestCase
     }
 
 
-    /** @test
-     * @throws UndefinedOriginException
-     */
+    /** @test */
     public function IntSubtractInt()
     {
         $settings = (new MoneySettings())
@@ -109,9 +97,7 @@ class ManipulatingMoneyNumberTest extends TestCase
         $this->assertEquals('$ 100', $money->subtract(500));
     }
 
-    /** @test
-     * @throws UndefinedOriginException
-     */
+    /** @test */
     public function IntSubtractFloat()
     {
         $settings = (new MoneySettings())
@@ -121,9 +107,7 @@ class ManipulatingMoneyNumberTest extends TestCase
         $this->assertEquals('$ 100', $money->subtract(50, MoneySettings::ORIGIN_FLOAT));
     }
 
-    /** @test
-     * @throws UndefinedOriginException
-     */
+    /** @test */
     public function FloatSubtractFloat()
     {
         $settings = (new MoneySettings())
@@ -133,9 +117,7 @@ class ManipulatingMoneyNumberTest extends TestCase
         $this->assertEquals('$ 100', $money->subtract(50, MoneySettings::ORIGIN_FLOAT));
     }
 
-    /** @test
-     * @throws UndefinedOriginException
-     */
+    /** @test */
     public function FloatSubtractInt()
     {
         $settings = (new MoneySettings())
@@ -145,12 +127,10 @@ class ManipulatingMoneyNumberTest extends TestCase
         $this->assertEquals('$ 100', $money->subtract(500));
     }
 
-    /** @test
-     * @throws UndefinedOriginException
-     */
+    /** @test */
     public function SubtractNumericError()
     {
-        $this->expectException(NotNumericException::class);
+        $this->expectException(NotNumericOrMoneyException::class);
 
         $settings = (new MoneySettings())
             ->setOrigin(MoneySettings::ORIGIN_INT);
@@ -182,9 +162,7 @@ class ManipulatingMoneyNumberTest extends TestCase
         $usd->subtract($rub);
     }
 
-    /** @test
-     * @throws UndefinedOriginException
-     */
+    /** @test */
     public function IntSubtractInt_MoreThanMoneyHas()
     {
         $settings = (new MoneySettings())
@@ -195,9 +173,7 @@ class ManipulatingMoneyNumberTest extends TestCase
         $this->assertEquals(-500, $money->getPureNumber());
     }
 
-    /** @test
-     * @throws UndefinedOriginException
-     */
+    /** @test */
     public function IntSubtractFloat_MoreThanMoneyHas()
     {
         $settings = (new MoneySettings())
@@ -208,9 +184,7 @@ class ManipulatingMoneyNumberTest extends TestCase
         $this->assertEquals(-500, $money->getPureNumber());
     }
 
-    /** @test
-     * @throws UndefinedOriginException
-     */
+    /** @test */
     public function FloatSubtractFloat_MoreThanMoneyHas()
     {
         $settings = (new MoneySettings())
@@ -221,9 +195,7 @@ class ManipulatingMoneyNumberTest extends TestCase
         $this->assertEquals(-50, $money->getPureNumber());
     }
 
-    /** @test
-     * @throws UndefinedOriginException
-     */
+    /** @test */
     public function FloatSubtractInt_MoreThanMoneyHas()
     {
         $settings = (new MoneySettings())
@@ -250,12 +222,10 @@ class ManipulatingMoneyNumberTest extends TestCase
         $this->assertEquals('$ 100', $money->rebase(100, MoneySettings::ORIGIN_FLOAT));
     }
 
-    /** @test
-     * @throws UndefinedOriginException
-     */
+    /** @test */
     public function RebaseNumericError()
     {
-        $this->expectException(NotNumericException::class);
+        $this->expectException(NotNumericOrMoneyException::class);
 
         $settings = (new MoneySettings())
             ->setOrigin(MoneySettings::ORIGIN_INT);
@@ -285,5 +255,25 @@ class ManipulatingMoneyNumberTest extends TestCase
         $rub = new Money(500, Currency::code('RUB'));
 
         $usd->rebase($rub);
+    }
+
+    /** @test */
+    public function money_can_be_multiplied_by_a_number()
+    {
+        $money = new Money(500);
+        $money->multiple(1.5);
+
+        $this->assertEquals(750, $money->getPureNumber());
+        $this->assertEquals('$ 75', $money->toString());
+    }
+
+    /** @test */
+    public function money_can_be_divided_by_a_number()
+    {
+        $money = new Money(1000);
+        $money->divide(2);
+
+        $this->assertEquals(500, $money->getPureNumber());
+        $this->assertEquals('$ 50', $money->toString());
     }
 }

@@ -2,7 +2,9 @@
 
 namespace PostScripton\Money\Exceptions;
 
-class NotNumericException extends ValueErrorException
+use PostScripton\Money\Money;
+
+class NotNumericOrMoneyException extends ValueErrorException
 {
     public function __construct(
         string $method,
@@ -15,7 +17,7 @@ class NotNumericException extends ValueErrorException
             $method,
             $arg_num,
             $arg_name,
-            'must be numeric',
+            'must be numeric or instance of ' . Money::class,
             null,
             $code,
             $previous
