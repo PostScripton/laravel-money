@@ -7,8 +7,6 @@ use PostScripton\Money\Exceptions\NotNumericOrMoneyException;
 
 interface MoneyInterface
 {
-    // todo Написать документацию для всех новых объектов
-
     // ========== STATIC ========== //
 
     /**
@@ -77,6 +75,19 @@ interface MoneyInterface
     // ========== OBJECT ========== //
 
     /**
+     * Binds the money object with settings
+     * @param MoneySettings $settings
+     * @return Money
+     */
+    public function bind(MoneySettings $settings): Money;
+
+    /**
+     * Returns settings object
+     * @return MoneySettings
+     */
+    public function settings(): MoneySettings;
+
+    /**
      * Returns a formatted number <p>
      * For example, "$ 1 234.5" -> "1 234.5" </p>
      * @return string
@@ -126,6 +137,24 @@ interface MoneyInterface
     public function subtract($money, int $origin = MoneySettings::ORIGIN_INT): Money;
 
     /**
+     * Multiples a number from the money. It's like <p>
+     * `$100 * 2 = $200` </p>
+     * @param float $number <p>
+     * A number on which the money will be multiplied </p>
+     * @return Money
+     */
+    public function multiple(float $number): Money;
+
+    /**
+     * Divides a number from the money. It's like <p>
+     * `$100 / 2 = $50` </p>
+     * @param float $number <p>
+     * A number on which the money will be divided </p>
+     * @return Money
+     */
+    public function divide(float $number): Money;
+
+    /**
      * Rebases the money on a number
      * @param int|float|Money $money <p>
      * A number or Money to which the money will be rebased </p>
@@ -137,6 +166,86 @@ interface MoneyInterface
      * @return Money
      */
     public function rebase($money, int $origin = MoneySettings::ORIGIN_INT): Money;
+
+    /**
+     * Removes decimals. It's like <p>
+     * `$10.25 -> $10.00` </p>
+     * @return Money
+     */
+    public function clear(): Money;
+
+    /**
+     * Checks whether two money objects have the same currency
+     * @param Money $money
+     * @return bool
+     */
+    public function isSameCurrency(Money $money): bool;
+
+    /**
+     * Checks whether the money's number is negative (less than zero)
+     * @return bool
+     */
+    public function isNegative(): bool;
+
+    /**
+     * Checks whether the money's number is positive (greater than zero)
+     * @return bool
+     */
+    public function isPositive(): bool;
+
+    /**
+     * Checks whether the money's number is zero
+     * @return bool
+     */
+    public function isEmpty(): bool;
+
+    /**
+     * Compares with a number or a money object whether it is less than the number or the money object.
+     * @param $money <p>
+     * A number or a money object </p>
+     * @param int $origin <p>
+     * If the previous parameter is the number then it sets an origin for that number </p><p>
+     * 1000, MoneySettings::ORIGIN_INT </p><p>
+     * 100.0, MoneySettings::ORIGIN_FLOAT </p>
+     * @return bool
+     */
+    public function lessThan($money, int $origin = MoneySettings::ORIGIN_INT): bool;
+
+    /**
+     * Compares with a number or a money object whether it is less than or equals to the number or the money object.
+     * @param $money <p>
+     * A number or a money object </p>
+     * @param int $origin <p>
+     * If the previous parameter is the number then it sets an origin for that number </p><p>
+     * 1000, MoneySettings::ORIGIN_INT </p><p>
+     * 100.0, MoneySettings::ORIGIN_FLOAT </p>
+     * @return bool
+     */
+    public function lessThanOrEqual($money, int $origin = MoneySettings::ORIGIN_INT): bool;
+
+    /**
+     * Compares with a number or a money object whether it is greater than the number or the money object.
+     * @param $money <p>
+     * A number or a money object </p>
+     * @param int $origin <p>
+     * If the previous parameter is the number then it sets an origin for that number </p><p>
+     * 1000, MoneySettings::ORIGIN_INT </p><p>
+     * 100.0, MoneySettings::ORIGIN_FLOAT </p>
+     * @return bool
+     */
+    public function greaterThan($money, int $origin = MoneySettings::ORIGIN_INT): bool;
+
+    /**
+     * Compares with a number or a money object whether it is greater than or equals to the number or the money object.
+     * @param $money <p>
+     * A number or a money object </p>
+     * @param int $origin <p>
+     * If the previous parameter is the number then it sets an origin for that number </p><p>
+     * 1000, MoneySettings::ORIGIN_INT </p><p>
+     * 100.0, MoneySettings::ORIGIN_FLOAT </p>
+     * @return bool
+     */
+    public function greaterThanOrEqual($money, int $origin = MoneySettings::ORIGIN_INT): bool;
 
     /**
      * Converts money into another currency using coefficient between currencies
