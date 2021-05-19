@@ -125,7 +125,7 @@ trait MoneyStatic
 
     public static function make(float $amount, $currency = null, $settings = null): Money
     {
-        return new Money($amount, $currency, $settings);
+        return money($amount, $currency, $settings);
     }
 
     public static function correctInput(string $input): string

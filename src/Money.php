@@ -239,7 +239,7 @@ class Money implements MoneyInterface
         $new_amount = $this->getPureNumber() * $coeff;
         $settings = clone $this->settings;
 
-        return new self($new_amount, $currency, $settings->setCurrency($currency));
+        return money($new_amount, $currency, $settings->setCurrency($currency));
     }
 
     public function upload()
