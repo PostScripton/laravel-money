@@ -11,12 +11,12 @@ class Money implements MoneyInterface
     use MoneyStatic;
     use MoneyHelpers;
 
-    private float $number;
+    private float $amount;
     private ?MoneySettings $settings;
 
-    public function __construct(float $number, $currency = null, $settings = null)
+    public function __construct(float $amount, $currency = null, $settings = null)
     {
-        $this->number = $number;
+        $this->amount = $amount;
         $this->settings = null;
 
         if (is_null($settings) && !($currency instanceof MoneySettings)) {
@@ -68,7 +68,7 @@ class Money implements MoneyInterface
 
     public function getPureNumber(): float
     {
-        return $this->number;
+        return $this->amount;
     }
 
     public function getNumber(): string
@@ -104,37 +104,37 @@ class Money implements MoneyInterface
 
     public function add($money, int $origin = MoneySettings::ORIGIN_INT): self
     {
-        $this->number += $this->numberIntoCorrectOrigin($money, $origin, __METHOD__);
+        $this->amount += $this->numberIntoCorrectOrigin($money, $origin, __METHOD__);
         return $this;
     }
 
     public function subtract($money, int $origin = MoneySettings::ORIGIN_INT): self
     {
-        $this->number -= $this->numberIntoCorrectOrigin($money, $origin, __METHOD__);
+        $this->amount -= $this->numberIntoCorrectOrigin($money, $origin, __METHOD__);
         return $this;
     }
 
     public function multiple(float $number): self
     {
-        $this->number = $this->getPureNumber() * $number;
+        $this->amount = $this->getPureNumber() * $number;
         return $this;
     }
 
     public function divide(float $number): self
     {
-        $this->number = $this->getPureNumber() / $number;
+        $this->amount = $this->getPureNumber() / $number;
         return $this;
     }
 
     public function rebase($money, int $origin = MoneySettings::ORIGIN_INT): self
     {
-        $this->number = $this->numberIntoCorrectOrigin($money, $origin, __METHOD__);
+        $this->amount = $this->numberIntoCorrectOrigin($money, $origin, __METHOD__);
         return $this;
     }
 
     public function clear(): self
     {
-        $this->number = $this->settings()->getOrigin() === MoneySettings::ORIGIN_INT
+        $this->amount = $this->settings()->getOrigin() === MoneySettings::ORIGIN_INT
             ? floor($this->getPureNumber() / $this->getDivisor()) * $this->getDivisor()
             : floor($this->getPureNumber());
 
@@ -239,7 +239,7 @@ class Money implements MoneyInterface
         $new_amount = $this->getPureNumber() * $coeff;
         $settings = clone $this->settings;
 
-        return new self($new_amount, $currency, $settings->setCurrency($currency));
+        return money($new_amount, $currency, $settings->setCurrency($currency));
     }
 
     public function upload()

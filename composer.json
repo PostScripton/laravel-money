@@ -1,22 +1,25 @@
 {
-    "name": "postscripton/laravel-money",
-    "description": "A convenient way to convert numbers from DB or inputs into money strings for humans",
-    "version": "2.2.1",
-    "type": "library",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "PostScripton",
-            "email": "postscripton.sp@gmail.com"
-        }
-    ],
-    "require": {
-	  	"php": "^7.4"
-    },
-  	"require-dev": {
-        "orchestra/testbench": "^6.15"
+	"name": "postscripton/laravel-money",
+	"description": "A convenient way to convert numbers from DB or inputs into money strings for humans",
+	"version": "2.2.1",
+	"type": "library",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "PostScripton",
+			"email": "postscripton.sp@gmail.com"
+		}
+	],
+	"require": {
+		"php": "^7.4"
+	},
+	"require-dev": {
+		"orchestra/testbench": "^6.15"
 	},
 	"autoload": {
+		"files": [
+			"src/helpers.php"
+		],
 		"psr-4": {
 			"PostScripton\\Money\\": "src/"
 		}
@@ -26,10 +29,10 @@
 			"PostScripton\\Money\\Tests\\": "tests/"
 		}
 	},
-  	"extra": {
-	  	"laravel": {
-		  	"providers": [
-			  	"PostScripton\\Money\\MoneyServiceProvider"
+	"extra": {
+		"laravel": {
+			"providers": [
+				"PostScripton\\Money\\MoneyServiceProvider"
 			]
 		}
 	}
