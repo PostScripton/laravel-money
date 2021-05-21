@@ -35,14 +35,14 @@ class Currency
 	public static function code(string $code): ?Currency
 	{
 		$currency = is_numeric($code)
-			? self::currencies()->firstWhere('num_code', $code)
-			: self::currencies()->firstWhere('iso_code', strtoupper($code));
+			? self::currencies()->filter(fn(Currency $currency) => $currency->getNumCode() === $code)->first()
+			: self::currencies()->filter(fn(Currency $currency) => $currency->getCode() === strtoupper($code))->first();
 
 		if (is_null($currency)) {
 			throw new CurrencyDoesNotExistException(__METHOD__, 1, '$code', implode(',', [$code, self::$_list]));
 		}
 
-		return new self($currency);
+		return $currency;
 	}
 
 	protected static function currencies(): Collection
@@ -86,6 +86,7 @@ class Currency
 
 		if ($list !== self::LIST_CONFIG) {
 			self::$currencies = self::getList($list);
+			self::$currencies = self::createCurrencies(self::$currencies);
 			return;
 		}
 
@@ -93,6 +94,7 @@ class Currency
 
 		if (!is_array(config(self::CONFIG_LIST))) {
 			self::$currencies = self::getList(config(self::CONFIG_LIST));
+			self::$currencies = self::createCurrencies(self::$currencies);
 			return;
 		}
 
@@ -102,6 +104,7 @@ class Currency
 
 		self::$currencies = array_filter(
 			self::$currencies,
+			// Filtering currencies from custom list: ['840', 'EUR', 'RUB']
 			function ($currency) use (&$custom_list) {
 				if (empty($custom_list)) {
 					return false;
@@ -117,6 +120,8 @@ class Currency
 				return false;
 			}
 		);
+
+		self::$currencies = self::createCurrencies(self::$currencies);
 	}
 
 	public static function currentList(): string
@@ -127,6 +132,13 @@ class Currency
 	public static function count(): int
 	{
 		return count(self::$currencies);
+	}
+
+	private static function createCurrencies(array $currencies): array
+	{
+		return array_map(function($currency) {
+			return new self($currency);
+		}, $currencies);
 	}
 
 	private static function getList(string $list, bool $custom = true)
