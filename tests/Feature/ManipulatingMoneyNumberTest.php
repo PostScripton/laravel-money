@@ -11,6 +11,12 @@ use PostScripton\Money\Exceptions\NotNumericOrMoneyException;
 
 class ManipulatingMoneyNumberTest extends TestCase
 {
+	protected function setUp(): void
+	{
+		parent::setUp();
+		Currency::setCurrencyList(Currency::currentList());
+	}
+
     /** @test */
     public function IntAddInt()
     {

@@ -1,5 +1,6 @@
 <?php
 
+use PostScripton\Money\Currency;
 use PostScripton\Money\MoneySettings;
 
 return [
@@ -26,13 +27,45 @@ return [
     | For now following lists are provided:
     | 1. all - all the currencies in the world.
     | 2. popular - only the most popular ones (35) are used. (default)
-    | 3. ['840', 'EUR', 'RUB'] -  array of currency codes you need
+    | 3. custom - only custom currencies
+    | 4. ['840', 'EUR', 'RUB'] - array of currency codes you need. Selects from
+    |                            lists both "all" and "custom_currencies" below
     |
     | Segregation of currencies is assumed for performance purposes so that
     | unnecessary ones won't be used.
     |
     */
     'currency_list' => 'popular',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Custom currencies
+    |--------------------------------------------------------------------------
+    |
+    | This option allows you to create you own currencies.
+    |
+    | Each custom currency represents an array with properties:
+    | 1. full_name  - a full qualified name of an currency
+    | 2. name       - a short name of a currency
+    | 3. iso_code   - an alphabetic code
+    | 4. num_code   - a numeric code
+    | 5. symbol     - a symbol of a currency.
+    |               If there are more than one, array of strings is passed.
+    |               "$" or ["$", "$$", "$$$"]
+    | 6. position   - a position of a currency either in the beginning or in the end
+    |               Currency::POS_START or Currency::POS_END
+    |
+    | Example of the existing currency:
+    | [
+    |   'full_name' => 'United States dollar',
+    |   'name' => 'dollar',
+    |   'iso_code' => 'USD',
+    |   'num_code' => '840',
+    |   'symbol' => '$',
+    |   'position' => Currency::POS_START,
+    | ]
+    */
+    'custom_currencies' => [],
 
 	/*
     |--------------------------------------------------------------------------

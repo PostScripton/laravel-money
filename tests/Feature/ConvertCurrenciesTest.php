@@ -7,7 +7,13 @@ use PostScripton\Money\Money;
 
 class ConvertCurrenciesTest extends TestCase
 {
-    /** @test */
+	protected function setUp(): void
+	{
+		parent::setUp();
+		Currency::setCurrencyList(Currency::currentList());
+	}
+
+	/** @test */
     public function money_can_be_offline_converted_between_two_currencies_without_fails_in_number()
     {
         $coeff = 75.32;
