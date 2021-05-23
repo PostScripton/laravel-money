@@ -29,7 +29,7 @@ class Money implements MoneyInterface
             return;
         }
 
-        // Only one passed. It may be Currency or Settings
+        // Is $currency a Currency or Settings?
         if ($currency instanceof Currency) {
             $settings->setCurrency($currency);
         } elseif ($currency instanceof MoneySettings) {

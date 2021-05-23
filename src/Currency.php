@@ -226,7 +226,7 @@ class Currency
 
 		$this->full_name = $currency['full_name'];
 		$this->name = $currency['name'];
-		$this->iso_code = $currency['iso_code'];
+		$this->iso_code = strtoupper($currency['iso_code']);
 		$this->num_code = $currency['num_code'];
 		$this->symbol = $currency['symbol'];
 		$this->position = $currency['position'] ?? self::POS_END;
