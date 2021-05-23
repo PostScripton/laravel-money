@@ -72,7 +72,9 @@ return [
     | Service
     |--------------------------------------------------------------------------
     |
-    | This option controls the default service for converting currencies using API
+    | This option controls the default service for converting currencies using API.
+	|
+	| Supported: "currencylayer"
     |
     */
 	'service' => 'currencylayer',
