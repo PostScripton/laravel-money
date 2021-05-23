@@ -69,6 +69,34 @@ return [
 
 	/*
     |--------------------------------------------------------------------------
+    | Service
+    |--------------------------------------------------------------------------
+    |
+    | This option controls the default service for converting currencies using API
+    |
+    */
+	'service' => 'currencylayer',
+
+	/*
+    |--------------------------------------------------------------------------
+    | Services
+    |--------------------------------------------------------------------------
+    |
+    | This option contains all the API services for converting currencies
+    |
+    */
+	'services' => [
+		'currencylayer' => [
+			// https://currencylayer.com/
+			'class' => \PostScripton\Money\Services\CurrencyLayerService::class,
+			'key' => env('CURRENCYLAYER_API_KEY'),
+			'secure' => false,
+			'source_restriction' => true,
+		]
+	],
+
+	/*
+    |--------------------------------------------------------------------------
     | Thousands separator
     |--------------------------------------------------------------------------
     |
