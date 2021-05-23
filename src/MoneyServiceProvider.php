@@ -4,6 +4,7 @@ namespace PostScripton\Money;
 
 use Illuminate\Support\ServiceProvider;
 use PostScripton\Money\Exceptions\ServiceClassDoesNotExistException;
+use PostScripton\Money\Exceptions\ServiceDoesNotExistException;
 use PostScripton\Money\Exceptions\ServiceDoesNotHaveClassException;
 use PostScripton\Money\Exceptions\ServiceDoesNotInheritServiceException;
 use PostScripton\Money\Exceptions\UndefinedOriginException;
@@ -15,11 +16,11 @@ class MoneyServiceProvider extends ServiceProvider
 	{
 		$this->mergeConfigFrom($this->getConfigPath(), 'money');
 
-    public function boot()
-    {
-        if ($this->app->runningInConsole()) {
-            $this->registerPublishing();
-        }
+		$this->registerService();
+
+		if ($this->app->runningInConsole()) {
+			$this->registerPublishing();
+		}
 
 		try {
 			$settings = (new MoneySettings())
@@ -46,8 +47,35 @@ class MoneyServiceProvider extends ServiceProvider
 		);
 	}
 
-    private function getConfigPath(): string
-    {
-        return __DIR__ . '/../config/money.php';
-    }
+	protected function registerService()
+	{
+		$this->app->bind(ServiceInterface::class, function ($app) {
+			$config = config('money.services.' . config('money.service'));
+
+			if (is_null($config)) {
+				throw new ServiceDoesNotExistException(config('money.service'));
+			}
+
+			if (!array_key_exists('class', $config = $config ?? [])) {
+				throw new ServiceDoesNotHaveClassException(config('money.service'));
+			}
+
+			$class = $config['class'];
+
+			if (!class_exists($class)) {
+				throw new ServiceClassDoesNotExistException($class);
+			}
+
+			if (!is_subclass_of($class, ServiceInterface::class)) {
+				throw new ServiceDoesNotInheritServiceException($class);
+			}
+
+			return new $class($config);
+		});
+	}
+
+	private function getConfigPath(): string
+	{
+		return __DIR__ . '/../config/money.php';
+	}
 }

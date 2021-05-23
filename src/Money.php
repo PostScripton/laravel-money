@@ -3,6 +3,8 @@
 namespace PostScripton\Money;
 
 use PostScripton\Money\Exceptions\NotNumericOrMoneyException;
+use PostScripton\Money\Exceptions\ServiceDoesNotSupportCurrencyException;
+use PostScripton\Money\Services\ServiceInterface;
 use PostScripton\Money\Traits\MoneyHelpers;
 use PostScripton\Money\Traits\MoneyStatic;
 
@@ -234,13 +236,22 @@ class Money implements MoneyInterface
         return $strict ? $this === $money : $this == $money;
     }
 
-    public function convertOfflineInto(Currency $currency, float $coeff): self
-    {
-        $new_amount = $this->getPureNumber() * $coeff;
-        $settings = clone $this->settings;
+    public function convertInto(Currency $currency, ?float $rate = null): self
+	{
+		// Convert online
+		if (is_null($rate)) {
+			if (!$this->service()->supports($currency->getCode())) {
+				throw new ServiceDoesNotSupportCurrencyException($this->service()->getClassName());
+			}
 
-        return money($new_amount, $currency, $settings->setCurrency($currency));
-    }
+			$rate = $this->service()->rate($this->getCurrency()->getCode(), $currency->getCode());
+		}
+
+		$new_amount = $this->getPureNumber() * $rate;
+		$settings = clone $this->settings;
+
+		return money($new_amount, $currency, $settings);
+	}
 
     public function upload()
     {
@@ -253,6 +264,11 @@ class Money implements MoneyInterface
     {
         return self::bindMoneyWithCurrency($this, $this->settings()->getCurrency());
     }
+
+    public function service(): ServiceInterface
+	{
+		return app(ServiceInterface::class);
+	}
 
     public function __toString(): string
     {
