@@ -74,7 +74,8 @@ return [
     |
     | This option controls the default service for converting currencies using API.
 	|
-	| Supported: "currencylayer"
+	| Supported: "currencylayer", "exchangeratesapi"
+	| exchangeratesapi (default)
     |
     */
 	'service' => 'currencylayer',
@@ -94,7 +95,14 @@ return [
 			'key' => env('CURRENCYLAYER_API_KEY'),
 			'secure' => false,
 			'source_restriction' => true,
-		]
+		],
+		'exchangeratesapi' => [
+			// https://exchangeratesapi.io/
+			'class' => \PostScripton\Money\Services\ExchangeRatesAPIService::class,
+			'key' => env('EXCHANGERATESAPI_API_KEY'),
+			'secure' => false,
+			'base_restriction' => true,
+		],
 	],
 
 	/*
