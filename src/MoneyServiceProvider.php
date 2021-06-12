@@ -49,7 +49,7 @@ class MoneyServiceProvider extends ServiceProvider
 
 	protected function registerService()
 	{
-		$this->app->singleton(ServiceInterface::class, function ($app) {
+		$this->app->bind(ServiceInterface::class, function ($app) {
 			$config = config('money.services.' . config('money.service'));
 
 			if (is_null($config)) {
