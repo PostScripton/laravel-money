@@ -118,6 +118,16 @@ abstract class AbstractService implements ServiceInterface
 		return self::TO_FORMAT;
 	}
 
+	protected function supportedData(array $data, string $index): array
+	{
+		return $data[$index];
+	}
+
+	protected function latestData(array $data, string $index): float
+	{
+		return $data[$this->result][$index];
+	}
+
 	private function hasBaseRestriction(): bool
 	{
 		if (!array_key_exists('base_restriction', $this->config)) {
@@ -157,6 +167,7 @@ abstract class AbstractService implements ServiceInterface
 	abstract protected function latestUri(): string;
 
 	abstract protected function historicalUri(Carbon $date, array &$query): string;
+
 
 	abstract protected function validateResponse(array $data): void;
 }
