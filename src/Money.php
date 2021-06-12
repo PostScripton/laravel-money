@@ -3,6 +3,7 @@
 namespace PostScripton\Money;
 
 use Illuminate\Support\Carbon;
+use PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException;
 use PostScripton\Money\Exceptions\NotNumericOrMoneyException;
 use PostScripton\Money\Exceptions\ServiceDoesNotSupportCurrencyException;
 use PostScripton\Money\Services\ServiceInterface;
@@ -252,6 +253,19 @@ class Money implements MoneyInterface
 		$settings = clone $this->settings;
 
 		return money($new_amount, $currency, $settings);
+	}
+
+	public function difference(self $money, ?MoneySettings $settings = null): string
+	{
+		if (!$this->isSameCurrency($money)) {
+			throw new MoneyHasDifferentCurrenciesException(__METHOD__, 1, '$money');
+		}
+
+		$money_amount = $this->numberIntoCorrectOrigin($money, $money->settings()->getOrigin(), __METHOD__);
+		$amount = $this->getPureNumber() - $money_amount;
+		$settings = is_null($settings) ? clone $this->settings() : $settings;
+
+		return money($amount, $this->getCurrency(), $settings)->toString();
 	}
 
     public function upload()
