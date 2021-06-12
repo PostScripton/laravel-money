@@ -2,6 +2,7 @@
 
 namespace PostScripton\Money;
 
+use Illuminate\Support\Carbon;
 use PostScripton\Money\Exceptions\NotNumericOrMoneyException;
 use PostScripton\Money\Exceptions\ServiceDoesNotSupportCurrencyException;
 use PostScripton\Money\Services\ServiceInterface;
@@ -236,7 +237,7 @@ class Money implements MoneyInterface
         return $strict ? $this === $money : $this == $money;
     }
 
-    public function convertInto(Currency $currency, ?float $rate = null): self
+    public function convertInto(Currency $currency, ?float $rate = null, ?Carbon $date = null): self
 	{
 		// Convert online
 		if (is_null($rate)) {
@@ -244,7 +245,7 @@ class Money implements MoneyInterface
 				throw new ServiceDoesNotSupportCurrencyException($this->service()->getClassName());
 			}
 
-			$rate = $this->service()->rate($this->getCurrency()->getCode(), $currency->getCode());
+			$rate = $this->service()->rate($this->getCurrency()->getCode(), $currency->getCode(), $date);
 		}
 
 		$new_amount = $this->getPureNumber() * $rate;

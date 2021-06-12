@@ -3,6 +3,7 @@
 namespace PostScripton\Money\Services;
 
 use GuzzleHttp\Client;
+use Illuminate\Support\Carbon;
 
 abstract class AbstractService implements ServiceInterface
 {
@@ -13,6 +14,8 @@ abstract class AbstractService implements ServiceInterface
 
 	protected const FROM_TO_FORMAT = 1;
 	protected const TO_FORMAT = 2;
+
+	protected const DATE_FORMAT = 'Y-m-d';
 
 	protected string $currencies = 'symbols';
 	protected string $base = 'base';
@@ -74,7 +77,7 @@ abstract class AbstractService implements ServiceInterface
 		return '';
 	}
 
-	public function rate(string $from, string $to): float
+	public function rate(string $from, string $to, ?Carbon $date = null): float
 	{
 		$options = [$this->currencies => implode(',', [$from, $to])];
 
@@ -82,13 +85,17 @@ abstract class AbstractService implements ServiceInterface
 			$options = array_merge($options, [$this->base => $from]);
 		}
 
-		$response = $this->client->get($this->latestUri(), $this->query($options));
+		$uri = is_null($date)
+			? $this->latestUri()
+			: $this->historicalUri($date, $options);
+
+		$response = $this->client->get($uri, $this->query($options));
 		$data = json_decode($response->getBody()->getContents(), true);
 
 		$this->validateResponse($data);
 
-		return $data[$this->result][$this->result($from, $to)] /
-			$data[$this->result][$this->result($from, $from)];
+		return $this->latestData($data, $this->result($from, $to)) /
+			$this->latestData($data, $this->result($from, $from));
 	}
 
 	public function supports(string $iso): bool
@@ -98,7 +105,7 @@ abstract class AbstractService implements ServiceInterface
 
 		$this->validateResponse($data);
 
-		return in_array($iso, array_keys($data[$this->currencies]));
+		return in_array($iso, array_keys($this->supportedData($data, $this->currencies)));
 	}
 
 	protected static function BASE_CURRENCY(): string
@@ -148,6 +155,8 @@ abstract class AbstractService implements ServiceInterface
 	abstract protected function supportedUri(): string;
 
 	abstract protected function latestUri(): string;
+
+	abstract protected function historicalUri(Carbon $date, array &$query): string;
 
 	abstract protected function validateResponse(array $data): void;
 }

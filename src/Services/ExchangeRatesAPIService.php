@@ -2,6 +2,7 @@
 
 namespace PostScripton\Money\Services;
 
+use Illuminate\Support\Carbon;
 use PostScripton\Money\Exceptions\ServiceRequestFailedException;
 
 class ExchangeRatesAPIService extends AbstractService
@@ -24,6 +25,11 @@ class ExchangeRatesAPIService extends AbstractService
 	protected function latestUri(): string
 	{
 		return 'latest';
+	}
+
+	protected function historicalUri(Carbon $date, array &$query): string
+	{
+		return $date->format(self::DATE_FORMAT);
 	}
 
 	protected function validateResponse(array $data): void

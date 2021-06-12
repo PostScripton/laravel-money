@@ -2,6 +2,7 @@
 
 namespace PostScripton\Money\Tests;
 
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
 use PostScripton\Money\Currency;
 use PostScripton\Money\Exceptions\ServiceClassDoesNotExistException;
@@ -109,5 +110,15 @@ class CurrencyLayerTest extends TestCase
 //		$this->assertEquals('1 000 ₽', $back_rub->toString());
 //		$this->assertTrue($rub->isSameCurrency($back_rub));
 //		$this->assertEquals($rub->getPureNumber(), $back_rub->getPureNumber());
+//	}
+//
+//	/** @test */
+//	public function exchangeratesapi_historical_converting()
+//	{
+//		$rub = money(10000, currency('rub'));
+//		$usd_now = $rub->convertInto(currency('usd'));
+//		$usd_historical = $rub->convertInto(currency('usd'), null, Carbon::createFromDate(2010, 9, 8));
+//
+//		$this->assertNotEquals($usd_now->getPureNumber(), $usd_historical->getPureNumber());
 //	}
 }

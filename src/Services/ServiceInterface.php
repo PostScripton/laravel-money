@@ -2,6 +2,8 @@
 
 namespace PostScripton\Money\Services;
 
+use Illuminate\Support\Carbon;
+
 interface ServiceInterface
 {
 	/**
@@ -13,9 +15,10 @@ interface ServiceInterface
 	 * Currency exchange rate
 	 * @param string $from
 	 * @param string $to
+	 * @param Carbon|null $date
 	 * @return float
 	 */
-	public function rate(string $from, string $to): float;
+	public function rate(string $from, string $to, ?Carbon $date = null): float;
 
 	/**
 	 * Whether the service supports currencies or not

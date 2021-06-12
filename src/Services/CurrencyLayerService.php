@@ -2,6 +2,7 @@
 
 namespace PostScripton\Money\Services;
 
+use Illuminate\Support\Carbon;
 use PostScripton\Money\Exceptions\ServiceRequestFailedException;
 
 class CurrencyLayerService extends AbstractService
@@ -23,6 +24,15 @@ class CurrencyLayerService extends AbstractService
 	protected function latestUri(): string
 	{
 		return 'live';
+	}
+
+	protected function historicalUri(Carbon $date, array &$query): string
+	{
+		$query = array_merge($query, [
+			'date' => $date->format(self::DATE_FORMAT)
+		]);
+
+		return 'historical';
 	}
 
 	protected static function BASE_CURRENCY(): string
