@@ -31,7 +31,7 @@ class OpenExchangeRatesTest extends TestCase
 	}
 
 	/** @test */
-	public function getting_info_about_an_exchangeratesapi_service()
+	public function getting_info_about_an_openexchangerates_service()
 	{
 		$money = money(1000);
 
@@ -40,7 +40,7 @@ class OpenExchangeRatesTest extends TestCase
 	}
 
 	/** @test */
-	public function an_incorrect_api_was_given_to_an_exchangeratesapi_service()
+	public function an_incorrect_api_was_given_to_an_openexchangerates_service()
 	{
 		Config::set('money.services.' . config('money.service'),
 			array_merge(config('money.services.' . config('money.service')), ['key' => 'incorrect_api_key'])
@@ -53,7 +53,7 @@ class OpenExchangeRatesTest extends TestCase
 	}
 
 	/** @test */
-	public function an_exchangeratesapi_service_does_not_have_class()
+	public function an_openexchangerates_service_does_not_have_class()
 	{
 		Config::set('money.services.' . config('money.service'),
 			array_diff_key(config('money.services.' . config('money.service')), ['class' => ''])
@@ -66,7 +66,7 @@ class OpenExchangeRatesTest extends TestCase
 	}
 
 	/** @test */
-	public function an_exchangeratesapi_service_class_does_not_exist()
+	public function an_openexchangerates_service_class_does_not_exist()
 	{
 		Config::set('money.services.' . config('money.service'),
 			array_merge(config('money.services.' . config('money.service')), ['class' => 'incorrect_class'])
@@ -79,7 +79,7 @@ class OpenExchangeRatesTest extends TestCase
 	}
 
 	/** @test */
-	public function an_exchangeratesapi_service_class_does_not_inherit_the_main_one()
+	public function an_openexchangerates_service_class_does_not_inherit_the_main_one()
 	{
 		Config::set('money.services.' . config('money.service'),
 			array_merge(config('money.services.' . config('money.service')), ['class' => stdClass::class])
@@ -92,7 +92,7 @@ class OpenExchangeRatesTest extends TestCase
 	}
 
 	/** @test */
-	public function exchangeratesapi_converting_back_and_forth_must_have_no_fails_in_number()
+	public function openexchangerates_converting_back_and_forth_must_have_no_fails_in_number()
 	{
 		$rub = money(10000, currency('rub'));
 		$usd = $rub->convertInto(currency('usd'));
@@ -106,7 +106,7 @@ class OpenExchangeRatesTest extends TestCase
 	}
 
 	/** @test */
-	public function exchangeratesapi_historical_converting()
+	public function openexchangerates_historical_converting()
 	{
 		$rub = money(10000, currency('rub'));
 		$usd_now = $rub->convertInto(currency('usd'));
