@@ -75,10 +75,12 @@ return [
     | This option controls the default service for converting currencies using API.
 	|
 	| Supported: "currencylayer", "exchangeratesapi", "openexchangerates"
-	| openexchangerates (default)
+	| and "exchangerate"
+	|
+	| exchangerate (default)
     |
     */
-	'service' => 'currencylayer',
+	'service' => 'exchangerate',
 
 	/*
     |--------------------------------------------------------------------------
@@ -108,6 +110,10 @@ return [
 			'class' => \PostScripton\Money\Services\OpenExchangeRatesService::class,
 			'key' => env('OPENEXCHANGERATES_API_KEY'),
 			'base_restriction' => env('OPENEXCHANGERATES_BASE_RESTRICTION', true),
+		],
+		'exchangerate' => [
+			// https://exchangerate.host/
+			'class' => \PostScripton\Money\Services\ExchangeRateService::class,
 		],
 	],
 
