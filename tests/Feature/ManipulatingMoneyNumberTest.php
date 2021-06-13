@@ -176,7 +176,7 @@ class ManipulatingMoneyNumberTest extends TestCase
         $money = new Money(500, $settings);
 
         $this->assertEquals('$ -50', $money->subtract(1000)->toString());
-        $this->assertEquals(-500, $money->getPureNumber());
+        $this->assertEquals(-500, $money->getPureAmount());
     }
 
     /** @test */
@@ -187,7 +187,7 @@ class ManipulatingMoneyNumberTest extends TestCase
         $money = new Money(500, $settings);
 
         $this->assertEquals('$ -50', $money->subtract(100, MoneySettings::ORIGIN_FLOAT));
-        $this->assertEquals(-500, $money->getPureNumber());
+        $this->assertEquals(-500, $money->getPureAmount());
     }
 
     /** @test */
@@ -198,7 +198,7 @@ class ManipulatingMoneyNumberTest extends TestCase
         $money = new Money(50, $settings);
 
         $this->assertEquals('$ -50', $money->subtract(100, MoneySettings::ORIGIN_FLOAT));
-        $this->assertEquals(-50, $money->getPureNumber());
+        $this->assertEquals(-50, $money->getPureAmount());
     }
 
     /** @test */
@@ -209,7 +209,7 @@ class ManipulatingMoneyNumberTest extends TestCase
         $money = new Money(50, $settings);
 
         $this->assertEquals('$ -50', $money->subtract(1000));
-        $this->assertEquals(-50, $money->getPureNumber());
+        $this->assertEquals(-50, $money->getPureAmount());
     }
 
     /** @test */
@@ -269,7 +269,7 @@ class ManipulatingMoneyNumberTest extends TestCase
         $money = new Money(500);
         $money->multiple(1.5);
 
-        $this->assertEquals(750, $money->getPureNumber());
+        $this->assertEquals(750, $money->getPureAmount());
         $this->assertEquals('$ 75', $money->toString());
     }
 
@@ -279,7 +279,7 @@ class ManipulatingMoneyNumberTest extends TestCase
         $money = new Money(1000);
         $money->divide(2);
 
-        $this->assertEquals(500, $money->getPureNumber());
+        $this->assertEquals(500, $money->getPureAmount());
         $this->assertEquals('$ 50', $money->toString());
     }
 }

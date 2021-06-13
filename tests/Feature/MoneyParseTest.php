@@ -15,41 +15,41 @@ class MoneyParseTest extends TestCase
         $money = Money::parse('$ 1 234.5');
         $this->assertInstanceOf(Money::class, $money);
         $this->assertEquals('$', $money->getCurrency()->getSymbol());
-        $this->assertEquals('1 234.5', $money->getNumber());
+        $this->assertEquals('1 234.5', $money->getAmount());
 
         $money = Money::parse('$ 123.4');
         $this->assertInstanceOf(Money::class, $money);
         $this->assertEquals('$', $money->getCurrency()->getSymbol());
-        $this->assertEquals('123.4', $money->getNumber());
+        $this->assertEquals('123.4', $money->getAmount());
 
         $money = Money::parse('USD 123.4');
         $this->assertInstanceOf(Money::class, $money);
         $this->assertEquals('$', $money->getCurrency()->getSymbol());
-        $this->assertEquals('123.4', $money->getNumber());
+        $this->assertEquals('123.4', $money->getAmount());
 
         $money = Money::parse('1 234.5 $');
         $this->assertInstanceOf(Money::class, $money);
         $this->assertEquals('$', $money->getCurrency()->getSymbol());
-        $this->assertEquals('1 234.5', $money->getNumber());
+        $this->assertEquals('1 234.5', $money->getAmount());
 
         $money = Money::parse('1 234.5 USD');
         $this->assertInstanceOf(Money::class, $money);
         $this->assertEquals('$', $money->getCurrency()->getSymbol());
-        $this->assertEquals('1 234.5', $money->getNumber());
+        $this->assertEquals('1 234.5', $money->getAmount());
 
         $money = Money::parse('$ -1 234.5');
         $this->assertInstanceOf(Money::class, $money);
         $this->assertEquals('$', $money->getCurrency()->getSymbol());
-        $this->assertEquals('-1 234.5', $money->getNumber());
+        $this->assertEquals('-1 234.5', $money->getAmount());
 
         $money = Money::parse('USD -1 234.5');
         $this->assertInstanceOf(Money::class, $money);
         $this->assertEquals('$', $money->getCurrency()->getSymbol());
-        $this->assertEquals('-1 234.5', $money->getNumber());
+        $this->assertEquals('-1 234.5', $money->getAmount());
 
         $money = Money::parse('$ 1 234.567890');
         $this->assertInstanceOf(Money::class, $money);
-        $this->assertEquals('1 234.6', $money->getNumber());
+        $this->assertEquals('1 234.6', $money->getAmount());
     }
     
     /** @test */
@@ -74,7 +74,7 @@ class MoneyParseTest extends TestCase
         $money = Money::parse("$ 1'234.5", null, '\'');
 
         $this->assertInstanceOf(Money::class, $money);
-        $this->assertEquals('1 234.5', $money->getNumber());
+        $this->assertEquals('1 234.5', $money->getAmount());
     }
 
     /** @test */
@@ -83,7 +83,7 @@ class MoneyParseTest extends TestCase
         $money = Money::parse("$ 1 234,5", null, null, ',');
 
         $this->assertInstanceOf(Money::class, $money);
-        $this->assertEquals('1 234.5', $money->getNumber());
+        $this->assertEquals('1 234.5', $money->getAmount());
     }
 
     /** @test */
@@ -92,7 +92,7 @@ class MoneyParseTest extends TestCase
         $money = Money::parse("1.234,5 ₽", Currency::code('RUB'), '.', ',');
 
         $this->assertInstanceOf(Money::class, $money);
-        $this->assertEquals('1 234.5', $money->getNumber());
+        $this->assertEquals('1 234.5', $money->getAmount());
         $this->assertEquals('₽', $money->getCurrency()->getSymbol());
         $this->assertEquals('RUB', $money->getCurrency()->getCode());
         $this->assertEquals(' ', $money->settings()->getThousandsSeparator());

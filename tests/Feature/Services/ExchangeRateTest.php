@@ -98,6 +98,6 @@ class ExchangeRateTest extends TestCase
 		$usd_now = $rub->convertInto(currency('usd'));
 		$usd_historical = $rub->convertInto(currency('usd'), null, Carbon::createFromDate(2010, 9, 8));
 
-		$this->assertNotEquals($usd_now->getPureNumber(), $usd_historical->getPureNumber());
+		$this->assertNotEquals($usd_now->getPureAmount(), $usd_historical->getPureAmount());
 	}
 }

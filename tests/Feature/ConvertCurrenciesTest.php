@@ -38,7 +38,7 @@ class ConvertCurrenciesTest extends TestCase
 
         $this->assertFalse($rub->equals($back_rub));
         $this->assertTrue($rub->isSameCurrency($back_rub));
-        $this->assertEquals($rub->getPureNumber(), $back_rub->getPureNumber());
+        $this->assertEquals($rub->getPureAmount(), $back_rub->getPureAmount());
     }
 
     /** @test */

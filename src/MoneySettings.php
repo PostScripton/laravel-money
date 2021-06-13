@@ -130,8 +130,8 @@ class MoneySettings implements MoneySettingsInterface
         if (!is_null($this->money)) {
             if ($old_origin !== $origin) {
                 $number = $old_origin === MoneySettings::ORIGIN_INT
-                    ? $this->money->getPureNumber() / $this->getDivisor()
-                    : $this->money->getPureNumber() * $this->getDivisor();
+                    ? $this->money->getPureAmount() / $this->getDivisor()
+                    : $this->money->getPureAmount() * $this->getDivisor();
 
                 $this->money->rebase($number, $origin);
             }

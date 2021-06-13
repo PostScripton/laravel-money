@@ -13,7 +13,7 @@ class UploadTest extends TestCase
         $money = Money::make(12345.67890);
 
         $this->assertEquals(12345, $money->upload());
-        $this->assertEquals(12345.67890, $money->getPureNumber());
+        $this->assertEquals(12345.67890, $money->getPureAmount());
     }
 
     /** @test */
@@ -23,6 +23,6 @@ class UploadTest extends TestCase
         $money->settings()->setOrigin(MoneySettings::ORIGIN_FLOAT);
 
         $this->assertEquals(1234.5, $money->upload());
-        $this->assertEquals(1234.567890, $money->getPureNumber());
+        $this->assertEquals(1234.567890, $money->getPureAmount());
     }
 }

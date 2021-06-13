@@ -148,7 +148,7 @@ trait MoneyStatic
         $min = $monies[0];
 
         for ($i = 1; $i < count($monies); $i++) {
-            if (($money = $monies[$i])->getPureNumber() < $min->getPureNumber()) {
+            if (($money = $monies[$i])->getPureAmount() < $min->getPureAmount()) {
                 $min = $money;
             }
         }
@@ -167,7 +167,7 @@ trait MoneyStatic
         $max = $monies[0];
 
         for ($i = 1; $i < count($monies); $i++) {
-            if (($money = $monies[$i])->getPureNumber() > $max->getPureNumber()) {
+            if (($money = $monies[$i])->getPureAmount() > $max->getPureAmount()) {
                 $max = $money;
             }
         }
@@ -184,7 +184,7 @@ trait MoneyStatic
         self::currenciesAreNotSame($monies, Money::class . '::' . __FUNCTION__, 1, '$monies');
 
         $sum = array_reduce($monies, function (float $acc, Money $money) {
-            return $acc + $money->getPureNumber();
+            return $acc + $money->getPureAmount();
         }, 0);
 
         return new Money($sum / count($monies),
@@ -201,7 +201,7 @@ trait MoneyStatic
         self::currenciesAreNotSame($monies, Money::class . '::' . __FUNCTION__, 1, '$monies');
 
         $sum = array_reduce($monies, function (float $acc, Money $money) {
-            return $acc + $money->getPureNumber();
+            return $acc + $money->getPureAmount();
         }, 0);
 
         return new Money($sum,
@@ -230,7 +230,7 @@ trait MoneyStatic
         }
 
         return $currency->getPosition() === Currency::POS_START
-            ? $currency->getSymbol() . $space . $money->getNumber()
-            : $money->getNumber() . $space . $currency->getSymbol();
+            ? $currency->getSymbol() . $space . $money->getAmount()
+            : $money->getAmount() . $space . $currency->getSymbol();
     }
 }

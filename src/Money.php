@@ -70,16 +70,16 @@ class Money implements MoneyInterface
         return $this->settings;
     }
 
-    public function getPureNumber(): float
+    public function getPureAmount(): float
     {
         return $this->amount;
     }
 
-    public function getNumber(): string
+    public function getAmount(): string
     {
         $amount = $this->settings()->getOrigin() === MoneySettings::ORIGIN_INT
-            ? (float)($this->getPureNumber() / $this->getDivisor())
-            : $this->getPureNumber();
+            ? (float)($this->getPureAmount() / $this->getDivisor())
+            : $this->getPureAmount();
 
         $money = number_format(
             $amount,
@@ -120,13 +120,13 @@ class Money implements MoneyInterface
 
     public function multiple(float $number): self
     {
-        $this->amount = $this->getPureNumber() * $number;
+        $this->amount = $this->getPureAmount() * $number;
         return $this;
     }
 
     public function divide(float $number): self
     {
-        $this->amount = $this->getPureNumber() / $number;
+        $this->amount = $this->getPureAmount() / $number;
         return $this;
     }
 
@@ -139,8 +139,8 @@ class Money implements MoneyInterface
     public function clear(): self
     {
         $this->amount = $this->settings()->getOrigin() === MoneySettings::ORIGIN_INT
-            ? floor($this->getPureNumber() / $this->getDivisor()) * $this->getDivisor()
-            : floor($this->getPureNumber());
+            ? floor($this->getPureAmount() / $this->getDivisor()) * $this->getDivisor()
+            : floor($this->getPureAmount());
 
         return $this;
     }
@@ -152,17 +152,17 @@ class Money implements MoneyInterface
 
     public function isNegative(): bool
     {
-        return $this->getPureNumber() < 0;
+        return $this->getPureAmount() < 0;
     }
 
     public function isPositive(): bool
     {
-        return $this->getPureNumber() > 0;
+        return $this->getPureAmount() > 0;
     }
 
     public function isEmpty(): bool
     {
-        return empty($this->getPureNumber());
+        return empty($this->getPureAmount());
     }
 
     public function lessThan($money, int $origin = MoneySettings::ORIGIN_INT): bool
@@ -176,10 +176,10 @@ class Money implements MoneyInterface
         }
 
         if ($money instanceof self) {
-            $money = $money->getPureNumber();
+            $money = $money->getPureAmount();
         }
 
-        return $this->getPureNumber() < $money;
+        return $this->getPureAmount() < $money;
     }
 
     public function lessThanOrEqual($money, int $origin = MoneySettings::ORIGIN_INT): bool
@@ -193,10 +193,10 @@ class Money implements MoneyInterface
         }
 
         if ($money instanceof self) {
-            $money = $money->getPureNumber();
+            $money = $money->getPureAmount();
         }
 
-        return $this->getPureNumber() <= $money;
+        return $this->getPureAmount() <= $money;
     }
 
     public function greaterThan($money, int $origin = MoneySettings::ORIGIN_INT): bool
@@ -210,10 +210,10 @@ class Money implements MoneyInterface
         }
 
         if ($money instanceof self) {
-            $money = $money->getPureNumber();
+            $money = $money->getPureAmount();
         }
 
-        return $this->getPureNumber() > $money;
+        return $this->getPureAmount() > $money;
     }
 
     public function greaterThanOrEqual($money, int $origin = MoneySettings::ORIGIN_INT): bool
@@ -227,10 +227,10 @@ class Money implements MoneyInterface
         }
 
         if ($money instanceof self) {
-            $money = $money->getPureNumber();
+            $money = $money->getPureAmount();
         }
 
-        return $this->getPureNumber() >= $money;
+        return $this->getPureAmount() >= $money;
     }
 
     public function equals(self $money, bool $strict = true): bool
@@ -249,7 +249,7 @@ class Money implements MoneyInterface
 			$rate = $this->service()->rate($this->getCurrency()->getCode(), $currency->getCode(), $date);
 		}
 
-		$new_amount = $this->getPureNumber() * $rate;
+		$new_amount = $this->getPureAmount() * $rate;
 		$settings = clone $this->settings;
 
 		return money($new_amount, $currency, $settings);
@@ -262,7 +262,7 @@ class Money implements MoneyInterface
 		}
 
 		$money_amount = $this->numberIntoCorrectOrigin($money, $money->settings()->getOrigin(), __METHOD__);
-		$amount = $this->getPureNumber() - $money_amount;
+		$amount = $this->getPureAmount() - $money_amount;
 		$settings = is_null($settings) ? clone $this->settings() : $settings;
 
 		return money($amount, $this->getCurrency(), $settings)->toString();
@@ -271,8 +271,8 @@ class Money implements MoneyInterface
     public function upload()
     {
         return $this->settings()->getOrigin() === MoneySettings::ORIGIN_INT
-            ? (int)floor($this->getPureNumber())
-            : (float)floor($this->getPureNumber() * $this->getDivisor()) / $this->getDivisor();
+            ? (int)floor($this->getPureAmount())
+            : (float)floor($this->getPureAmount() * $this->getDivisor()) / $this->getDivisor();
     }
 
     public function toString(): string

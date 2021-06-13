@@ -15,8 +15,8 @@ class OriginTest extends TestCase
 
         $money = new Money(132.76686139139672, $settings);
 
-        $this->assertEquals('13.3', $money->getNumber());
-        $this->assertEquals(132.76686139139672, $money->getPureNumber());
+        $this->assertEquals('13.3', $money->getAmount());
+        $this->assertEquals(132.76686139139672, $money->getPureAmount());
         $this->assertEquals(132, $money->upload());
     }
 
@@ -28,8 +28,8 @@ class OriginTest extends TestCase
 
         $money = new Money(13.276686139139672, $settings);
 
-        $this->assertEquals('13.3', $money->getNumber());
-        $this->assertEquals(13.276686139139672, $money->getPureNumber());
+        $this->assertEquals('13.3', $money->getAmount());
+        $this->assertEquals(13.276686139139672, $money->getPureAmount());
         $this->assertEquals(13.2, $money->upload());
     }
 
@@ -40,12 +40,12 @@ class OriginTest extends TestCase
         $settings->setOrigin(MoneySettings::ORIGIN_INT);
 
         $money = new Money(132.76686139139672, $settings);
-        $this->assertEquals(132.76686139139672, $money->getPureNumber());
+        $this->assertEquals(132.76686139139672, $money->getPureAmount());
 
         $money->settings()->setOrigin(MoneySettings::ORIGIN_FLOAT);
 
-        $this->assertEquals('13.3', $money->getNumber());
-        $this->assertEquals(13.276686139139672, $money->getPureNumber());
+        $this->assertEquals('13.3', $money->getAmount());
+        $this->assertEquals(13.276686139139672, $money->getPureAmount());
         $this->assertEquals(13.2, $money->upload());
     }
 
@@ -56,12 +56,12 @@ class OriginTest extends TestCase
         $settings->setOrigin(MoneySettings::ORIGIN_FLOAT);
 
         $money = new Money(13.276686139139672, $settings);
-        $this->assertEquals(13.276686139139672, $money->getPureNumber());
+        $this->assertEquals(13.276686139139672, $money->getPureAmount());
 
         $money->settings()->setOrigin(MoneySettings::ORIGIN_INT);
 
-        $this->assertEquals('13.3', $money->getNumber());
-        $this->assertEquals(132.76686139139672, $money->getPureNumber());
+        $this->assertEquals('13.3', $money->getAmount());
+        $this->assertEquals(132.76686139139672, $money->getPureAmount());
         $this->assertEquals(132, $money->upload());
     }
 }

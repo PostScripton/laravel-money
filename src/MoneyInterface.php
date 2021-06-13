@@ -94,14 +94,14 @@ interface MoneyInterface
      * For example, "$ 1 234.5" -> "1 234.5" </p>
      * @return string
      */
-    public function getNumber(): string;
+    public function getAmount(): string;
 
     /**
      * Returns a pure number that uses for calculations. Not usually used <p>
      * For example, you see "13.3" but within it looks like 13.276686139139672 </p>
      * @return float
      */
-    public function getPureNumber(): float;
+    public function getPureAmount(): float;
 
     /**
      * Shortcut for returning the currency <p>

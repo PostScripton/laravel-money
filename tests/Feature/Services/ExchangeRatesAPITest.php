@@ -102,7 +102,7 @@ class ExchangeRatesAPITest extends TestCase
 		$this->assertFalse($rub->equals($back_rub));
 		$this->assertEquals('1 000 ₽', $back_rub->toString());
 		$this->assertTrue($rub->isSameCurrency($back_rub));
-		$this->assertEquals($rub->getPureNumber(), $back_rub->getPureNumber());
+		$this->assertEquals($rub->getPureAmount(), $back_rub->getPureAmount());
 	}
 
 	/** @test */
@@ -112,6 +112,6 @@ class ExchangeRatesAPITest extends TestCase
 		$usd_now = $rub->convertInto(currency('usd'));
 		$usd_historical = $rub->convertInto(currency('usd'), null, Carbon::createFromDate(2010, 9, 8));
 
-		$this->assertNotEquals($usd_now->getPureNumber(), $usd_historical->getPureNumber());
+		$this->assertNotEquals($usd_now->getPureAmount(), $usd_historical->getPureAmount());
 	}
 }

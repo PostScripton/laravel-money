@@ -13,7 +13,7 @@ class HelpersTest extends TestCase
         $money = money(12345);
 
         $this->assertInstanceOf(Money::class, $money);
-        $this->assertEquals(12345, $money->getPureNumber());
+        $this->assertEquals(12345, $money->getPureAmount());
     }
 
     /** @test */
