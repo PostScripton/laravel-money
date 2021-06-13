@@ -2,8 +2,10 @@
 
 namespace PostScripton\Money;
 
+use Illuminate\Support\Carbon;
 use PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException;
 use PostScripton\Money\Exceptions\NotNumericOrMoneyException;
+use PostScripton\Money\Services\ServiceInterface;
 
 interface MoneyInterface
 {
@@ -92,14 +94,14 @@ interface MoneyInterface
      * For example, "$ 1 234.5" -> "1 234.5" </p>
      * @return string
      */
-    public function getNumber(): string;
+    public function getAmount(): string;
 
     /**
      * Returns a pure number that uses for calculations. Not usually used <p>
      * For example, you see "13.3" but within it looks like 13.276686139139672 </p>
      * @return float
      */
-    public function getPureNumber(): float;
+    public function getPureAmount(): float;
 
     /**
      * Shortcut for returning the currency <p>
@@ -247,17 +249,48 @@ interface MoneyInterface
      */
     public function greaterThanOrEqual($money, int $origin = MoneySettings::ORIGIN_INT): bool;
 
-    /**
-     * Converts money into another currency using coefficient between currencies
-     * <p>USD -> RUB = 75.79 / 1</p>
-     * <p>RUB -> USD = 1 / 75.79</p>
-     * @param Currency $currency <p>
-     * Currency you want to convert into </p>
-     * @param float $coeff <p>
-     * Coefficient between the money's currency and the chosen one
-     * @return Money
-     */
-    public function convertOfflineInto(Currency $currency, float $coeff): Money;
+	/**
+	 * Checks whether two money objects are equal or not
+	 * @param Money $money
+	 * @param bool $strict <p>
+	 * Whether it is === or ==
+	 * @return bool
+	 */
+	public function equals(Money $money, bool $strict = true): bool;
+
+	/**
+	 * Converts money into another currency using an exchange rate between currencies
+	 * <p>USD -> RUB = 75.79 / 1</p>
+	 * <p>RUB -> USD = 1 / 75.79</p> <br/> <p>
+	 * You can do it whether online or offline by not passing or passing the $rate parameter
+	 * </p>
+	 * @param Currency $currency <p>
+	 * Currency you want to convert into </p>
+	 * @param float|null $rate <p>
+	 * Rate of the money's currency and the chosen one </p>
+	 * @param Carbon|null $date <p>
+	 * Historical mode. Pass the date you want to get rate of.
+	 * </p>
+	 * @return Money
+	 */
+    public function convertInto(Currency $currency, ?float $rate = null, ?Carbon $date = null): Money;
+
+	/**
+	 * Shows the difference between two money objects <p>
+	 * $50 - $100 = "$ -50" </p>
+	 * @param Money $money <p>
+	 * The given money must be the same currency as the first one </p>
+	 * @param MoneySettings|null $settings <p>
+	 * Settings for displaying the difference </p>
+	 * @return string
+	 */
+	public function difference(Money $money, ?MoneySettings $settings = null): string;
+
+	/**
+	 * Allows you to get access to the selected service from the config file
+	 * @return ServiceInterface
+	 */
+	public function service(): ServiceInterface;
 
     /**
      * Converts the money into the number according to origin for storing in database <p>

@@ -42,8 +42,8 @@ class MoneyTest extends TestCase
     {
         $money = Money::make(12345);
 
-        $this->assertEquals('1 234.5', $money->getNumber());
-        $this->assertEquals(12345.0, $money->getPureNumber());
+        $this->assertEquals('1 234.5', $money->getAmount());
+        $this->assertEquals(12345.0, $money->getPureAmount());
     }
 
 	/** @test */
@@ -62,12 +62,12 @@ class MoneyTest extends TestCase
 	{
 	    $money = new Money(132.76);
 
-	    $this->assertEquals(132.76, $money->getPureNumber());
+	    $this->assertEquals(132.76, $money->getPureAmount());
 	    $this->assertEquals('$ 13.3', $money->toString());
 
 	    $money->clear();
 
-	    $this->assertEquals(130, $money->getPureNumber());
+	    $this->assertEquals(130, $money->getPureAmount());
 	    $this->assertEquals('$ 13', $money->toString());
 	}
 
@@ -77,12 +77,12 @@ class MoneyTest extends TestCase
 	    $settings = new MoneySettings();
         $money = new Money(13.276, $settings->setOrigin(MoneySettings::ORIGIN_FLOAT));
 
-        $this->assertEquals(13.276, $money->getPureNumber());
+        $this->assertEquals(13.276, $money->getPureAmount());
         $this->assertEquals('$ 13.3', $money->toString());
 
         $money->clear();
 
-        $this->assertEquals(13, $money->getPureNumber());
+        $this->assertEquals(13, $money->getPureAmount());
         $this->assertEquals('$ 13', $money->toString());
 	}
 	
@@ -110,8 +110,8 @@ class MoneyTest extends TestCase
 
         $johnReward = $johnReward->add($winCoupon);
 
-        $this->assertEquals(1000, $bobReward->getPureNumber());
-        $this->assertEquals(1500, $johnReward->getPureNumber());
+        $this->assertEquals(1000, $bobReward->getPureAmount());
+        $this->assertEquals(1500, $johnReward->getPureAmount());
         $this->assertNotTrue($johnReward->equals($bobReward));
         $this->assertNotTrue($johnReward->settings() === $bobReward->settings());
 	}

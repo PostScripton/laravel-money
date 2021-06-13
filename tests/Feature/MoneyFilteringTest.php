@@ -77,7 +77,7 @@ class MoneyFilteringTest extends TestCase
 
         $avg = Money::avg($m1, $m2, $m3);
 
-        $this->assertEquals(2000, $avg->getPureNumber());
+        $this->assertEquals(2000, $avg->getPureAmount());
     }
 
     /** @test */
@@ -107,7 +107,7 @@ class MoneyFilteringTest extends TestCase
 
         $avg = Money::sum($m1, $m2, $m3);
 
-        $this->assertEquals(6000, $avg->getPureNumber());
+        $this->assertEquals(6000, $avg->getPureAmount());
     }
 
     /** @test */

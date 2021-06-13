@@ -42,7 +42,7 @@ trait MoneyHelpers
             }
 
             $origin = $money->settings()->getOrigin();
-            $money = $money->getPureNumber();
+            $money = $money->getPureAmount();
         }
 
         if (MoneySettings::isIncorrectOrigin($origin)) {
