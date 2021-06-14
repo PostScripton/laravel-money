@@ -1,10 +1,13 @@
 <?php
 
-namespace PostScripton\Money;
+namespace PostScripton\Money\PHPDocs;
 
 use Illuminate\Support\Carbon;
+use PostScripton\Money\Currency;
 use PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException;
 use PostScripton\Money\Exceptions\NotNumericOrMoneyException;
+use PostScripton\Money\Money;
+use PostScripton\Money\MoneySettings;
 use PostScripton\Money\Services\ServiceInterface;
 
 interface MoneyInterface
