@@ -53,7 +53,7 @@ return [
 	|               If there are more than one, array of strings is passed.
 	|               "$" or ["$", "$$", "$$$"]
 	| 6. position   - a position of a currency either in the beginning or in the end
-	|               Currency::POS_START or Currency::POS_END
+	|               Currency::POSITION_START or Currency::POSITION_END
 	|
 	| Example of the existing currency:
 	| [
@@ -62,7 +62,7 @@ return [
 	|   'iso_code' => 'USD',
 	|   'num_code' => '840',
 	|   'symbol' => '$',
-	|   'position' => Currency::POS_START,
+	|   'position' => Currency::POSITION_START,
 	| ]
 	*/
 	'custom_currencies' => [],

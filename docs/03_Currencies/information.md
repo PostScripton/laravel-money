@@ -36,7 +36,7 @@ $usd->getName();        // "dollar"
 $usd->getCode();        // "USD"
 $usd->getNumCode();     // "840"
 $usd->getSymbol();      // "$"
-$usd->getPosition();    // 0 (Currency::POS_START)
+$usd->getPosition();    // 0 (Currency::POSITION_START)
 $usd->getDisplay();     // 10 (Currency::DISPLAY_SYMBOL)
 ```
 

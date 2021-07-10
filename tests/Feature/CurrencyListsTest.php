@@ -52,7 +52,7 @@ class CurrencyListsTest extends TestCase
 				'iso_code' => 'XBT',
 				'num_code' => '1234',
 				'symbol' => '₿',
-				'position' => Currency::POS_START,
+				'position' => Currency::POSITION_START,
 			]
 		]);
 

@@ -22,7 +22,7 @@ class CurrencyDisplayTest extends TestCase
     {
         $currency = Currency::code('USD')
             ->setDisplay(Currency::DISPLAY_CODE)
-            ->setPosition(Currency::POS_END);
+            ->setPosition(Currency::POSITION_END);
         $usd = Money::make(1234, $currency);
 
         $this->assertEquals('123.4 USD', $usd->toString());
@@ -43,7 +43,7 @@ class CurrencyDisplayTest extends TestCase
     {
         $currency = Currency::code('RUB')
             ->setDisplay(Currency::DISPLAY_CODE)
-            ->setPosition(Currency::POS_START);
+            ->setPosition(Currency::POSITION_START);
         $rub = Money::make(1234, $currency);
 
         $this->assertEquals('RUB 123.4', $rub->toString());

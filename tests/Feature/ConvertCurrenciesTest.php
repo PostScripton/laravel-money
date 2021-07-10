@@ -51,7 +51,7 @@ class ConvertCurrenciesTest extends TestCase
 				'iso_code' => 'QWERTY',
 				'num_code' => '1234',
 				'symbol' => 'QWERTY',
-				'position' => Currency::POS_START,
+				'position' => Currency::POSITION_START,
 			]
 		]);
 		Currency::setCurrencyList(Currency::currentList());
