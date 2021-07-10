@@ -1,10 +1,11 @@
 <?php
 
-namespace PostScripton\Money\Tests;
+namespace PostScripton\Money\Tests\Feature;
 
 use Illuminate\Support\Facades\Config;
 use PostScripton\Money\Currency;
 use PostScripton\Money\Exceptions\ServiceDoesNotSupportCurrencyException;
+use PostScripton\Money\Tests\TestCase;
 
 class ConvertCurrenciesTest extends TestCase
 {
@@ -51,7 +52,7 @@ class ConvertCurrenciesTest extends TestCase
 				'iso_code' => 'QWERTY',
 				'num_code' => '1234',
 				'symbol' => 'QWERTY',
-				'position' => Currency::POS_START,
+				'position' => Currency::POSITION_START,
 			]
 		]);
 		Currency::setCurrencyList(Currency::currentList());

@@ -2,7 +2,7 @@
 
 namespace PostScripton\Money\PHPDocs;
 
-use Illuminate\Support\Carbon;
+use Carbon\Carbon;
 use PostScripton\Money\Currency;
 use PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException;
 use PostScripton\Money\Exceptions\NotNumericOrMoneyException;

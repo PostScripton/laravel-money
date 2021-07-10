@@ -1,9 +1,10 @@
 <?php
 
-namespace PostScripton\Money\Tests;
+namespace PostScripton\Money\Tests\Feature;
 
 use PostScripton\Money\Currency;
 use PostScripton\Money\Money;
+use PostScripton\Money\Tests\TestCase;
 
 class HelpersTest extends TestCase
 {
@@ -39,10 +40,10 @@ class HelpersTest extends TestCase
     /** @test */
     public function modify_currency_before_creating_money()
     {
-        $money = money(12345, currency('usd')->setPosition(Currency::POS_END));
+        $money = money(12345, currency('usd')->setPosition(Currency::POSITION_END));
 
         $this->assertInstanceOf(Money::class, $money);
         $this->assertEquals('1 234.5 $', $money->toString());
-        $this->assertEquals(Currency::POS_END, $money->getCurrency()->getPosition());
+        $this->assertEquals(Currency::POSITION_END, $money->getCurrency()->getPosition());
     }
 }

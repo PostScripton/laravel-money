@@ -1,10 +1,11 @@
 <?php
 
-namespace PostScripton\Money\Tests;
+namespace PostScripton\Money\Tests\Feature;
 
 use Illuminate\Support\Facades\Config;
 use PostScripton\Money\Currency;
 use PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException;
+use PostScripton\Money\Tests\TestCase;
 
 class DifferenceBetweenMoneyTest extends TestCase
 {

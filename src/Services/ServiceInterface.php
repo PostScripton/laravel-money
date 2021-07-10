@@ -2,15 +2,10 @@
 
 namespace PostScripton\Money\Services;
 
-use Illuminate\Support\Carbon;
+use Carbon\Carbon;
 
 interface ServiceInterface
 {
-	/**
-	 * Runs at the booting of the service
-	 */
-	public function boot(): void;
-
 	/**
 	 * Currency exchange rate
 	 * @param string $from

@@ -1,10 +1,11 @@
 <?php
 
-namespace PostScripton\Money\Tests;
+namespace PostScripton\Money\Tests\Feature;
 
 use Illuminate\Support\Facades\Config;
 use PostScripton\Money\Currency;
 use PostScripton\Money\Exceptions\CurrencyDoesNotExistException;
+use PostScripton\Money\Tests\TestCase;
 
 class CurrencyListsTest extends TestCase
 {
@@ -52,7 +53,7 @@ class CurrencyListsTest extends TestCase
 				'iso_code' => 'XBT',
 				'num_code' => '1234',
 				'symbol' => '₿',
-				'position' => Currency::POS_START,
+				'position' => Currency::POSITION_START,
 			]
 		]);
 

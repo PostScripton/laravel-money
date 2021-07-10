@@ -1,6 +1,6 @@
 <?php
 
-namespace PostScripton\Money\Tests;
+namespace PostScripton\Money\Tests\Feature;
 
 use Illuminate\Support\Facades\Config;
 use PostScripton\Money\Currency;
@@ -8,6 +8,7 @@ use PostScripton\Money\Exceptions\BaseException;
 use PostScripton\Money\Exceptions\CustomCurrencyDoesNotHaveFieldException;
 use PostScripton\Money\Exceptions\CustomCurrencyTakenCodesException;
 use PostScripton\Money\Exceptions\CustomCurrencyWrongFieldTypeException;
+use PostScripton\Money\Tests\TestCase;
 
 class CustomCurrenciesTest extends TestCase
 {
@@ -120,7 +121,7 @@ class CustomCurrenciesTest extends TestCase
 			'iso_code' => 'XBT',
 			'num_code' => '1234',
 			'symbol' => '₿',
-			'position' => Currency::POS_START,
+			'position' => Currency::POSITION_START,
 		];
 	}
 }

@@ -1,9 +1,9 @@
 <?php
 
-namespace PostScripton\Money\Traits;
+namespace PostScripton\Money\Partials;
 
 use PostScripton\Money\Currency;
-use PostScripton\Money\Exceptions\MoneyShouldHaveSameCurrencyException;
+use PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException;
 use PostScripton\Money\Exceptions\NoCurrencyInParserStringException;
 use PostScripton\Money\Exceptions\WrongParserStringException;
 use PostScripton\Money\Money;
@@ -215,7 +215,7 @@ trait MoneyStatic
 
         foreach ($monies as $money) {
             if (!$main->isSameCurrency($money)) {
-                throw new MoneyShouldHaveSameCurrencyException($method, $arg_num, $arg_name);
+                throw new MoneyHasDifferentCurrenciesException($method, $arg_num, $arg_name);
             }
         }
     }
@@ -225,11 +225,11 @@ trait MoneyStatic
         $space = $money->settings()->hasSpaceBetween() ? ' ' : '';
 
         // Always has a space
-        if ($currency->getPosition() === Currency::POS_START && $money->isNegative() || $currency->getDisplay() === Currency::DISPLAY_CODE) {
+        if ($currency->getPosition() === Currency::POSITION_START && $money->isNegative() || $currency->getDisplay() === Currency::DISPLAY_CODE) {
             $space = ' ';
         }
 
-        return $currency->getPosition() === Currency::POS_START
+        return $currency->getPosition() === Currency::POSITION_START
             ? $currency->getSymbol() . $space . $money->getAmount()
             : $money->getAmount() . $space . $currency->getSymbol();
     }

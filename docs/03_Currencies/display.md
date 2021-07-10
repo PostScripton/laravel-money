@@ -30,7 +30,7 @@ $money->settings()->getCurrency()->getDisplay();    // 11 (Currency::DISPLAY_COD
 $money->toString();                                 // "USD 123.4"
 
 // If you don't like the look of the iso-code at the beginning
-$money->settings()->getCurrency()->setPosition(Currency::POS_END);
+$money->settings()->getCurrency()->setPosition(Currency::POSITION_END);
 $money->toString();                                 // "123.4 USD"
 ```
 

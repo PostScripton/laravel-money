@@ -3,7 +3,7 @@
 namespace PostScripton\Money\Services;
 
 use GuzzleHttp\Client;
-use Illuminate\Support\Carbon;
+use Carbon\Carbon;
 
 abstract class AbstractService implements ServiceInterface
 {

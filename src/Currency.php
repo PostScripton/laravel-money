@@ -17,8 +17,8 @@ class Currency
 {
 	protected static array $currencies = [];
 
-	public const POS_START = 0;
-	public const POS_END = 1;
+	public const POSITION_START = 0;
+	public const POSITION_END = 1;
 
 	public const DISPLAY_SYMBOL = 10;
 	public const DISPLAY_CODE = 11;
@@ -229,7 +229,7 @@ class Currency
 		$this->iso_code = strtoupper($currency['iso_code']);
 		$this->num_code = $currency['num_code'];
 		$this->symbol = $currency['symbol'];
-		$this->position = $currency['position'] ?? self::POS_END;
+		$this->position = $currency['position'] ?? self::POSITION_END;
 		$this->display = self::DISPLAY_SYMBOL;
 		$preferred_symbol = null;
 	}
@@ -315,10 +315,10 @@ class Currency
 		return $this->display;
 	}
 
-	public function setPosition(int $position = self::POS_START): self
+	public function setPosition(int $position = self::POSITION_START): self
 	{
-		if ($position !== self::POS_START && $position !== self::POS_END) {
-			$position = self::POS_START;
+		if ($position !== self::POSITION_START && $position !== self::POSITION_END) {
+			$position = self::POSITION_START;
 		}
 
 		$this->position = $position;
