@@ -121,4 +121,4 @@ We would be really pleased if you considered helping us with:
 
 ## License
 
-Laravel-money is an open-source library under the [MIT license](). 
+Laravel-money is an open-source library under the [MIT license](/LICENSE.txt). 
