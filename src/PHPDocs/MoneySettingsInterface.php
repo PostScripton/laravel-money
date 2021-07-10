@@ -1,6 +1,9 @@
 <?php
 
-namespace PostScripton\Money;
+namespace PostScripton\Money\PHPDocs;
+
+use PostScripton\Money\Currency;
+use PostScripton\Money\MoneySettings;
 
 interface MoneySettingsInterface
 {
