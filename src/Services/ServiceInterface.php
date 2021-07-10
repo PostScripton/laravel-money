@@ -7,11 +7,6 @@ use Illuminate\Support\Carbon;
 interface ServiceInterface
 {
 	/**
-	 * Runs at the booting of the service
-	 */
-	public function boot(): void;
-
-	/**
 	 * Currency exchange rate
 	 * @param string $from
 	 * @param string $to
