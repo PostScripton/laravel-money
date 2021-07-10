@@ -8,8 +8,8 @@ use PostScripton\Money\Exceptions\NotNumericOrMoneyException;
 use PostScripton\Money\Exceptions\ServiceDoesNotSupportCurrencyException;
 use PostScripton\Money\PHPDocs\MoneyInterface;
 use PostScripton\Money\Services\ServiceInterface;
-use PostScripton\Money\Traits\MoneyHelpers;
-use PostScripton\Money\Traits\MoneyStatic;
+use PostScripton\Money\Partials\MoneyHelpers;
+use PostScripton\Money\Partials\MoneyStatic;
 
 class Money implements MoneyInterface
 {

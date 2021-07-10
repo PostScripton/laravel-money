@@ -1,6 +1,6 @@
 <?php
 
-namespace PostScripton\Money\Traits;
+namespace PostScripton\Money\Partials;
 
 use PostScripton\Money\Currency;
 use PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException;
