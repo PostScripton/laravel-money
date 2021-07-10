@@ -2,7 +2,7 @@
 
 namespace PostScripton\Money\Tests\Feature\Services;
 
-use Illuminate\Support\Carbon;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Config;
 use PostScripton\Money\Currency;
 use PostScripton\Money\Exceptions\ServiceClassDoesNotExistException;

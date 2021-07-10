@@ -2,7 +2,7 @@
 
 namespace PostScripton\Money\Services;
 
-use Illuminate\Support\Carbon;
+use Carbon\Carbon;
 use PostScripton\Money\Exceptions\ServiceRequestFailedException;
 
 class ExchangeRatesAPIService extends AbstractService
