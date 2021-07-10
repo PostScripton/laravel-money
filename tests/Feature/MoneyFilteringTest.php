@@ -3,7 +3,7 @@
 namespace PostScripton\Money\Tests;
 
 use PostScripton\Money\Currency;
-use PostScripton\Money\Exceptions\MoneyShouldHaveSameCurrencyException;
+use PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException;
 use PostScripton\Money\Money;
 
 class MoneyFilteringTest extends TestCase
@@ -23,7 +23,7 @@ class MoneyFilteringTest extends TestCase
     /** @test */
     public function an_exception_is_thrown_when_different_currencies_passed_to_min_function()
     {
-        $this->expectException(MoneyShouldHaveSameCurrencyException::class);
+        $this->expectException(MoneyHasDifferentCurrenciesException::class);
 
         $m1 = new Money(3000, Currency::code('RUB'));
         $m2 = new Money(1000);
@@ -53,7 +53,7 @@ class MoneyFilteringTest extends TestCase
     /** @test */
     public function an_exception_is_thrown_when_different_currencies_passed_to_max_function()
     {
-        $this->expectException(MoneyShouldHaveSameCurrencyException::class);
+        $this->expectException(MoneyHasDifferentCurrenciesException::class);
 
         $m1 = new Money(3000, Currency::code('RUB'));
         $m2 = new Money(1000);
@@ -83,7 +83,7 @@ class MoneyFilteringTest extends TestCase
     /** @test */
     public function an_exception_is_thrown_when_different_currencies_passed_to_avg_function()
     {
-        $this->expectException(MoneyShouldHaveSameCurrencyException::class);
+        $this->expectException(MoneyHasDifferentCurrenciesException::class);
 
         $m1 = new Money(3000, Currency::code('RUB'));
         $m2 = new Money(1000);
@@ -113,7 +113,7 @@ class MoneyFilteringTest extends TestCase
     /** @test */
     public function an_exception_is_thrown_when_different_currencies_passed_to_sum_function()
     {
-        $this->expectException(MoneyShouldHaveSameCurrencyException::class);
+        $this->expectException(MoneyHasDifferentCurrenciesException::class);
 
         $m1 = new Money(3000, Currency::code('RUB'));
         $m2 = new Money(1000);

@@ -3,7 +3,7 @@
 namespace PostScripton\Money\Traits;
 
 use PostScripton\Money\Currency;
-use PostScripton\Money\Exceptions\MoneyShouldHaveSameCurrencyException;
+use PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException;
 use PostScripton\Money\Exceptions\NoCurrencyInParserStringException;
 use PostScripton\Money\Exceptions\WrongParserStringException;
 use PostScripton\Money\Money;
@@ -215,7 +215,7 @@ trait MoneyStatic
 
         foreach ($monies as $money) {
             if (!$main->isSameCurrency($money)) {
-                throw new MoneyShouldHaveSameCurrencyException($method, $arg_num, $arg_name);
+                throw new MoneyHasDifferentCurrenciesException($method, $arg_num, $arg_name);
             }
         }
     }
