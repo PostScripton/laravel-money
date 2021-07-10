@@ -1,9 +1,10 @@
 <?php
 
-namespace PostScripton\Money\Tests;
+namespace PostScripton\Money\Tests\Unit;
 
 use PostScripton\Money\Money;
 use PostScripton\Money\MoneySettings;
+use PostScripton\Money\Tests\TestCase;
 
 class UploadTest extends TestCase
 {

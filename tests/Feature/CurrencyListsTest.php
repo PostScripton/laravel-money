@@ -1,10 +1,11 @@
 <?php
 
-namespace PostScripton\Money\Tests;
+namespace PostScripton\Money\Tests\Feature;
 
 use Illuminate\Support\Facades\Config;
 use PostScripton\Money\Currency;
 use PostScripton\Money\Exceptions\CurrencyDoesNotExistException;
+use PostScripton\Money\Tests\TestCase;
 
 class CurrencyListsTest extends TestCase
 {

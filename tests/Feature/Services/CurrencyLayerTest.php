@@ -1,8 +1,7 @@
 <?php
 
-namespace PostScripton\Money\Tests;
+namespace PostScripton\Money\Tests\Feature\Services;
 
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
 use PostScripton\Money\Currency;
 use PostScripton\Money\Exceptions\ServiceClassDoesNotExistException;
@@ -10,6 +9,7 @@ use PostScripton\Money\Exceptions\ServiceDoesNotHaveClassException;
 use PostScripton\Money\Exceptions\ServiceDoesNotInheritServiceException;
 use PostScripton\Money\Exceptions\ServiceRequestFailedException;
 use PostScripton\Money\Services\CurrencyLayerService;
+use PostScripton\Money\Tests\TestCase;
 use stdClass;
 
 class CurrencyLayerTest extends TestCase
@@ -91,34 +91,34 @@ class CurrencyLayerTest extends TestCase
 		$money->convertInto(currency('rub'));
 	}
 
-//	/** @test */
-//	public function currencylayer_convert_currency()
-//	{
-//	    $rub = money(10000, currency('rub'));
-//	    $usd = $rub->convertInto(currency('usd'));
-//	}
-//
-//	/** @test */
-//	public function currencylayer_converting_back_and_forth_must_have_no_fails_in_number()
-//	{
-//		$rub = money(10000, currency('rub'));
-//		$usd = $rub->convertInto(currency('usd'));
-//
-//		$back_rub = $usd->convertInto(currency('rub'));
-//
-//		$this->assertFalse($rub->equals($back_rub));
-//		$this->assertEquals('1 000 ₽', $back_rub->toString());
-//		$this->assertTrue($rub->isSameCurrency($back_rub));
-//		$this->assertEquals($rub->getPureNumber(), $back_rub->getPureNumber());
-//	}
-//
-//	/** @test */
-//	public function exchangeratesapi_historical_converting()
-//	{
-//		$rub = money(10000, currency('rub'));
-//		$usd_now = $rub->convertInto(currency('usd'));
-//		$usd_historical = $rub->convertInto(currency('usd'), null, Carbon::createFromDate(2010, 9, 8));
-//
-//		$this->assertNotEquals($usd_now->getPureNumber(), $usd_historical->getPureNumber());
-//	}
+	/** @test */
+	public function currencylayer_convert_currency()
+	{
+	    $rub = money(10000, currency('rub'));
+	    $usd = $rub->convertInto(currency('usd'));
+	}
+
+	/** @test */
+	public function currencylayer_converting_back_and_forth_must_have_no_fails_in_number()
+	{
+		$rub = money(10000, currency('rub'));
+		$usd = $rub->convertInto(currency('usd'));
+
+		$back_rub = $usd->convertInto(currency('rub'));
+
+		$this->assertFalse($rub->equals($back_rub));
+		$this->assertEquals('1 000 ₽', $back_rub->toString());
+		$this->assertTrue($rub->isSameCurrency($back_rub));
+		$this->assertEquals($rub->getPureNumber(), $back_rub->getPureNumber());
+	}
+
+	/** @test */
+	public function exchangeratesapi_historical_converting()
+	{
+		$rub = money(10000, currency('rub'));
+		$usd_now = $rub->convertInto(currency('usd'));
+		$usd_historical = $rub->convertInto(currency('usd'), null, Carbon::createFromDate(2010, 9, 8));
+
+		$this->assertNotEquals($usd_now->getPureNumber(), $usd_historical->getPureNumber());
+	}
 }

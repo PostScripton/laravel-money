@@ -1,6 +1,6 @@
 <?php
 
-namespace PostScripton\Money\Tests;
+namespace PostScripton\Money\Tests\Feature;
 
 use PostScripton\Money\Currency;
 use PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException;
@@ -8,6 +8,7 @@ use PostScripton\Money\Money;
 use PostScripton\Money\MoneySettings;
 use PostScripton\Money\Exceptions\UndefinedOriginException;
 use PostScripton\Money\Exceptions\NotNumericOrMoneyException;
+use PostScripton\Money\Tests\TestCase;
 
 class ManipulatingMoneyNumberTest extends TestCase
 {

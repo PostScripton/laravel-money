@@ -1,6 +1,6 @@
 <?php
 
-namespace PostScripton\Money\Tests;
+namespace PostScripton\Money\Tests\Feature\Services;
 
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
@@ -9,6 +9,7 @@ use PostScripton\Money\Exceptions\ServiceClassDoesNotExistException;
 use PostScripton\Money\Exceptions\ServiceDoesNotHaveClassException;
 use PostScripton\Money\Exceptions\ServiceDoesNotInheritServiceException;
 use PostScripton\Money\Services\ExchangeRateService;
+use PostScripton\Money\Tests\TestCase;
 use stdClass;
 
 class ExchangeRateTest extends TestCase

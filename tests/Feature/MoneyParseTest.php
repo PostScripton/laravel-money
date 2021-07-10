@@ -1,11 +1,12 @@
 <?php
 
-namespace PostScripton\Money\Tests;
+namespace PostScripton\Money\Tests\Feature;
 
 use PostScripton\Money\Currency;
 use PostScripton\Money\Exceptions\NoCurrencyInParserStringException;
 use PostScripton\Money\Exceptions\WrongParserStringException;
 use PostScripton\Money\Money;
+use PostScripton\Money\Tests\TestCase;
 
 class MoneyParseTest extends TestCase
 {

@@ -1,10 +1,11 @@
 <?php
 
-namespace PostScripton\Money\Tests;
+namespace PostScripton\Money\Tests\Feature;
 
 use PostScripton\Money\Currency;
 use PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException;
 use PostScripton\Money\Money;
+use PostScripton\Money\Tests\TestCase;
 
 class MoneyFilteringTest extends TestCase
 {

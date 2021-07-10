@@ -1,12 +1,13 @@
 <?php
 
-namespace PostScripton\Money\Tests;
+namespace PostScripton\Money\Tests\Feature\Services;
 
 use Illuminate\Support\Facades\Config;
 use PostScripton\Money\Currency;
 use PostScripton\Money\Exceptions\ServiceDoesNotExistException;
 use PostScripton\Money\Services\CurrencyLayerService;
 use PostScripton\Money\Services\ExchangeRatesAPIService;
+use PostScripton\Money\Tests\TestCase;
 
 class ServicesTest extends TestCase
 {
