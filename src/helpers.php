@@ -1,7 +1,6 @@
 <?php
 
 use PostScripton\Money\Currency;
-use PostScripton\Money\Exceptions\CurrencyDoesNotExistException;
 use PostScripton\Money\Money;
 use PostScripton\Money\MoneySettings;
 
@@ -24,7 +23,7 @@ if (!function_exists('currency')) {
      * Returns currency
      * @param string $code
      * @return Currency
-     * @throws CurrencyDoesNotExistException
+     * @throws \PostScripton\Money\Exceptions\CurrencyDoesNotExistException
      */
     function currency(string $code): Currency
     {

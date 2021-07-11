@@ -2,7 +2,6 @@
 
 namespace PostScripton\Money\Exceptions;
 
-
 class ShouldPublishConfigFileException extends BaseException
 {
     public function __construct($code = 0, BaseException $previous = null)

@@ -11,7 +11,7 @@ use PostScripton\Money\Tests\TestCase;
 class MoneyLogicalOperationsTest extends TestCase
 {
     /** @test */
-    public function money_is_zero()
+    public function moneyIsZero()
     {
         $money = new Money(0);
 
@@ -19,7 +19,7 @@ class MoneyLogicalOperationsTest extends TestCase
     }
 
     /** @test */
-    public function money_is_less_than_a_number()
+    public function moneyIsLessThanANumber()
     {
         $money = new Money(500);
 
@@ -28,7 +28,7 @@ class MoneyLogicalOperationsTest extends TestCase
     }
 
     /** @test */
-    public function money_is_less_than_another_money()
+    public function moneyIsLessThanAnotherMoney()
     {
         $m1 = new Money(500);
         $m2 = new Money(1000);
@@ -37,7 +37,7 @@ class MoneyLogicalOperationsTest extends TestCase
     }
 
     /** @test */
-    public function an_exception_is_thrown_when_anything_else_passes_to_argument_of_money_is_less_than()
+    public function anExceptionIsThrownWhenAnythingElsePassesToArgumentOfMoneyIsLessThan()
     {
         $this->expectException(NotNumericOrMoneyException::class);
 
@@ -46,7 +46,7 @@ class MoneyLogicalOperationsTest extends TestCase
     }
 
     /** @test */
-    public function money_is_less_than_or_equal_to_a_number()
+    public function moneyIsLessThanOrEqualToANumber()
     {
         $money = new Money(500);
 
@@ -58,7 +58,7 @@ class MoneyLogicalOperationsTest extends TestCase
     }
 
     /** @test */
-    public function money_is_less_than_or_equal_to_another_money()
+    public function moneyIsLessThanOrEqualToAnotherMoney()
     {
         $m1 = new Money(500);
         $m2 = new Money(500);
@@ -69,7 +69,7 @@ class MoneyLogicalOperationsTest extends TestCase
     }
 
     /** @test */
-    public function an_exception_is_thrown_when_anything_else_passes_to_argument_of_money_is_less_than_or_equal()
+    public function anExceptionIsThrownWhenAnythingElsePassesToArgumentOfMoneyIsLessThanOrEqual()
     {
         $this->expectException(NotNumericOrMoneyException::class);
 
@@ -78,7 +78,7 @@ class MoneyLogicalOperationsTest extends TestCase
     }
 
     /** @test */
-    public function money_is_greater_than_a_number()
+    public function moneyIsGreaterThanANumber()
     {
         $money = new Money(1000);
 
@@ -87,7 +87,7 @@ class MoneyLogicalOperationsTest extends TestCase
     }
 
     /** @test */
-    public function money_is_greater_than_another_money()
+    public function moneyIsGreaterThanAnotherMoney()
     {
         $m1 = new Money(1000);
         $m2 = new Money(500);
@@ -96,7 +96,7 @@ class MoneyLogicalOperationsTest extends TestCase
     }
 
     /** @test */
-    public function an_exception_is_thrown_when_anything_else_passes_to_argument_of_money_is_greater_than()
+    public function anExceptionIsThrownWhenAnythingElsePassesToArgumentOfMoneyIsGreaterThan()
     {
         $this->expectException(NotNumericOrMoneyException::class);
 
@@ -105,7 +105,7 @@ class MoneyLogicalOperationsTest extends TestCase
     }
 
     /** @test */
-    public function money_is_greater_than_or_equal_to_a_number()
+    public function moneyIsGreaterThanOrEqualToANumber()
     {
         $money = new Money(1000);
 
@@ -117,7 +117,7 @@ class MoneyLogicalOperationsTest extends TestCase
     }
 
     /** @test */
-    public function money_is_greater_than_or_equal_to_another_money()
+    public function moneyIsGreaterThanOrEqualToAnotherMoney()
     {
         $m1 = new Money(1000);
         $m2 = new Money(1000);
@@ -128,7 +128,7 @@ class MoneyLogicalOperationsTest extends TestCase
     }
 
     /** @test */
-    public function an_exception_is_thrown_when_anything_else_passes_to_argument_of_money_is_greater_than_or_equal()
+    public function anExceptionIsThrownWhenAnythingElsePassesToArgumentOfMoneyIsGreaterThanOrEqual()
     {
         $this->expectException(NotNumericOrMoneyException::class);
 
@@ -137,7 +137,7 @@ class MoneyLogicalOperationsTest extends TestCase
     }
 
     /** @test */
-    public function money_has_the_same_currency_with_another_money()
+    public function moneyHasTheSameCurrencyWithAnotherMoney()
     {
         $usd1 = new Money(1000);
         $usd2 = new Money(1000);
@@ -148,7 +148,7 @@ class MoneyLogicalOperationsTest extends TestCase
     }
 
     /** @test */
-    public function money_is_positive()
+    public function moneyIsPositive()
     {
         $money = new Money(1000);
 
@@ -156,7 +156,7 @@ class MoneyLogicalOperationsTest extends TestCase
     }
 
     /** @test */
-    public function money_is_negative()
+    public function moneyIsNegative()
     {
         $money = new Money(-1000);
 
@@ -164,7 +164,7 @@ class MoneyLogicalOperationsTest extends TestCase
     }
 
     /** @test */
-    public function check_if_money_objects_are_the_same()
+    public function checkIfMoneyObjectsAreTheSame()
     {
         $m1 = $m2 = new Money(1000);
         $m3 = new Money(1000);

@@ -4,22 +4,16 @@ namespace PostScripton\Money\Tests\Feature;
 
 use PostScripton\Money\Currency;
 use PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException;
+use PostScripton\Money\Exceptions\NotNumericOrMoneyException;
+use PostScripton\Money\Exceptions\UndefinedOriginException;
 use PostScripton\Money\Money;
 use PostScripton\Money\MoneySettings;
-use PostScripton\Money\Exceptions\UndefinedOriginException;
-use PostScripton\Money\Exceptions\NotNumericOrMoneyException;
 use PostScripton\Money\Tests\TestCase;
 
 class ManipulatingMoneyNumberTest extends TestCase
 {
-	protected function setUp(): void
-	{
-		parent::setUp();
-		Currency::setCurrencyList(Currency::currentList());
-	}
-
     /** @test */
-    public function IntAddInt()
+    public function intAddInt()
     {
         $settings = (new MoneySettings())
             ->setOrigin(MoneySettings::ORIGIN_INT);
@@ -29,7 +23,7 @@ class ManipulatingMoneyNumberTest extends TestCase
     }
 
     /** @test */
-    public function IntAddFloat()
+    public function intAddFloat()
     {
         $settings = (new MoneySettings())
             ->setOrigin(MoneySettings::ORIGIN_INT);
@@ -39,7 +33,7 @@ class ManipulatingMoneyNumberTest extends TestCase
     }
 
     /** @test */
-    public function FloatAddFloat()
+    public function floatAddFloat()
     {
         $settings = (new MoneySettings())
             ->setOrigin(MoneySettings::ORIGIN_FLOAT);
@@ -49,7 +43,7 @@ class ManipulatingMoneyNumberTest extends TestCase
     }
 
     /** @test */
-    public function FloatAddInt()
+    public function floatAddInt()
     {
         $settings = (new MoneySettings())
             ->setOrigin(MoneySettings::ORIGIN_FLOAT);
@@ -59,7 +53,7 @@ class ManipulatingMoneyNumberTest extends TestCase
     }
 
     /** @test */
-    public function AddNumericError()
+    public function addNumericError()
     {
         $this->expectException(NotNumericOrMoneyException::class);
 
@@ -71,7 +65,7 @@ class ManipulatingMoneyNumberTest extends TestCase
     }
 
     /** @test */
-    public function AddOriginError()
+    public function addOriginError()
     {
         $this->expectException(UndefinedOriginException::class);
 
@@ -83,7 +77,7 @@ class ManipulatingMoneyNumberTest extends TestCase
     }
 
     /** @test */
-    public function AddMoneyHasDifferentCurrenciesError()
+    public function addMoneyHasDifferentCurrenciesError()
     {
         $this->expectException(MoneyHasDifferentCurrenciesException::class);
 
@@ -95,7 +89,7 @@ class ManipulatingMoneyNumberTest extends TestCase
 
 
     /** @test */
-    public function IntSubtractInt()
+    public function intSubtractInt()
     {
         $settings = (new MoneySettings())
             ->setOrigin(MoneySettings::ORIGIN_INT);
@@ -105,7 +99,7 @@ class ManipulatingMoneyNumberTest extends TestCase
     }
 
     /** @test */
-    public function IntSubtractFloat()
+    public function intSubtractFloat()
     {
         $settings = (new MoneySettings())
             ->setOrigin(MoneySettings::ORIGIN_INT);
@@ -115,7 +109,7 @@ class ManipulatingMoneyNumberTest extends TestCase
     }
 
     /** @test */
-    public function FloatSubtractFloat()
+    public function floatSubtractFloat()
     {
         $settings = (new MoneySettings())
             ->setOrigin(MoneySettings::ORIGIN_FLOAT);
@@ -125,7 +119,7 @@ class ManipulatingMoneyNumberTest extends TestCase
     }
 
     /** @test */
-    public function FloatSubtractInt()
+    public function floatSubtractInt()
     {
         $settings = (new MoneySettings())
             ->setOrigin(MoneySettings::ORIGIN_FLOAT);
@@ -135,7 +129,7 @@ class ManipulatingMoneyNumberTest extends TestCase
     }
 
     /** @test */
-    public function SubtractNumericError()
+    public function subtractNumericError()
     {
         $this->expectException(NotNumericOrMoneyException::class);
 
@@ -147,7 +141,7 @@ class ManipulatingMoneyNumberTest extends TestCase
     }
 
     /** @test */
-    public function SubtractOriginError()
+    public function subtractOriginError()
     {
         $this->expectException(UndefinedOriginException::class);
 
@@ -159,7 +153,7 @@ class ManipulatingMoneyNumberTest extends TestCase
     }
 
     /** @test */
-    public function SubtractMoneyHasDifferentCurrenciesError()
+    public function subtractMoneyHasDifferentCurrenciesError()
     {
         $this->expectException(MoneyHasDifferentCurrenciesException::class);
 
@@ -170,7 +164,7 @@ class ManipulatingMoneyNumberTest extends TestCase
     }
 
     /** @test */
-    public function IntSubtractInt_MoreThanMoneyHas()
+    public function intSubtractIntMoreThanMoneyHas()
     {
         $settings = (new MoneySettings())
             ->setOrigin(MoneySettings::ORIGIN_INT);
@@ -181,7 +175,7 @@ class ManipulatingMoneyNumberTest extends TestCase
     }
 
     /** @test */
-    public function IntSubtractFloat_MoreThanMoneyHas()
+    public function intSubtractFloatMoreThanMoneyHas()
     {
         $settings = (new MoneySettings())
             ->setOrigin(MoneySettings::ORIGIN_INT);
@@ -192,7 +186,7 @@ class ManipulatingMoneyNumberTest extends TestCase
     }
 
     /** @test */
-    public function FloatSubtractFloat_MoreThanMoneyHas()
+    public function floatSubtractFloatMoreThanMoneyHas()
     {
         $settings = (new MoneySettings())
             ->setOrigin(MoneySettings::ORIGIN_FLOAT);
@@ -203,7 +197,7 @@ class ManipulatingMoneyNumberTest extends TestCase
     }
 
     /** @test */
-    public function FloatSubtractInt_MoreThanMoneyHas()
+    public function floatSubtractIntMoreThanMoneyHas()
     {
         $settings = (new MoneySettings())
             ->setOrigin(MoneySettings::ORIGIN_FLOAT);
@@ -214,7 +208,7 @@ class ManipulatingMoneyNumberTest extends TestCase
     }
 
     /** @test */
-    public function RebaseInt()
+    public function rebaseInt()
     {
         $money = new Money(1500);
 
@@ -222,7 +216,7 @@ class ManipulatingMoneyNumberTest extends TestCase
     }
 
     /** @test */
-    public function RebaseFloat()
+    public function rebaseFloat()
     {
         $money = new Money(1500);
 
@@ -230,7 +224,7 @@ class ManipulatingMoneyNumberTest extends TestCase
     }
 
     /** @test */
-    public function RebaseNumericError()
+    public function rebaseNumericError()
     {
         $this->expectException(NotNumericOrMoneyException::class);
 
@@ -242,7 +236,7 @@ class ManipulatingMoneyNumberTest extends TestCase
     }
 
     /** @test */
-    public function RebaseOriginError()
+    public function rebaseOriginError()
     {
         $this->expectException(UndefinedOriginException::class);
 
@@ -254,7 +248,7 @@ class ManipulatingMoneyNumberTest extends TestCase
     }
 
     /** @test */
-    public function RebaseMoneyHasDifferentCurrenciesError()
+    public function rebaseMoneyHasDifferentCurrenciesError()
     {
         $this->expectException(MoneyHasDifferentCurrenciesException::class);
 
@@ -265,7 +259,7 @@ class ManipulatingMoneyNumberTest extends TestCase
     }
 
     /** @test */
-    public function money_can_be_multiplied_by_a_number()
+    public function moneyCanBeMultipliedByANumber()
     {
         $money = new Money(500);
         $money->multiple(1.5);
@@ -275,12 +269,18 @@ class ManipulatingMoneyNumberTest extends TestCase
     }
 
     /** @test */
-    public function money_can_be_divided_by_a_number()
+    public function moneyCanBeDividedByANumber()
     {
         $money = new Money(1000);
         $money->divide(2);
 
         $this->assertEquals(500, $money->getPureAmount());
         $this->assertEquals('$ 50', $money->toString());
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        Currency::setCurrencyList(Currency::currentList());
     }
 }

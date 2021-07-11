@@ -9,7 +9,7 @@ use PostScripton\Money\Tests\TestCase;
 class CurrencyDisplayTest extends TestCase
 {
     /** @test */
-    public function DisplayCodeStart()
+    public function displayCodeStart()
     {
         $currency = Currency::code('USD')
             ->setDisplay(Currency::DISPLAY_CODE);
@@ -19,7 +19,7 @@ class CurrencyDisplayTest extends TestCase
     }
 
     /** @test */
-    public function DisplayCodeStartInEnd()
+    public function displayCodeStartInEnd()
     {
         $currency = Currency::code('USD')
             ->setDisplay(Currency::DISPLAY_CODE)
@@ -30,7 +30,7 @@ class CurrencyDisplayTest extends TestCase
     }
 
     /** @test */
-    public function DisplayCodeEnd()
+    public function displayCodeEnd()
     {
         $currency = Currency::code('RUB')
             ->setDisplay(Currency::DISPLAY_CODE);
@@ -40,7 +40,7 @@ class CurrencyDisplayTest extends TestCase
     }
 
     /** @test */
-    public function DisplayCodeEndInStart()
+    public function displayCodeEndInStart()
     {
         $currency = Currency::code('RUB')
             ->setDisplay(Currency::DISPLAY_CODE)

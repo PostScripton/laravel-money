@@ -36,7 +36,7 @@ trait MoneyHelpers
         }
 
         if ($money instanceof Money) {
-           if (!$this->isSameCurrency($money)) {
+            if (!$this->isSameCurrency($money)) {
                 // In the future it will be converted automatically with no exceptions
                 throw new MoneyHasDifferentCurrenciesException($method, 1, '$money');
             }

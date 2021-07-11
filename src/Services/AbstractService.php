@@ -2,172 +2,171 @@
 
 namespace PostScripton\Money\Services;
 
-use GuzzleHttp\Client;
 use Carbon\Carbon;
+use GuzzleHttp\Client;
 
 abstract class AbstractService implements ServiceInterface
 {
-	protected array $config;
-	protected Client $client;
+    protected const USER_AGENT = 'PostScripton/laravel-money';
 
-	protected const USER_AGENT = 'PostScripton/laravel-money';
+    protected const FROM_TO_FORMAT = 1;
+    protected const TO_FORMAT = 2;
 
-	protected const FROM_TO_FORMAT = 1;
-	protected const TO_FORMAT = 2;
+    protected const DATE_FORMAT = 'Y-m-d';
 
-	protected const DATE_FORMAT = 'Y-m-d';
+    protected array $config;
+    protected Client $client;
 
-	protected string $currencies = 'symbols';
-	protected string $base = 'base';
-	protected string $result = 'rates';
+    protected string $currencies = 'symbols';
+    protected string $base = 'base';
+    protected string $result = 'rates';
 
-	public function __construct(array $config)
-	{
-		$this->config = $config;
-		$this->boot();
-	}
+    abstract protected function domain(): string;
 
-	public function getClassName(): string
-	{
-		return static::class;
-	}
+    abstract protected function supportedUri(): string;
 
-	public function boot(): void
-	{
-		$this->registerClient();
-	}
+    abstract protected function latestUri(): string;
 
-	protected function registerClient(): void
-	{
-		$base = [
-			'base_uri' => $this->url(),
-			'headers' => [
-				'User-Agent' => self::USER_AGENT,
-			],
-			'query' => $this->baseQuery(),
-			'http_errors' => false,
-		];
+    abstract protected function historicalUri(Carbon $date, array &$query): string;
 
-		$this->client = new Client($base);
-	}
+    abstract protected function validateResponse(array $data): void;
 
-	protected function baseQuery(): array
-	{
-		return [
-			'access_key' => $this->config['key'],
-		];
-	}
+    public function __construct(array $config)
+    {
+        $this->config = $config;
+        $this->boot();
+    }
 
-	public function url(): string
-	{
-		return $this->protocol() . '://' . trim($this->domain(), '/') . '/' . trim($this->uri(), '/');
-	}
+    public function getClassName(): string
+    {
+        return static::class;
+    }
 
-	protected function protocol(): string
-	{
-		if (!array_key_exists('secure', $this->config)) {
-			return 'https';
-		}
+    public function url(): string
+    {
+        return $this->protocol() . '://' . trim($this->domain(), '/') . '/' . trim($this->uri(), '/');
+    }
 
-		return $this->config['secure'] ? 'https' : 'http';
-	}
+    public function rate(string $from, string $to, ?Carbon $date = null): float
+    {
+        $options = [$this->currencies => implode(',', [$from, $to])];
 
-	protected function uri(): string
-	{
-		return '';
-	}
+        if ($this->doesNotHaveBaseRestriction()) {
+            $options = array_merge($options, [$this->base => $from]);
+        }
 
-	public function rate(string $from, string $to, ?Carbon $date = null): float
-	{
-		$options = [$this->currencies => implode(',', [$from, $to])];
+        $uri = is_null($date)
+            ? $this->latestUri()
+            : $this->historicalUri($date, $options);
 
-		if ($this->doesNotHaveBaseRestriction()) {
-			$options = array_merge($options, [$this->base => $from]);
-		}
+        $response = $this->client->get($uri, $this->query($options));
+        $data = json_decode($response->getBody()->getContents(), true);
 
-		$uri = is_null($date)
-			? $this->latestUri()
-			: $this->historicalUri($date, $options);
+        $this->validateResponse($data);
 
-		$response = $this->client->get($uri, $this->query($options));
-		$data = json_decode($response->getBody()->getContents(), true);
+        return $this->latestData($data, $this->result($from, $to)) /
+            $this->latestData($data, $this->result($from, $from));
+    }
 
-		$this->validateResponse($data);
+    public function supports(string $iso): bool
+    {
+        $response = $this->client->get($this->supportedUri());
+        $data = json_decode($response->getBody()->getContents(), true);
 
-		return $this->latestData($data, $this->result($from, $to)) /
-			$this->latestData($data, $this->result($from, $from));
-	}
+        $this->validateResponse($data);
 
-	public function supports(string $iso): bool
-	{
-		$response = $this->client->get($this->supportedUri());
-		$data = json_decode($response->getBody()->getContents(), true);
+        return in_array($iso, array_keys($this->supportedData($data, $this->currencies)));
+    }
 
-		$this->validateResponse($data);
+    public function boot(): void
+    {
+        $this->registerClient();
+    }
 
-		return in_array($iso, array_keys($this->supportedData($data, $this->currencies)));
-	}
+    protected function registerClient(): void
+    {
+        $base = [
+            'base_uri' => $this->url(),
+            'headers' => [
+                'User-Agent' => self::USER_AGENT,
+            ],
+            'query' => $this->baseQuery(),
+            'http_errors' => false,
+        ];
 
-	protected static function BASE_CURRENCY(): string
-	{
-		return 'USD';
-	}
+        $this->client = new Client($base);
+    }
 
-	protected function resultFormat(): int
-	{
-		return self::TO_FORMAT;
-	}
+    protected function baseQuery(): array
+    {
+        return [
+            'access_key' => $this->config['key'],
+        ];
+    }
 
-	protected function supportedData(array $data, string $index): array
-	{
-		return $data[$index];
-	}
+    protected function protocol(): string
+    {
+        if (!array_key_exists('secure', $this->config)) {
+            return 'https';
+        }
 
-	protected function latestData(array $data, string $index): float
-	{
-		return $data[$this->result][$index];
-	}
+        return $this->config['secure'] ? 'https' : 'http';
+    }
 
-	private function hasBaseRestriction(): bool
-	{
-		if (!array_key_exists('base_restriction', $this->config)) {
-			return false;
-		}
+    protected function uri(): string
+    {
+        return '';
+    }
 
-		return $this->config['base_restriction'];
-	}
+    protected function resultFormat(): int
+    {
+        return self::TO_FORMAT;
+    }
 
-	private function doesNotHaveBaseRestriction(): bool
-	{
-		return !$this->hasBaseRestriction();
-	}
+    protected function supportedData(array $data, string $index): array
+    {
+        return $data[$index];
+    }
 
-	private function result(string $from, string $to): string
-	{
-		if ($this->resultFormat() === self::TO_FORMAT) {
-			return $to;
-		}
+    protected function latestData(array $data, string $index): float
+    {
+        return $data[$this->result][$index];
+    }
 
-		return $this->hasBaseRestriction()
-			? static::BASE_CURRENCY() . $to
-			: $from . $to;
-	}
+    protected static function baseCurrency(): string
+    {
+        return 'USD';
+    }
 
-	private function query(array $options): array
-	{
-		return [
-			'query' => array_merge($this->client->getConfig('query'), $options)
-		];
-	}
+    private function hasBaseRestriction(): bool
+    {
+        if (!array_key_exists('base_restriction', $this->config)) {
+            return false;
+        }
 
-	abstract protected function domain(): string;
+        return $this->config['base_restriction'];
+    }
 
-	abstract protected function supportedUri(): string;
+    private function doesNotHaveBaseRestriction(): bool
+    {
+        return !$this->hasBaseRestriction();
+    }
 
-	abstract protected function latestUri(): string;
+    private function result(string $from, string $to): string
+    {
+        if ($this->resultFormat() === self::TO_FORMAT) {
+            return $to;
+        }
 
-	abstract protected function historicalUri(Carbon $date, array &$query): string;
+        return $this->hasBaseRestriction()
+            ? static::baseCurrency() . $to
+            : $from . $to;
+    }
 
-
-	abstract protected function validateResponse(array $data): void;
+    private function query(array $options): array
+    {
+        return [
+            'query' => array_merge($this->client->getConfig('query'), $options),
+        ];
+    }
 }

@@ -11,41 +11,41 @@ use PostScripton\Money\Tests\TestCase;
 
 class ServicesTest extends TestCase
 {
-	private $backup_config;
+    private $backup_config;
 
-	protected function setUp(): void
-	{
-		parent::setUp();
-		$this->backup_config = Config::get('money');
-		Currency::setCurrencyList(Currency::currentList());
-	}
+    /** @test */
+    public function aServiceChangesDependingOnTheConfigValueWhenItCalls()
+    {
+        $money = money(1000);
 
-	protected function tearDown(): void
-	{
-		parent::tearDown();
-		Config::set('money', $this->backup_config);
-	}
+        Config::set('money.service', 'exchangerate');
+        $this->assertInstanceOf(ExchangeRateService::class, $money->service());
 
-	/** @test */
-	public function a_service_changes_depending_on_the_config_value_when_it_calls()
-	{
-		$money = money(1000);
+        Config::set('money.service', 'exchangeratesapi');
+        $this->assertInstanceOf(ExchangeRatesAPIService::class, $money->service());
+    }
 
-		Config::set('money.service', 'exchangerate');
-		$this->assertInstanceOf(ExchangeRateService::class, $money->service());
+    /** @test */
+    public function aServiceDoesNotExist()
+    {
+        Config::set('money.service', 'qwerty');
 
-		Config::set('money.service', 'exchangeratesapi');
-		$this->assertInstanceOf(ExchangeRatesAPIService::class, $money->service());
-	}
+        $this->expectException(ServiceDoesNotExistException::class);
 
-	/** @test */
-	public function a_service_does_not_exist()
-	{
-		Config::set('money.service', 'qwerty');
+        $money = money(1000);
+        $money->convertInto(currency('rub'));
+    }
 
-		$this->expectException(ServiceDoesNotExistException::class);
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->backup_config = Config::get('money');
+        Currency::setCurrencyList(Currency::currentList());
+    }
 
-		$money = money(1000);
-		$money->convertInto(currency('rub'));
-	}
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        Config::set('money', $this->backup_config);
+    }
 }

@@ -11,7 +11,7 @@ use PostScripton\Money\Tests\TestCase;
 class MoneyParseTest extends TestCase
 {
     /** @test */
-    public function parse_money_with_default_values()
+    public function parseMoneyWithDefaultValues()
     {
         $money = Money::parse('$ 1 234.5');
         $this->assertInstanceOf(Money::class, $money);
@@ -52,9 +52,9 @@ class MoneyParseTest extends TestCase
         $this->assertInstanceOf(Money::class, $money);
         $this->assertEquals('1 234.6', $money->getAmount());
     }
-    
+
     /** @test */
-    public function parse_money_with_a_certain_currency()
+    public function parseMoneyWithACertainCurrency()
     {
         $money = Money::parse('$ 1 234.5', Currency::code('USD'));
         $this->assertEquals('USD', $money->getCurrency()->getCode());
@@ -70,7 +70,7 @@ class MoneyParseTest extends TestCase
     }
 
     /** @test */
-    public function parse_money_with_a_certain_thousands_separator()
+    public function parseMoneyWithACertainThousandsSeparator()
     {
         $money = Money::parse("$ 1'234.5", null, '\'');
 
@@ -79,7 +79,7 @@ class MoneyParseTest extends TestCase
     }
 
     /** @test */
-    public function parse_money_with_a_certain_decimal_separator()
+    public function parseMoneyWithACertainDecimalSeparator()
     {
         $money = Money::parse("$ 1 234,5", null, null, ',');
 
@@ -88,7 +88,7 @@ class MoneyParseTest extends TestCase
     }
 
     /** @test */
-    public function parse_money_with_passed_parameters()
+    public function parseMoneyWithPassedParameters()
     {
         $money = Money::parse("1.234,5 ₽", Currency::code('RUB'), '.', ',');
 
@@ -99,16 +99,16 @@ class MoneyParseTest extends TestCase
         $this->assertEquals(' ', $money->settings()->getThousandsSeparator());
         $this->assertEquals('.', $money->settings()->getDecimalSeparator());
     }
-    
+
     /** @test */
-    public function an_exception_is_thrown_when_there_is_no_currency_in_the_given_string_for_parser()
+    public function anExceptionIsThrownWhenThereIsNoCurrencyInTheGivenStringForParser()
     {
         $this->expectException(NoCurrencyInParserStringException::class);
         Money::parse('1 234.5');
     }
 
     /** @test */
-    public function an_exception_is_thrown_when_there_is_an_error_in_the_given_string_for_parser()
+    public function anExceptionIsThrownWhenThereIsAnErrorInTheGivenStringForParser()
     {
         $this->expectException(WrongParserStringException::class);
         Money::parse('qwerty 1234');

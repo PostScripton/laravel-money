@@ -9,7 +9,7 @@ use PostScripton\Money\Tests\TestCase;
 class NegativeMoneyTest extends TestCase
 {
     /** @test */
-    public function NegativeWithCurrencyStartAsSymbol()
+    public function negativeWithCurrencyStartAsSymbol()
     {
         $usd = new Money(-1234, Currency::code('USD'));
 
@@ -20,7 +20,7 @@ class NegativeMoneyTest extends TestCase
     }
 
     /** @test */
-    public function NegativeWithCurrencyStartAsSymbolNoSpace()
+    public function negativeWithCurrencyStartAsSymbolNoSpace()
     {
         $usd = new Money(-1234, Currency::code('USD'));
 
@@ -33,7 +33,7 @@ class NegativeMoneyTest extends TestCase
     }
 
     /** @test */
-    public function NegativeWithCurrencyStartAsCode()
+    public function negativeWithCurrencyStartAsCode()
     {
         $usd = new Money(-1234, Currency::code('USD')->setDisplay(Currency::DISPLAY_CODE));
 
@@ -44,7 +44,7 @@ class NegativeMoneyTest extends TestCase
     }
 
     /** @test */
-    public function NegativeWithCurrencyStartAsCodeNoSpace()
+    public function negativeWithCurrencyStartAsCodeNoSpace()
     {
         $usd = new Money(-1234, Currency::code('USD')->setDisplay(Currency::DISPLAY_CODE));
 
@@ -57,7 +57,7 @@ class NegativeMoneyTest extends TestCase
     }
 
     /** @test */
-    public function NegativeWithCurrencyEndAsSymbol()
+    public function negativeWithCurrencyEndAsSymbol()
     {
         $usd = new Money(-1234, Currency::code('RUB'));
 
@@ -68,7 +68,7 @@ class NegativeMoneyTest extends TestCase
     }
 
     /** @test */
-    public function NegativeWithCurrencyEndAsCode()
+    public function negativeWithCurrencyEndAsCode()
     {
         $usd = new Money(-1234, Currency::code('RUB')->setDisplay(Currency::DISPLAY_CODE));
 
