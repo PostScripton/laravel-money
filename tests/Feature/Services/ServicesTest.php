@@ -5,8 +5,8 @@ namespace PostScripton\Money\Tests\Feature\Services;
 use Illuminate\Support\Facades\Config;
 use PostScripton\Money\Currency;
 use PostScripton\Money\Exceptions\ServiceDoesNotExistException;
-use PostScripton\Money\Services\CurrencyLayerService;
 use PostScripton\Money\Services\ExchangeRatesAPIService;
+use PostScripton\Money\Services\ExchangeRateService;
 use PostScripton\Money\Tests\TestCase;
 
 class ServicesTest extends TestCase
@@ -31,8 +31,8 @@ class ServicesTest extends TestCase
 	{
 		$money = money(1000);
 
-		Config::set('money.service', 'currencylayer');
-		$this->assertInstanceOf(CurrencyLayerService::class, $money->service());
+		Config::set('money.service', 'exchangerate');
+		$this->assertInstanceOf(ExchangeRateService::class, $money->service());
 
 		Config::set('money.service', 'exchangeratesapi');
 		$this->assertInstanceOf(ExchangeRatesAPIService::class, $money->service());
