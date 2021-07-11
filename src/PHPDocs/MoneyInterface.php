@@ -4,8 +4,6 @@ namespace PostScripton\Money\PHPDocs;
 
 use Carbon\Carbon;
 use PostScripton\Money\Currency;
-use PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException;
-use PostScripton\Money\Exceptions\NotNumericOrMoneyException;
 use PostScripton\Money\Money;
 use PostScripton\Money\MoneySettings;
 use PostScripton\Money\Services\ServiceInterface;
@@ -13,95 +11,6 @@ use PostScripton\Money\Services\ServiceInterface;
 interface MoneyInterface
 {
     // ========== STATIC ========== //
-
-    /**
-     * Sets default settings for any Money object
-     * @param MoneySettings $setting
-     */
-    public static function set(MoneySettings $setting): void;
-
-	/**
-	 * Creates a Money object
-	 * @param float $amount
-	 * @param null $currency
-	 * @param null $settings
-	 * @return Money
-	 */
-    public static function make(float $amount, $currency = null, $settings = null): Money;
-
-    /**
-     * Corrects input &lt;input type="number" /&gt; using default settings
-     * @param string $input <p>
-     * Input string: "1234.567890" </p>
-     * @return string <p>
-     * Corrected string: "1234.5" </p>
-     */
-    public static function correctInput(string $input): string;
-
-    /**
-     * Returns the default divisor
-     * @return int
-     */
-    public static function getDefaultDivisor(): int;
-
-    /**
-     * Returns the default number of decimals
-     * @return int
-     */
-    public static function getDefaultDecimals(): int;
-
-    /**
-     * Returns the default thousand separator
-     * @return string
-     */
-    public static function getDefaultThousandsSeparator(): string;
-
-    /**
-     * Returns the default decimal separator
-     * @return string
-     */
-    public static function getDefaultDecimalSeparator(): string;
-
-    /**
-     * Returns whether money ends with 0 or not
-     * @return bool
-     */
-    public static function getDefaultEndsWith0(): bool;
-
-    /**
-     * Returns whether there is a space between currency sign and number
-     * @return bool
-     */
-    public static function getDefaultSpaceBetween(): bool;
-
-    /**
-     * Returns the default currency
-     * @return Currency
-     */
-    public static function getDefaultCurrency(): Currency;
-
-    /**
-     * Returns the default origin. Whether it is integer or float
-     * @return int
-     */
-    public static function getDefaultOrigin(): int;
-
-	/**
-	 * Parses the string and turns it into a money instance
-	 * @param string $money
-	 * @param Currency|null $currency
-	 * @param string|null $thousands
-	 * @param string|null $decimals
-	 * @return Money
-	 */
-    public static function parse(
-		string $money,
-		Currency $currency = null,
-		string $thousands = null,
-		string $decimals = null
-	): Money;
-
-    // ========== OBJECT ========== //
 
     /**
      * Binds the money object with settings
@@ -145,8 +54,8 @@ interface MoneyInterface
      * @param int $origin <p>
      * Origin of the number whether it is integer of float </p> <p>
      * Use `Money::ORIGIN_*` to ensure it's correct </p>
-     * @throws MoneyHasDifferentCurrenciesException
-     * @throws NotNumericOrMoneyException
+     * @throws \PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException
+     * @throws \PostScripton\Money\Exceptions\NotNumericOrMoneyException
      * @return Money
      */
     public function add($money, int $origin = MoneySettings::ORIGIN_INT): Money;
@@ -159,8 +68,8 @@ interface MoneyInterface
      * @param int $origin <p>
      * Origin of the number whether it is integer of float </p> <p>
      * Use `Money::ORIGIN_*` to ensure it's correct </p>
-     * @throws MoneyHasDifferentCurrenciesException
-     * @throws NotNumericOrMoneyException
+     * @throws \PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException
+     * @throws \PostScripton\Money\Exceptions\NotNumericOrMoneyException
      * @return Money
      */
     public function subtract($money, int $origin = MoneySettings::ORIGIN_INT): Money;
@@ -190,8 +99,8 @@ interface MoneyInterface
      * @param int $origin <p>
      * Origin of the number whether it is integer of float </p> <p>
      * Use `Money::ORIGIN_*` to ensure it's correct </p>
-     * @throws MoneyHasDifferentCurrenciesException
-     * @throws NotNumericOrMoneyException
+     * @throws \PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException
+     * @throws \PostScripton\Money\Exceptions\NotNumericOrMoneyException
      * @return Money
      */
     public function rebase($money, int $origin = MoneySettings::ORIGIN_INT): Money;
@@ -265,7 +174,8 @@ interface MoneyInterface
     public function greaterThan($money, int $origin = MoneySettings::ORIGIN_INT): bool;
 
     /**
-     * Compares with an amount, or a money object whether it is greater than or equals to the number, or the money object
+     * Compares with an amount, or a money object whether it is greater than or equals to the number,
+     * or the money object
      * @param $money <p>
      * An amount or a money object </p>
      * @param int $origin <p>
@@ -276,48 +186,48 @@ interface MoneyInterface
      */
     public function greaterThanOrEqual($money, int $origin = MoneySettings::ORIGIN_INT): bool;
 
-	/**
-	 * Checks whether two money objects are equal or not
-	 * @param Money $money
-	 * @param bool $strict <p>
-	 * Whether it is === or ==
-	 * @return bool
-	 */
-	public function equals(Money $money, bool $strict = true): bool;
+    /**
+     * Checks whether two money objects are equal or not
+     * @param Money $money
+     * @param bool $strict <p>
+     * Whether it is === or ==
+     * @return bool
+     */
+    public function equals(Money $money, bool $strict = true): bool;
 
-	/**
-	 * Converts money into another currency using an exchange rate between currencies
-	 * <p>USD -> RUB = 75.79 / 1</p>
-	 * <p>RUB -> USD = 1 / 75.79</p> <br/> <p>
-	 * You can do it whether online or offline by not passing or passing the $rate parameter
-	 * </p>
-	 * @param Currency $currency <p>
-	 * Currency you want to convert into </p>
-	 * @param float|null $rate <p>
-	 * Rate of the money's currency and the chosen one </p>
-	 * @param Carbon|null $date <p>
-	 * Historical mode. Pass the date you want to get rate of
-	 * </p>
-	 * @return Money
-	 */
+    /**
+     * Converts money into another currency using an exchange rate between currencies
+     * <p>USD -> RUB = 75.79 / 1</p>
+     * <p>RUB -> USD = 1 / 75.79</p> <br/> <p>
+     * You can do it whether online or offline by not passing or passing the $rate parameter
+     * </p>
+     * @param Currency $currency <p>
+     * Currency you want to convert into </p>
+     * @param float|null $rate <p>
+     * Rate of the money's currency and the chosen one </p>
+     * @param Carbon|null $date <p>
+     * Historical mode. Pass the date you want to get rate of
+     * </p>
+     * @return Money
+     */
     public function convertInto(Currency $currency, ?float $rate = null, ?Carbon $date = null): Money;
 
-	/**
-	 * Shows the difference between two money objects <p>
-	 * $50 - $100 = "$ -50" </p>
-	 * @param Money $money <p>
-	 * The given money must be the same currency as the first one </p>
-	 * @param MoneySettings|null $settings <p>
-	 * Settings for displaying the difference </p>
-	 * @return string
-	 */
-	public function difference(Money $money, ?MoneySettings $settings = null): string;
+    /**
+     * Shows the difference between two money objects <p>
+     * $50 - $100 = "$ -50" </p>
+     * @param Money $money <p>
+     * The given money must be the same currency as the first one </p>
+     * @param MoneySettings|null $settings <p>
+     * Settings for displaying the difference </p>
+     * @return string
+     */
+    public function difference(Money $money, ?MoneySettings $settings = null): string;
 
-	/**
-	 * Allows you to get access to the selected service from the config file
-	 * @return ServiceInterface
-	 */
-	public function service(): ServiceInterface;
+    /**
+     * Allows you to get access to the selected service from the config file
+     * @return ServiceInterface
+     */
+    public function service(): ServiceInterface;
 
     /**
      * Converts the money into the number according to origin for storing in database <p>
@@ -333,4 +243,93 @@ interface MoneyInterface
      * "$ 1 234.5" </p>
      */
     public function toString(): string;
+
+
+
+    /**
+     * Sets default settings for any Money object
+     * @param MoneySettings $setting
+     */
+    public static function set(MoneySettings $setting): void;
+
+    /**
+     * Creates a Money object
+     * @param float $amount
+     * @param null $currency
+     * @param null $settings
+     * @return Money
+     */
+    public static function make(float $amount, $currency = null, $settings = null): Money;
+
+    /**
+     * Corrects input &lt;input type="number" /&gt; using default settings
+     * @param string $input <p>
+     * Input string: "1234.567890" </p>
+     * @return string <p>
+     * Corrected string: "1234.5" </p>
+     */
+    public static function correctInput(string $input): string;
+
+    /**
+     * Returns the default divisor
+     * @return int
+     */
+    public static function getDefaultDivisor(): int;
+
+    /**
+     * Returns the default number of decimals
+     * @return int
+     */
+    public static function getDefaultDecimals(): int;
+
+    /**
+     * Returns the default thousand separator
+     * @return string
+     */
+    public static function getDefaultThousandsSeparator(): string;
+
+    /**
+     * Returns the default decimal separator
+     * @return string
+     */
+    public static function getDefaultDecimalSeparator(): string;
+
+    /**
+     * Returns whether money ends with 0 or not
+     * @return bool
+     */
+    public static function getDefaultEndsWith0(): bool;
+
+    /**
+     * Returns whether there is a space between currency sign and number
+     * @return bool
+     */
+    public static function getDefaultSpaceBetween(): bool;
+
+    /**
+     * Returns the default currency
+     * @return Currency
+     */
+    public static function getDefaultCurrency(): Currency;
+
+    /**
+     * Returns the default origin. Whether it is integer or float
+     * @return int
+     */
+    public static function getDefaultOrigin(): int;
+
+    /**
+     * Parses the string and turns it into a money instance
+     * @param string $money
+     * @param Currency|null $currency
+     * @param string|null $thousands
+     * @param string|null $decimals
+     * @return Money
+     */
+    public static function parse(
+        string $money,
+        Currency $currency = null,
+        string $thousands = null,
+        string $decimals = null
+    ): Money;// ========== OBJECT ========== //
 }

@@ -47,7 +47,7 @@ trait MoneyStatic
         $decimals = preg_quote($decimals ?? self::getDefaultDecimalSeparator());
         $currencies = implode('|', array_map(function ($sign) {
                 return preg_quote($sign);
-            }, $currency->getSymbols())) . '|' .
+        }, $currency->getSymbols())) . '|' .
             preg_quote($currency->getCode()) . '|' .
             preg_quote($currency->getNumCode());
 
@@ -187,9 +187,11 @@ trait MoneyStatic
             return $acc + $money->getPureAmount();
         }, 0);
 
-        return new Money($sum / count($monies),
+        return new Money(
+            $sum / count($monies),
             Currency::code($monies[0]->getCurrency()->getCode()),
-            clone $monies[0]->settings());
+            clone $monies[0]->settings()
+        );
     }
 
     public static function sum(Money ...$monies): ?Money
@@ -204,9 +206,11 @@ trait MoneyStatic
             return $acc + $money->getPureAmount();
         }, 0);
 
-        return new Money($sum,
+        return new Money(
+            $sum,
             Currency::code($monies[0]->getCurrency()->getCode()),
-            clone $monies[0]->settings());
+            clone $monies[0]->settings()
+        );
     }
 
     private static function currenciesAreNotSame(array $monies, string $method, int $arg_num, string $arg_name): void
@@ -225,7 +229,9 @@ trait MoneyStatic
         $space = $money->settings()->hasSpaceBetween() ? ' ' : '';
 
         // Always has a space
-        if ($currency->getPosition() === Currency::POSITION_START && $money->isNegative() || $currency->getDisplay() === Currency::DISPLAY_CODE) {
+        $has_space = $currency->getPosition() === Currency::POSITION_START && $money->isNegative()
+            || $currency->getDisplay() === Currency::DISPLAY_CODE;
+        if ($has_space) {
             $space = ' ';
         }
 

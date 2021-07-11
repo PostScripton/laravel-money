@@ -6,10 +6,10 @@ use Carbon\Carbon;
 use PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException;
 use PostScripton\Money\Exceptions\NotNumericOrMoneyException;
 use PostScripton\Money\Exceptions\ServiceDoesNotSupportCurrencyException;
-use PostScripton\Money\PHPDocs\MoneyInterface;
-use PostScripton\Money\Services\ServiceInterface;
 use PostScripton\Money\Partials\MoneyHelpers;
 use PostScripton\Money\Partials\MoneyStatic;
+use PostScripton\Money\PHPDocs\MoneyInterface;
+use PostScripton\Money\Services\ServiceInterface;
 
 class Money implements MoneyInterface
 {
@@ -25,7 +25,7 @@ class Money implements MoneyInterface
         $this->settings = null;
 
         if (is_null($settings) && !($currency instanceof MoneySettings)) {
-            $settings = new MoneySettings;
+            $settings = new MoneySettings();
         }
 
         // No parameters passed
@@ -240,34 +240,34 @@ class Money implements MoneyInterface
     }
 
     public function convertInto(Currency $currency, ?float $rate = null, ?Carbon $date = null): self
-	{
-		// Convert online
-		if (is_null($rate)) {
-			if (!$this->service()->supports($currency->getCode())) {
-				throw new ServiceDoesNotSupportCurrencyException($this->service()->getClassName());
-			}
+    {
+        // Convert online
+        if (is_null($rate)) {
+            if (!$this->service()->supports($currency->getCode())) {
+                throw new ServiceDoesNotSupportCurrencyException($this->service()->getClassName());
+            }
 
-			$rate = $this->service()->rate($this->getCurrency()->getCode(), $currency->getCode(), $date);
-		}
+            $rate = $this->service()->rate($this->getCurrency()->getCode(), $currency->getCode(), $date);
+        }
 
-		$new_amount = $this->getPureAmount() * $rate;
-		$settings = clone $this->settings;
+        $new_amount = $this->getPureAmount() * $rate;
+        $settings = clone $this->settings;
 
-		return money($new_amount, $currency, $settings);
-	}
+        return money($new_amount, $currency, $settings);
+    }
 
-	public function difference(self $money, ?MoneySettings $settings = null): string
-	{
-		if (!$this->isSameCurrency($money)) {
-			throw new MoneyHasDifferentCurrenciesException(__METHOD__, 1, '$money');
-		}
+    public function difference(self $money, ?MoneySettings $settings = null): string
+    {
+        if (!$this->isSameCurrency($money)) {
+            throw new MoneyHasDifferentCurrenciesException(__METHOD__, 1, '$money');
+        }
 
-		$money_amount = $this->numberIntoCorrectOrigin($money, $money->settings()->getOrigin(), __METHOD__);
-		$amount = $this->getPureAmount() - $money_amount;
-		$settings = is_null($settings) ? clone $this->settings() : $settings;
+        $money_amount = $this->numberIntoCorrectOrigin($money, $money->settings()->getOrigin(), __METHOD__);
+        $amount = $this->getPureAmount() - $money_amount;
+        $settings = is_null($settings) ? clone $this->settings() : $settings;
 
-		return money($amount, $this->getCurrency(), $settings)->toString();
-	}
+        return money($amount, $this->getCurrency(), $settings)->toString();
+    }
 
     public function upload()
     {
@@ -282,9 +282,9 @@ class Money implements MoneyInterface
     }
 
     public function service(): ServiceInterface
-	{
-		return app(ServiceInterface::class);
-	}
+    {
+        return app(ServiceInterface::class);
+    }
 
     public function __toString(): string
     {

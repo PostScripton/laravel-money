@@ -9,9 +9,9 @@ use PostScripton\Money\Tests\TestCase;
 class OriginTest extends TestCase
 {
     /** @test */
-    public function money_with_origin_int()
+    public function moneyWithOriginInt()
     {
-        $settings = new MoneySettings;
+        $settings = new MoneySettings();
         $settings->setOrigin(MoneySettings::ORIGIN_INT);
 
         $money = new Money(132.76686139139672, $settings);
@@ -22,9 +22,9 @@ class OriginTest extends TestCase
     }
 
     /** @test */
-    public function money_with_origin_float()
+    public function moneyWithOriginFloat()
     {
-        $settings = new MoneySettings;
+        $settings = new MoneySettings();
         $settings->setOrigin(MoneySettings::ORIGIN_FLOAT);
 
         $money = new Money(13.276686139139672, $settings);
@@ -35,9 +35,9 @@ class OriginTest extends TestCase
     }
 
     /** @test */
-    public function set_origin_float_for_money_with_origin_int()
+    public function setOriginFloatForMoneyWithOriginInt()
     {
-        $settings = new MoneySettings;
+        $settings = new MoneySettings();
         $settings->setOrigin(MoneySettings::ORIGIN_INT);
 
         $money = new Money(132.76686139139672, $settings);
@@ -51,9 +51,9 @@ class OriginTest extends TestCase
     }
 
     /** @test */
-    public function set_origin_int_for_money_with_origin_float()
+    public function setOriginIntForMoneyWithOriginFloat()
     {
-        $settings = new MoneySettings;
+        $settings = new MoneySettings();
         $settings->setOrigin(MoneySettings::ORIGIN_FLOAT);
 
         $money = new Money(13.276686139139672, $settings);

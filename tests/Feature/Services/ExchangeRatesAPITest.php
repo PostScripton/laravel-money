@@ -15,104 +15,108 @@ use stdClass;
 
 class ExchangeRatesAPITest extends TestCase
 {
-	private $backup_config;
+    private $backup_config;
 
-	protected function setUp(): void
-	{
-		parent::setUp();
-		$this->backup_config = Config::get('money');
-		Currency::setCurrencyList(Currency::currentList());
-		Config::set('money.service', 'exchangeratesapi');
-	}
+    /** @test */
+    public function gettingInfoAboutAnExchangeratesapiService()
+    {
+        $money = money(1000);
 
-	protected function tearDown(): void
-	{
-		parent::tearDown();
-		Config::set('money', $this->backup_config);
-	}
+        $this->assertInstanceOf(ExchangeRatesAPIService::class, $money->service());
+        $this->assertEquals(ExchangeRatesAPIService::class, $money->service()->getClassName());
+    }
 
-	/** @test */
-	public function getting_info_about_an_exchangeratesapi_service()
-	{
-		$money = money(1000);
+    /** @test */
+    public function anIncorrectApiWasGivenToAnExchangeratesapiService()
+    {
+        Config::set(
+            'money.services.' . config('money.service'),
+            array_merge(config('money.services.' . config('money.service')), ['key' => 'incorrect_api_key'])
+        );
 
-		$this->assertInstanceOf(ExchangeRatesAPIService::class, $money->service());
-		$this->assertEquals(ExchangeRatesAPIService::class, $money->service()->getClassName());
-	}
+        $this->expectException(ServiceRequestFailedException::class);
 
-	/** @test */
-	public function an_incorrect_api_was_given_to_an_exchangeratesapi_service()
-	{
-		Config::set('money.services.' . config('money.service'),
-			array_merge(config('money.services.' . config('money.service')), ['key' => 'incorrect_api_key'])
-		);
+        $money = money(1000);
+        $money->convertInto(currency('rub'));
+    }
 
-		$this->expectException(ServiceRequestFailedException::class);
+    /** @test */
+    public function anExchangeratesapiServiceDoesNotHaveClass()
+    {
+        Config::set(
+            'money.services.' . config('money.service'),
+            array_diff_key(config('money.services.' . config('money.service')), ['class' => ''])
+        );
 
-		$money = money(1000);
-		$money->convertInto(currency('rub'));
-	}
+        $this->expectException(ServiceDoesNotHaveClassException::class);
 
-	/** @test */
-	public function an_exchangeratesapi_service_does_not_have_class()
-	{
-		Config::set('money.services.' . config('money.service'),
-			array_diff_key(config('money.services.' . config('money.service')), ['class' => ''])
-		);
+        $money = money(1000);
+        $money->convertInto(currency('rub'));
+    }
 
-		$this->expectException(ServiceDoesNotHaveClassException::class);
+    /** @test */
+    public function anExchangeratesapiServiceClassDoesNotExist()
+    {
+        Config::set(
+            'money.services.' . config('money.service'),
+            array_merge(config('money.services.' . config('money.service')), ['class' => 'incorrect_class'])
+        );
 
-		$money = money(1000);
-		$money->convertInto(currency('rub'));
-	}
+        $this->expectException(ServiceClassDoesNotExistException::class);
 
-	/** @test */
-	public function an_exchangeratesapi_service_class_does_not_exist()
-	{
-		Config::set('money.services.' . config('money.service'),
-			array_merge(config('money.services.' . config('money.service')), ['class' => 'incorrect_class'])
-		);
+        $money = money(1000);
+        $money->convertInto(currency('rub'));
+    }
 
-		$this->expectException(ServiceClassDoesNotExistException::class);
+    /** @test */
+    public function anExchangeratesapiServiceClassDoesNotInheritTheMainOne()
+    {
+        Config::set(
+            'money.services.' . config('money.service'),
+            array_merge(config('money.services.' . config('money.service')), ['class' => stdClass::class])
+        );
 
-		$money = money(1000);
-		$money->convertInto(currency('rub'));
-	}
+        $this->expectException(ServiceDoesNotInheritServiceException::class);
 
-	/** @test */
-	public function an_exchangeratesapi_service_class_does_not_inherit_the_main_one()
-	{
-		Config::set('money.services.' . config('money.service'),
-			array_merge(config('money.services.' . config('money.service')), ['class' => stdClass::class])
-		);
+        $money = money(1000);
+        $money->convertInto(currency('rub'));
+    }
 
-		$this->expectException(ServiceDoesNotInheritServiceException::class);
+    /** @test */
+    public function exchangeratesapiConvertingBackAndForthMustHaveNoFailsInNumber()
+    {
+        $rub = money(10000, currency('rub'));
+        $usd = $rub->convertInto(currency('usd'));
 
-		$money = money(1000);
-		$money->convertInto(currency('rub'));
-	}
+        $back_rub = $usd->convertInto(currency('rub'));
 
-	/** @test */
-	public function exchangeratesapi_converting_back_and_forth_must_have_no_fails_in_number()
-	{
-		$rub = money(10000, currency('rub'));
-		$usd = $rub->convertInto(currency('usd'));
+        $this->assertFalse($rub->equals($back_rub));
+        $this->assertEquals('1 000 ₽', $back_rub->toString());
+        $this->assertTrue($rub->isSameCurrency($back_rub));
+        $this->assertEquals($rub->getPureAmount(), $back_rub->getPureAmount());
+    }
 
-		$back_rub = $usd->convertInto(currency('rub'));
+    /** @test */
+    public function exchangeratesapiHistoricalConverting()
+    {
+        $rub = money(10000, currency('rub'));
+        $usd_now = $rub->convertInto(currency('usd'));
+        $usd_historical = $rub->convertInto(currency('usd'), null, Carbon::createFromDate(2010, 9, 8));
 
-		$this->assertFalse($rub->equals($back_rub));
-		$this->assertEquals('1 000 ₽', $back_rub->toString());
-		$this->assertTrue($rub->isSameCurrency($back_rub));
-		$this->assertEquals($rub->getPureAmount(), $back_rub->getPureAmount());
-	}
+        $this->assertNotEquals($usd_now->getPureAmount(), $usd_historical->getPureAmount());
+    }
 
-	/** @test */
-	public function exchangeratesapi_historical_converting()
-	{
-		$rub = money(10000, currency('rub'));
-		$usd_now = $rub->convertInto(currency('usd'));
-		$usd_historical = $rub->convertInto(currency('usd'), null, Carbon::createFromDate(2010, 9, 8));
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->backup_config = Config::get('money');
+        Currency::setCurrencyList(Currency::currentList());
+        Config::set('money.service', 'exchangeratesapi');
+    }
 
-		$this->assertNotEquals($usd_now->getPureAmount(), $usd_historical->getPureAmount());
-	}
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        Config::set('money', $this->backup_config);
+    }
 }

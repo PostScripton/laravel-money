@@ -9,7 +9,7 @@ use PostScripton\Money\Tests\TestCase;
 class HelpersTest extends TestCase
 {
     /** @test */
-    public function create_money_with_money_helper()
+    public function createMoneyWithMoneyHelper()
     {
         $money = money(12345);
 
@@ -18,7 +18,7 @@ class HelpersTest extends TestCase
     }
 
     /** @test */
-    public function create_money_with_money_and_currency_helpers()
+    public function createMoneyWithMoneyAndCurrencyHelpers()
     {
         $money = money(12345, currency('RUB'));
 
@@ -28,7 +28,7 @@ class HelpersTest extends TestCase
     }
 
     /** @test */
-    public function create_money_with_money_currency_and_settings_helpers()
+    public function createMoneyWithMoneyCurrencyAndSettingsHelpers()
     {
         $money = money(12345, currency('RUB'), settings()->setHasSpaceBetween(false));
 
@@ -38,7 +38,7 @@ class HelpersTest extends TestCase
     }
 
     /** @test */
-    public function modify_currency_before_creating_money()
+    public function modifyCurrencyBeforeCreatingMoney()
     {
         $money = money(12345, currency('usd')->setPosition(Currency::POSITION_END));
 

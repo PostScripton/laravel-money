@@ -9,7 +9,7 @@ return [
         'iso_code' => 'USD',
         'num_code' => '840',
         'symbol' => '$',
-        'position' => Currency::POSITION_START
+        'position' => Currency::POSITION_START,
     ],
     [
         'full_name' => 'Euro',
@@ -17,7 +17,7 @@ return [
         'iso_code' => 'EUR',
         'num_code' => '978',
         'symbol' => '€',
-        'position' => Currency::POSITION_START
+        'position' => Currency::POSITION_START,
     ],
     [
         'full_name' => 'Japanese yen',
@@ -25,7 +25,7 @@ return [
         'iso_code' => 'JPY',
         'num_code' => '392',
         'symbol' => ['¥', '円'],
-        'position' => Currency::POSITION_END
+        'position' => Currency::POSITION_END,
     ],
     [
         'full_name' => 'Pound sterling',
@@ -33,7 +33,7 @@ return [
         'iso_code' => 'GBP',
         'num_code' => '826',
         'symbol' => '£',
-        'position' => Currency::POSITION_END
+        'position' => Currency::POSITION_END,
     ],
     [
         'full_name' => 'Australian dollar',
@@ -41,7 +41,7 @@ return [
         'iso_code' => 'AUD',
         'num_code' => '036',
         'symbol' => '$',
-        'position' => Currency::POSITION_START
+        'position' => Currency::POSITION_START,
     ],
     [
         'full_name' => 'Canadian dollar',
@@ -49,7 +49,7 @@ return [
         'iso_code' => 'CAD',
         'num_code' => '124',
         'symbol' => '$',
-        'position' => Currency::POSITION_START
+        'position' => Currency::POSITION_START,
     ],
     [
         'full_name' => 'Swiss franc',
@@ -57,7 +57,7 @@ return [
         'iso_code' => 'CHF',
         'num_code' => '756',
         'symbol' => 'Fr.',
-        'position' => Currency::POSITION_END
+        'position' => Currency::POSITION_END,
     ],
     [
         'full_name' => 'Chinese yuan',
@@ -65,7 +65,7 @@ return [
         'iso_code' => 'CNY',
         'num_code' => '156',
         'symbol' => ['¥', '元'],
-        'position' => Currency::POSITION_END
+        'position' => Currency::POSITION_END,
     ],
     [
         'full_name' => 'Hong Kong dollar',
@@ -73,7 +73,7 @@ return [
         'iso_code' => 'HKD',
         'num_code' => '344',
         'symbol' => '$',
-        'position' => Currency::POSITION_START
+        'position' => Currency::POSITION_START,
     ],
     [
         'full_name' => 'New Zealand dollar',
@@ -81,7 +81,7 @@ return [
         'iso_code' => 'NZD',
         'num_code' => '554',
         'symbol' => '$',
-        'position' => Currency::POSITION_START
+        'position' => Currency::POSITION_START,
     ],
     [
         'full_name' => 'Swedish krona',
@@ -89,7 +89,7 @@ return [
         'iso_code' => 'SEK',
         'num_code' => '752',
         'symbol' => 'kr',
-        'position' => Currency::POSITION_END
+        'position' => Currency::POSITION_END,
     ],
     [
         'full_name' => 'South Korean won',
@@ -97,7 +97,7 @@ return [
         'iso_code' => 'KRW',
         'num_code' => '410',
         'symbol' => '₩',
-        'position' => Currency::POSITION_END
+        'position' => Currency::POSITION_END,
     ],
     [
         'full_name' => 'Singapore dollar',
@@ -105,7 +105,7 @@ return [
         'iso_code' => 'SGD',
         'num_code' => '702',
         'symbol' => '$',
-        'position' => Currency::POSITION_START
+        'position' => Currency::POSITION_START,
     ],
     [
         'full_name' => 'Norwegian krone',
@@ -113,7 +113,7 @@ return [
         'iso_code' => 'NOK',
         'num_code' => '578',
         'symbol' => 'kr',
-        'position' => Currency::POSITION_END
+        'position' => Currency::POSITION_END,
     ],
     [
         'full_name' => 'Mexican peso',
@@ -121,7 +121,7 @@ return [
         'iso_code' => 'MXN',
         'num_code' => '484',
         'symbol' => '$',
-        'position' => Currency::POSITION_START
+        'position' => Currency::POSITION_START,
     ],
     [
         'full_name' => 'Indian rupee',
@@ -129,7 +129,7 @@ return [
         'iso_code' => 'INR',
         'num_code' => '356',
         'symbol' => '₹',
-        'position' => Currency::POSITION_END
+        'position' => Currency::POSITION_END,
     ],
     [
         'full_name' => 'Russian ruble',
@@ -137,7 +137,7 @@ return [
         'iso_code' => 'RUB',
         'num_code' => '643',
         'symbol' => '₽',
-        'position' => Currency::POSITION_END
+        'position' => Currency::POSITION_END,
     ],
     [
         'full_name' => 'South African rand',
@@ -145,7 +145,7 @@ return [
         'iso_code' => 'ZAR',
         'num_code' => '710',
         'symbol' => 'R',
-        'position' => Currency::POSITION_END
+        'position' => Currency::POSITION_END,
     ],
     [
         'full_name' => 'Turkish lira',
@@ -153,7 +153,7 @@ return [
         'iso_code' => 'TRY',
         'num_code' => '949',
         'symbol' => '₺',
-        'position' => Currency::POSITION_END
+        'position' => Currency::POSITION_END,
     ],
     [
         'full_name' => 'Brazilian real',
@@ -161,7 +161,7 @@ return [
         'iso_code' => 'BRL',
         'num_code' => '986',
         'symbol' => 'R$',
-        'position' => Currency::POSITION_END
+        'position' => Currency::POSITION_END,
     ],
     [
         'full_name' => 'New Taiwan dollar',
@@ -169,7 +169,7 @@ return [
         'iso_code' => 'TWD',
         'num_code' => '901',
         'symbol' => '$',
-        'position' => Currency::POSITION_START
+        'position' => Currency::POSITION_START,
     ],
     [
         'full_name' => 'Danish krone',
@@ -177,7 +177,7 @@ return [
         'iso_code' => 'DKK',
         'num_code' => '208',
         'symbol' => 'kr',
-        'position' => Currency::POSITION_END
+        'position' => Currency::POSITION_END,
     ],
     [
         'full_name' => 'Polish złoty',
@@ -185,7 +185,7 @@ return [
         'iso_code' => 'PLN',
         'num_code' => '985',
         'symbol' => 'zł',
-        'position' => Currency::POSITION_END
+        'position' => Currency::POSITION_END,
     ],
     [
         'full_name' => 'Thai baht',
@@ -193,7 +193,7 @@ return [
         'iso_code' => 'THB',
         'num_code' => '764',
         'symbol' => '฿',
-        'position' => Currency::POSITION_END
+        'position' => Currency::POSITION_END,
     ],
     [
         'full_name' => 'Indonesian rupiah',
@@ -201,7 +201,7 @@ return [
         'iso_code' => 'IDR',
         'num_code' => '360',
         'symbol' => 'Rp',
-        'position' => Currency::POSITION_END
+        'position' => Currency::POSITION_END,
     ],
     [
         'full_name' => 'Hungarian forint',
@@ -209,7 +209,7 @@ return [
         'iso_code' => 'HUF',
         'num_code' => '348',
         'symbol' => 'Ft',
-        'position' => Currency::POSITION_END
+        'position' => Currency::POSITION_END,
     ],
     [
         'full_name' => 'Czech koruna',
@@ -217,7 +217,7 @@ return [
         'iso_code' => 'CZK',
         'num_code' => '203',
         'symbol' => 'Kč',
-        'position' => Currency::POSITION_END
+        'position' => Currency::POSITION_END,
     ],
     [
         'full_name' => 'Israeli new shekel',
@@ -225,7 +225,7 @@ return [
         'iso_code' => 'ILS',
         'num_code' => '376',
         'symbol' => '₪',
-        'position' => Currency::POSITION_END
+        'position' => Currency::POSITION_END,
     ],
     [
         'full_name' => 'Chilean peso',
@@ -233,7 +233,7 @@ return [
         'iso_code' => 'CLP',
         'num_code' => '152',
         'symbol' => '$',
-        'position' => Currency::POSITION_START
+        'position' => Currency::POSITION_START,
     ],
     [
         'full_name' => 'Philippine peso',
@@ -241,7 +241,7 @@ return [
         'iso_code' => 'PHP',
         'num_code' => '608',
         'symbol' => '₱',
-        'position' => Currency::POSITION_END
+        'position' => Currency::POSITION_END,
     ],
     [
         'full_name' => 'United Arab Emirates dirham',
@@ -249,7 +249,7 @@ return [
         'iso_code' => 'AED',
         'num_code' => '784',
         'symbol' => 'د.إ',
-        'position' => Currency::POSITION_END
+        'position' => Currency::POSITION_END,
     ],
     [
         'full_name' => 'Colombian peso',
@@ -257,7 +257,7 @@ return [
         'iso_code' => 'COP',
         'num_code' => '170',
         'symbol' => '$',
-        'position' => Currency::POSITION_START
+        'position' => Currency::POSITION_START,
     ],
     [
         'full_name' => 'Saudi riyal',
@@ -265,7 +265,7 @@ return [
         'iso_code' => 'SAR',
         'num_code' => '682',
         'symbol' => '﷼',
-        'position' => Currency::POSITION_END
+        'position' => Currency::POSITION_END,
     ],
     [
         'full_name' => 'Malaysian ringgit',
@@ -273,7 +273,7 @@ return [
         'iso_code' => 'MYR',
         'num_code' => '458',
         'symbol' => 'RM',
-        'position' => Currency::POSITION_END
+        'position' => Currency::POSITION_END,
     ],
     [
         'full_name' => 'Romanian leu',
@@ -281,6 +281,6 @@ return [
         'iso_code' => 'RON',
         'num_code' => '946',
         'symbol' => 'lei',
-        'position' => Currency::POSITION_END
+        'position' => Currency::POSITION_END,
     ],
 ];

@@ -9,23 +9,10 @@ use PostScripton\Money\Tests\TestCase;
 
 class ConvertCurrenciesTest extends TestCase
 {
-	private $backup_config;
+    private $backup_config;
 
-	protected function setUp(): void
-	{
-		parent::setUp();
-		$this->backup_config = Config::get('money');
-		Currency::setCurrencyList(Currency::currentList());
-	}
-
-	protected function tearDown(): void
-	{
-		parent::tearDown();
-		Config::set('money', $this->backup_config);
-	}
-
-	/** @test */
-    public function money_can_be_offline_converted_between_two_currencies_without_fails_in_number()
+    /** @test */
+    public function moneyCanBeOfflineConvertedBetweenTwoCurrenciesWithoutFailsInNumber()
     {
         $rate = 75.32;
         $rub = money(10000, currency('RUB'));
@@ -43,23 +30,36 @@ class ConvertCurrenciesTest extends TestCase
     }
 
     /** @test */
-    public function the_given_currency_is_not_supported_for_converting_by_a_service()
+    public function theGivenCurrencyIsNotSupportedForConvertingByAService()
     {
-		Config::set('money.custom_currencies', [
-			[
-				'full_name' => 'QWERTY',
-				'name' => 'QWERTY',
-				'iso_code' => 'QWERTY',
-				'num_code' => '1234',
-				'symbol' => 'QWERTY',
-				'position' => Currency::POSITION_START,
-			]
-		]);
-		Currency::setCurrencyList(Currency::currentList());
+        Config::set('money.custom_currencies', [
+            [
+                'full_name' => 'QWERTY',
+                'name' => 'QWERTY',
+                'iso_code' => 'QWERTY',
+                'num_code' => '1234',
+                'symbol' => 'QWERTY',
+                'position' => Currency::POSITION_START,
+            ],
+        ]);
+        Currency::setCurrencyList(Currency::currentList());
 
         $this->expectException(ServiceDoesNotSupportCurrencyException::class);
 
         $money = money(1000);
         $money->convertInto(currency('1234'));
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->backup_config = Config::get('money');
+        Currency::setCurrencyList(Currency::currentList());
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        Config::set('money', $this->backup_config);
     }
 }

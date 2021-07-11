@@ -22,14 +22,6 @@ class MoneySettings implements MoneySettingsInterface
 
     private ?Money $money;
 
-    public static function isIncorrectOrigin(int $origin): bool
-    {
-        return !in_array($origin, [
-            self::ORIGIN_INT,
-            self::ORIGIN_FLOAT,
-        ]);
-    }
-
     public function __construct(
         int $decimals = null,
         string $thousands_separator = null,
@@ -176,6 +168,14 @@ class MoneySettings implements MoneySettingsInterface
     public function getOrigin(): int
     {
         return $this->origin;
+    }
+
+    public static function isIncorrectOrigin(int $origin): bool
+    {
+        return !in_array($origin, [
+            self::ORIGIN_INT,
+            self::ORIGIN_FLOAT,
+        ]);
     }
 
     private function getDivisor(): int

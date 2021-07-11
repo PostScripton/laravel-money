@@ -12,116 +12,116 @@ use PostScripton\Money\Tests\TestCase;
 
 class CustomCurrenciesTest extends TestCase
 {
-	private $backup_config;
+    private $backup_config;
 
-	protected function setUp(): void
-	{
-		parent::setUp();
-		$this->backup_config = Config::get('money');
-	}
+    /** @test */
+    public function useACustomCurrency()
+    {
+        Config::set('money.custom_currencies', [
+            $this->customCurrency(),
+        ]);
 
-	protected function tearDown(): void
-	{
-		parent::tearDown();
-		Config::set('money', $this->backup_config);
-	}
+        Currency::setCurrencyList(Currency::LIST_CONFIG);
 
-	/** @test */
-	public function use_a_custom_currency()
-	{
-		Config::set('money.custom_currencies', [
-			$this->customCurrency()
-		]);
+        $btc = currency('XBT');
+        $this->assertInstanceOf(Currency::class, $btc);
+        $this->assertEquals('XBT', $btc->getCode());
+        $this->assertEquals('1234', $btc->getNumCode());
+    }
 
-		Currency::setCurrencyList(Currency::LIST_CONFIG);
+    /** @test */
+    public function aCustomCurrencyHasIsoCodeOfTheExistingOne()
+    {
+        $this->expectException(CustomCurrencyTakenCodesException::class);
 
-		$btc = currency('XBT');
-		$this->assertInstanceOf(Currency::class, $btc);
-		$this->assertEquals('XBT', $btc->getCode());
-		$this->assertEquals('1234', $btc->getNumCode());
-	}
+        Config::set('money.custom_currencies', [
+            array_merge($this->customCurrency(), ['iso_code' => 'usd']),
+        ]);
 
-	/** @test */
-	public function a_custom_currency_has_iso_code_of_the_existing_one()
-	{
-		$this->expectException(CustomCurrencyTakenCodesException::class);
+        Currency::setCurrencyList(Currency::LIST_CONFIG);
+    }
 
-		Config::set('money.custom_currencies', [
-			array_merge($this->customCurrency(), ['iso_code' => 'usd'])
-		]);
+    /** @test */
+    public function aCustomCurrencyHasNumCodeOfTheExistingOne()
+    {
+        $this->expectException(CustomCurrencyTakenCodesException::class);
 
-		Currency::setCurrencyList(Currency::LIST_CONFIG);
-	}
+        Config::set('money.custom_currencies', [
+            array_merge($this->customCurrency(), ['num_code' => '840']),
+        ]);
 
-	/** @test */
-	public function a_custom_currency_has_num_code_of_the_existing_one()
-	{
-		$this->expectException(CustomCurrencyTakenCodesException::class);
+        Currency::setCurrencyList(Currency::LIST_CONFIG);
+    }
 
-		Config::set('money.custom_currencies', [
-			array_merge($this->customCurrency(), ['num_code' => '840'])
-		]);
+    /** @test */
+    public function anExceptionIsThrownWhenThereAreTwoCustomCurrenciesWithTheSameCodes()
+    {
+        $this->expectException(CustomCurrencyTakenCodesException::class);
 
-		Currency::setCurrencyList(Currency::LIST_CONFIG);
-	}
+        Config::set('money.custom_currencies', [
+            $this->customCurrency(),
+            $this->customCurrency(),
+        ]);
 
-	/** @test */
-	public function an_exception_is_thrown_when_there_are_two_custom_currencies_with_the_same_codes()
-	{
-		$this->expectException(CustomCurrencyTakenCodesException::class);
+        Currency::setCurrencyList(Currency::LIST_CONFIG);
+    }
 
-		Config::set('money.custom_currencies', [
-			$this->customCurrency(),
-			$this->customCurrency(),
-		]);
+    /** @test */
+    public function aCustomCurrencyDoesNotHaveARequiredField()
+    {
+        $this->expectException(CustomCurrencyDoesNotHaveFieldException::class);
 
-		Currency::setCurrencyList(Currency::LIST_CONFIG);
-	}
-	
-	/** @test */
-	public function a_custom_currency_does_not_have_a_required_field()
-	{
-	    $this->expectException(CustomCurrencyDoesNotHaveFieldException::class);
+        Config::set('money.custom_currencies', [
+            array_diff_key($this->customCurrency(), ['full_name' => '']),
+        ]);
 
-	    Config::set('money.custom_currencies', [
-			array_diff_key($this->customCurrency(), ['full_name' => ''])
-		]);
+        Currency::setCurrencyList(Currency::LIST_CONFIG);
+    }
 
-		Currency::setCurrencyList(Currency::LIST_CONFIG);
-	}
+    /** @test */
+    public function aCustomCurrencyHasAFieldWithAWrongType()
+    {
+        $this->expectException(CustomCurrencyWrongFieldTypeException::class);
 
-	/** @test */
-	public function a_custom_currency_has_a_field_with_a_wrong_type()
-	{
-		$this->expectException(CustomCurrencyWrongFieldTypeException::class);
+        Config::set('money.custom_currencies', [
+            array_merge($this->customCurrency(), ['full_name' => false]),
+        ]);
 
-		Config::set('money.custom_currencies', [
-			array_merge($this->customCurrency(), ['full_name' => false])
-		]);
+        Currency::setCurrencyList(Currency::LIST_CONFIG);
+    }
 
-		Currency::setCurrencyList(Currency::LIST_CONFIG);
-	}
+    /** @test */
+    public function aConfigPropertyCustomCurrenciesMustBeAnArray()
+    {
+        $this->expectException(BaseException::class);
+        $this->expectExceptionMessage('The config property "custom_currencies" must be an array.');
 
-	/** @test */
-	public function a_config_property_custom_currencies_must_be_an_array()
-	{
-		$this->expectException(BaseException::class);
-		$this->expectExceptionMessage('The config property "custom_currencies" must be an array.');
+        Config::set('money.custom_currencies', true);
 
-		Config::set('money.custom_currencies', true);
+        Currency::setCurrencyList(Currency::LIST_CONFIG);
+    }
 
-		Currency::setCurrencyList(Currency::LIST_CONFIG);
-	}
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->backup_config = Config::get('money');
+    }
 
-	private function customCurrency(): array
-	{
-		return [
-			'full_name' => 'Bitcoin',
-			'name' => 'BTC',
-			'iso_code' => 'XBT',
-			'num_code' => '1234',
-			'symbol' => '₿',
-			'position' => Currency::POSITION_START,
-		];
-	}
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        Config::set('money', $this->backup_config);
+    }
+
+    private function customCurrency(): array
+    {
+        return [
+            'full_name' => 'Bitcoin',
+            'name' => 'BTC',
+            'iso_code' => 'XBT',
+            'num_code' => '1234',
+            'symbol' => '₿',
+            'position' => Currency::POSITION_START,
+        ];
+    }
 }

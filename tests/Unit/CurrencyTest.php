@@ -10,34 +10,34 @@ use PostScripton\Money\Tests\TestCase;
 
 class CurrencyTest extends TestCase
 {
-	/** @test */
-	public function CheckingCurrencyPropsByCodeTest()
-	{
-		$cur = Currency::code('RUB');
-		$this->assertEquals('Russian ruble', $cur->getFullName());
-		$this->assertEquals('ruble', $cur->getName());
-		$this->assertEquals('RUB', $cur->getCode());
-		$this->assertEquals('643', $cur->getNumCode());
-		$this->assertEquals('₽', $cur->getSymbol());
-		$this->assertEquals(Currency::POSITION_END, $cur->getPosition());
-	}
-
-	/** @test */
-	public function NoCurrencyByISOCodeTest()
-	{
-		$this->expectException(CurrencyDoesNotExistException::class);
-		Currency::code('NO_SUCH_CODE');
-	}
+    /** @test */
+    public function checkingCurrencyPropsByCodeTest()
+    {
+        $cur = Currency::code('RUB');
+        $this->assertEquals('Russian ruble', $cur->getFullName());
+        $this->assertEquals('ruble', $cur->getName());
+        $this->assertEquals('RUB', $cur->getCode());
+        $this->assertEquals('643', $cur->getNumCode());
+        $this->assertEquals('₽', $cur->getSymbol());
+        $this->assertEquals(Currency::POSITION_END, $cur->getPosition());
+    }
 
     /** @test */
-    public function NoCurrencyByNumCodeTest()
+    public function noCurrencyByISOCodeTest()
+    {
+        $this->expectException(CurrencyDoesNotExistException::class);
+        Currency::code('NO_SUCH_CODE');
+    }
+
+    /** @test */
+    public function noCurrencyByNumCodeTest()
     {
         $this->expectException(CurrencyDoesNotExistException::class);
         Currency::code('000');
     }
 
     /** @test */
-    public function CurrencyWithTwoSymbols()
+    public function currencyWithTwoSymbols()
     {
         Currency::setCurrencyList(Currency::LIST_ALL);
 
@@ -47,7 +47,7 @@ class CurrencyTest extends TestCase
     }
 
     /** @test */
-    public function CurrencyWithTwoSymbolsException()
+    public function currencyWithTwoSymbolsException()
     {
         Currency::setCurrencyList(Currency::LIST_ALL);
 
@@ -57,7 +57,7 @@ class CurrencyTest extends TestCase
     }
 
     /** @test */
-    public function CurrencyNoSymbolException()
+    public function currencyNoSymbolException()
     {
         Currency::setCurrencyList(Currency::LIST_POPULAR);
 
@@ -66,7 +66,7 @@ class CurrencyTest extends TestCase
     }
 
     /** @test */
-    public function PreferredSymbol()
+    public function preferredSymbol()
     {
         Currency::setCurrencyList(Currency::LIST_ALL);
 

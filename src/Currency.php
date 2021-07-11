@@ -15,341 +15,343 @@ use PostScripton\Money\Exceptions\ShouldPublishConfigFileException;
 
 class Currency
 {
-	protected static array $currencies = [];
+    public const POSITION_START = 0;
+    public const POSITION_END = 1;
 
-	public const POSITION_START = 0;
-	public const POSITION_END = 1;
+    public const DISPLAY_SYMBOL = 10;
+    public const DISPLAY_CODE = 11;
 
-	public const DISPLAY_SYMBOL = 10;
-	public const DISPLAY_CODE = 11;
+    public const LIST_ALL = 'all';
+    public const LIST_POPULAR = 'popular';
+    public const LIST_CUSTOM = 'custom';
+    public const LIST_CONFIG = 'config';
 
-	public const LIST_ALL = 'all';
-	public const LIST_POPULAR = 'popular';
-	public const LIST_CUSTOM = 'custom';
-	public const LIST_CONFIG = 'config';
+    private const CONFIG_LIST = 'money.currency_list';
+    private const CONFIG_CUSTOM = 'money.custom_currencies';
 
-	private const CONFIG_LIST = 'money.currency_list';
-	private const CONFIG_CUSTOM = 'money.custom_currencies';
-	private static ?string $_list;
+    protected static array $currencies = [];
+    private string $full_name;
+    private string $name;
+    private string $iso_code;
+    private string $num_code;
+    private $symbol; // array or string
+    private int $position;
+    private int $display;
+    private ?int $preferred_symbol = null;
 
-	public static function code(string $code): ?Currency
-	{
-		$currency = is_numeric($code)
-			? self::currencies()->filter(fn(Currency $currency) => $currency->getNumCode() === $code)->first()
-			: self::currencies()->filter(fn(Currency $currency) => $currency->getCode() === strtoupper($code))->first();
+    private static ?string $list;
 
-		if (is_null($currency)) {
-			throw new CurrencyDoesNotExistException(__METHOD__, 1, '$code', implode(',', [$code, self::$_list]));
-		}
+    public function __construct(array $currency)
+    {
+        if (
+            is_null($currency['full_name']) ||
+            is_null($currency['name']) ||
+            is_null($currency['iso_code']) ||
+            is_null($currency['num_code']) ||
+            is_null($currency['symbol'])
+        ) {
+            throw new CurrencyHasWrongConstructorException();
+        }
 
-		return $currency;
-	}
+        $this->full_name = $currency['full_name'];
+        $this->name = $currency['name'];
+        $this->iso_code = strtoupper($currency['iso_code']);
+        $this->num_code = $currency['num_code'];
+        $this->symbol = $currency['symbol'];
+        $this->position = $currency['position'] ?? self::POSITION_END;
+        $this->display = self::DISPLAY_SYMBOL;
+        $preferred_symbol = null;
+    }
 
-	protected static function currencies(): Collection
-	{
-		$list = is_array(config(self::CONFIG_LIST))
-			? self::LIST_CONFIG
-			: config(self::CONFIG_LIST);
+    public static function code(string $code): ?Currency
+    {
+        $currency = is_numeric($code)
+            ? self::currencies()->filter(fn(Currency $currency) => $currency->getNumCode() === $code)->first()
+            : self::currencies()->filter(fn(Currency $currency) => $currency->getCode() === strtoupper($code))->first();
 
-		if (self::isIncorrectList($list)) {
-			throw new CurrencyListConfigException($list);
-		}
+        if (is_null($currency)) {
+            throw new CurrencyDoesNotExistException(__METHOD__, 1, '$code', implode(',', [$code, self::$list]));
+        }
 
-		if (!self::$currencies) {
-			self::setCurrencyList($list);
-		}
+        return $currency;
+    }
 
-		return collect(self::$currencies);
-	}
+    public function getFullName(): string
+    {
+        return $this->full_name;
+    }
 
-	public static function isIncorrectList(string $list): bool
-	{
-		return !in_array(
-			$list,
-			[
-				self::LIST_ALL,
-				self::LIST_POPULAR,
-				self::LIST_CONFIG,
-				self::LIST_CONFIG,
-			]
-		);
-	}
+    public function getName(): string
+    {
+        return $this->name;
+    }
 
-	public static function setCurrencyList(string $list = self::LIST_POPULAR): void
-	{
-		if (self::isIncorrectList($list)) {
-			$list = self::LIST_POPULAR;
-		}
-		self::$_list = $list;
+    public function getCode(): string
+    {
+        return $this->iso_code;
+    }
 
-		self::checkCustomCurrencies();
+    public function getNumCode(): string
+    {
+        return $this->num_code;
+    }
 
-		if ($list !== self::LIST_CONFIG) {
-			self::$currencies = self::getList($list);
-			self::$currencies = self::createCurrencies(self::$currencies);
-			return;
-		}
+    public function getSymbol(?int $index = null): string
+    {
+        if ($this->display === self::DISPLAY_CODE) {
+            return $this->iso_code;
+        }
 
-		// Config list below...
+        if (is_array($this->symbol)) {
+            if (!array_key_exists($index ?? 0, $this->symbol)) {
+                throw new NoSuchCurrencySymbolException(
+                    __METHOD__,
+                    1,
+                    '$index',
+                    implode(',', [$index ?? 0, count($this->symbol) - 1])
+                );
+            }
 
-		if (!is_array(config(self::CONFIG_LIST))) {
-			self::$currencies = self::getList(config(self::CONFIG_LIST));
-			self::$currencies = self::createCurrencies(self::$currencies);
-			return;
-		}
+            if (is_null($index)) {
+                if (!is_null($this->preferred_symbol)) {
+                    return $this->symbol[$this->preferred_symbol];
+                }
 
-		// Custom currency list
-		$custom_list = config(self::CONFIG_LIST);
-		self::$currencies = self::getList(self::LIST_ALL);
+                $index = 0;
+            }
 
-		self::$currencies = array_filter(
-			self::$currencies,
-			// Filtering currencies from custom list: ['840', 'EUR', 'RUB']
-			function ($currency) use (&$custom_list) {
-				if (empty($custom_list)) {
-					return false;
-				}
+            return $this->symbol[$index];
+        }
 
-				foreach ($custom_list as $item) {
-					if ($currency['iso_code'] === $item || $currency['num_code'] === $item) {
-						$custom_list = array_diff($custom_list, [$item]);
-						return true;
-					}
-				}
+        return $this->symbol;
+    }
 
-				return false;
-			}
-		);
+    public function getSymbols(): array
+    {
+        if (is_array($this->symbol)) {
+            return $this->symbol;
+        }
 
-		self::$currencies = self::createCurrencies(self::$currencies);
-	}
+        return [$this->symbol];
+    }
 
-	public static function currentList(): string
-	{
-		return self::$_list ?? self::LIST_CONFIG;
-	}
+    public function getPosition(): int
+    {
+        return $this->position;
+    }
 
-	public static function count(): int
-	{
-		return count(self::$currencies);
-	}
+    public function getDisplay(): int
+    {
+        return $this->display;
+    }
 
-	private static function createCurrencies(array $currencies): array
-	{
-		return array_map(function($currency) {
-			return new self($currency);
-		}, $currencies);
-	}
+    public function setPosition(int $position = self::POSITION_START): self
+    {
+        if ($position !== self::POSITION_START && $position !== self::POSITION_END) {
+            $position = self::POSITION_START;
+        }
 
-	private static function getList(string $list, bool $custom = true)
-	{
-		$list = require __DIR__ . "/List/" . $list . "_currencies.php";
+        $this->position = $position;
+        return $this;
+    }
 
-		return $custom
-			? array_merge($list, config(self::CONFIG_CUSTOM))
-			: $list;
-	}
+    public function setDisplay(int $display = self::DISPLAY_SYMBOL): self
+    {
+        if ($display !== self::DISPLAY_SYMBOL && $display !== self::DISPLAY_CODE) {
+            $display = self::DISPLAY_SYMBOL;
+        }
 
-	private static function checkCustomCurrencies()
-	{
-		$custom_currencies = config(self::CONFIG_CUSTOM);
-		$all = self::getList(self::LIST_ALL, false);
+        $this->display = $display;
+        return $this;
+    }
 
-		if (!is_array($custom_currencies)) {
-			throw new BaseException('The config property "custom_currencies" must be an array.');
-		}
+    public function setPreferredSymbol(int $index = 0): self
+    {
+        if (is_array($this->symbol)) {
+            if (!array_key_exists($index, $this->symbol)) {
+                throw new NoSuchCurrencySymbolException(
+                    __METHOD__,
+                    1,
+                    '$index',
+                    implode(',', [$index, count($this->symbol) - 1])
+                );
+            }
 
-		// Validation
-		$validator = [
-			'full_name' => ['string'],
-			'name' => ['string'],
-			'iso_code' => ['string'],
-			'num_code' => ['string'],
-			'symbol' => ['string', 'array'],
-			'position' => ['integer'],
-		];
-		foreach ($custom_currencies as $custom) {
-			foreach ($validator as $field => $rules) {
-				if (!array_key_exists($field, $custom)) {
-					throw new CustomCurrencyDoesNotHaveFieldException($field);
-				}
+            $this->preferred_symbol = $index;
+        }
 
-				$valid = false;
-				for ($i = 0, $rule = $rules[$i]; $i < count($rules) && !$valid; $i++) {
-					$function = 'is_' . $rule;
-					$valid = $function($custom[$field]);
-				}
-				if (!$valid) {
-					throw new CustomCurrencyWrongFieldTypeException(implode(':', [$field, implode('|', $rules)]));
-				}
-			}
-		}
+        return $this;
+    }
 
-		foreach ($custom_currencies as $key => $custom) {
-			$except_current_custom = array_filter(
-				$custom_currencies,
-				fn($index) => $index !== $key,
-				ARRAY_FILTER_USE_KEY
-			);
+    public static function isIncorrectList(string $list): bool
+    {
+        return !in_array(
+            $list,
+            [
+                self::LIST_ALL,
+                self::LIST_POPULAR,
+                self::LIST_CONFIG,
+                self::LIST_CONFIG,
+            ]
+        );
+    }
 
-			foreach (array_merge($all, $except_current_custom) as $currency) {
-				if (strtoupper($currency['iso_code']) === strtoupper($custom['iso_code']) ||
-					strtoupper($currency['num_code']) === strtoupper($custom['num_code'])) {
-					throw new CustomCurrencyTakenCodesException(
-						implode(',', [$currency['full_name'], $currency['iso_code'], $currency['num_code']])
-					);
-				}
-			}
-		}
-	}
+    public static function setCurrencyList(string $list = self::LIST_POPULAR): void
+    {
+        if (self::isIncorrectList($list)) {
+            $list = self::LIST_POPULAR;
+        }
+        self::$list = $list;
 
-	// ==================== OBJECT ==================== //
+        self::checkCustomCurrencies();
 
-	private string $full_name;
-	private string $name;
-	private string $iso_code;
-	private string $num_code;
-	private $symbol; // array or string
-	private int $position;
-	private int $display;
-	private ?int $preferred_symbol = null;
+        if ($list !== self::LIST_CONFIG) {
+            self::$currencies = self::getList($list);
+            self::$currencies = self::createCurrencies(self::$currencies);
+            return;
+        }
 
-	public function __construct(array $currency)
-	{
-		if (is_null($currency['full_name']) ||
-			is_null($currency['name']) ||
-			is_null($currency['iso_code']) ||
-			is_null($currency['num_code']) ||
-			is_null($currency['symbol'])) {
-			throw new CurrencyHasWrongConstructorException();
-		}
+        // Config list below...
 
-		$this->full_name = $currency['full_name'];
-		$this->name = $currency['name'];
-		$this->iso_code = strtoupper($currency['iso_code']);
-		$this->num_code = $currency['num_code'];
-		$this->symbol = $currency['symbol'];
-		$this->position = $currency['position'] ?? self::POSITION_END;
-		$this->display = self::DISPLAY_SYMBOL;
-		$preferred_symbol = null;
-	}
+        if (!is_array(config(self::CONFIG_LIST))) {
+            self::$currencies = self::getList(config(self::CONFIG_LIST));
+            self::$currencies = self::createCurrencies(self::$currencies);
+            return;
+        }
 
-	/**
-	 * @throws ShouldPublishConfigFileException
-	 */
-	public static function getConfigCurrency(): string
-	{
-		if (Money::configNotPublished()) {
-			throw new ShouldPublishConfigFileException();
-		}
+        // Custom currency list
+        $custom_list = config(self::CONFIG_LIST);
+        self::$currencies = self::getList(self::LIST_ALL);
 
-		return config('money.default_currency', 'USD');
-	}
+        self::$currencies = array_filter(
+            self::$currencies,
+            // Filtering currencies from custom list: ['840', 'EUR', 'RUB']
+            function ($currency) use (&$custom_list) {
+                if (empty($custom_list)) {
+                    return false;
+                }
 
-	public function getFullName(): string
-	{
-		return $this->full_name;
-	}
+                foreach ($custom_list as $item) {
+                    if ($currency['iso_code'] === $item || $currency['num_code'] === $item) {
+                        $custom_list = array_diff($custom_list, [$item]);
+                        return true;
+                    }
+                }
 
-	public function getName(): string
-	{
-		return $this->name;
-	}
+                return false;
+            }
+        );
 
-	public function getCode(): string
-	{
-		return $this->iso_code;
-	}
+        self::$currencies = self::createCurrencies(self::$currencies);
+    }
 
-	public function getNumCode(): string
-	{
-		return $this->num_code;
-	}
+    public static function currentList(): string
+    {
+        return self::$list ?? self::LIST_CONFIG;
+    }
 
-	public function getSymbol(?int $index = null): string
-	{
-		if ($this->display === self::DISPLAY_CODE) {
-			return $this->iso_code;
-		}
+    public static function count(): int
+    {
+        return count(self::$currencies);
+    }
 
-		if (is_array($this->symbol)) {
-			if (!array_key_exists($index ?? 0, $this->symbol)) {
-				throw new NoSuchCurrencySymbolException(
-					__METHOD__,
-					1,
-					'$index',
-					implode(',', [$index ?? 0, count($this->symbol) - 1])
-				);
-			}
+    /**
+     * @throws ShouldPublishConfigFileException
+     */
+    public static function getConfigCurrency(): string
+    {
+        if (Money::configNotPublished()) {
+            throw new ShouldPublishConfigFileException();
+        }
 
-			if (is_null($index)) {
-				if (!is_null($this->preferred_symbol)) {
-					return $this->symbol[$this->preferred_symbol];
-				}
+        return config('money.default_currency', 'USD');
+    }
 
-				$index = 0;
-			}
+    protected static function currencies(): Collection
+    {
+        $list = is_array(config(self::CONFIG_LIST))
+            ? self::LIST_CONFIG
+            : config(self::CONFIG_LIST);
 
-			return $this->symbol[$index];
-		}
+        if (self::isIncorrectList($list)) {
+            throw new CurrencyListConfigException($list);
+        }
 
-		return $this->symbol;
-	}
+        if (!self::$currencies) {
+            self::setCurrencyList($list);
+        }
 
-	public function getSymbols(): array
-	{
-		if (is_array($this->symbol)) {
-			return $this->symbol;
-		}
+        return collect(self::$currencies);
+    }
 
-		return [$this->symbol];
-	}
+    private static function createCurrencies(array $currencies): array
+    {
+        return array_map(function ($currency) {
+            return new self($currency);
+        }, $currencies);
+    }
 
-	public function getPosition(): int
-	{
-		return $this->position;
-	}
+    private static function getList(string $list, bool $custom = true)
+    {
+        $list = require __DIR__ . "/List/" . $list . "_currencies.php";
 
-	public function getDisplay(): int
-	{
-		return $this->display;
-	}
+        return $custom
+            ? array_merge($list, config(self::CONFIG_CUSTOM))
+            : $list;
+    }
 
-	public function setPosition(int $position = self::POSITION_START): self
-	{
-		if ($position !== self::POSITION_START && $position !== self::POSITION_END) {
-			$position = self::POSITION_START;
-		}
+    private static function checkCustomCurrencies()
+    {
+        $custom_currencies = config(self::CONFIG_CUSTOM);
+        $all = self::getList(self::LIST_ALL, false);
 
-		$this->position = $position;
-		return $this;
-	}
+        if (!is_array($custom_currencies)) {
+            throw new BaseException('The config property "custom_currencies" must be an array.');
+        }
 
-	public function setDisplay(int $display = self::DISPLAY_SYMBOL): self
-	{
-		if ($display !== self::DISPLAY_SYMBOL && $display !== self::DISPLAY_CODE) {
-			$display = self::DISPLAY_SYMBOL;
-		}
+        // Validation
+        $validator = [
+            'full_name' => ['string'],
+            'name' => ['string'],
+            'iso_code' => ['string'],
+            'num_code' => ['string'],
+            'symbol' => ['string', 'array'],
+            'position' => ['integer'],
+        ];
+        foreach ($custom_currencies as $custom) {
+            foreach ($validator as $field => $rules) {
+                if (!array_key_exists($field, $custom)) {
+                    throw new CustomCurrencyDoesNotHaveFieldException($field);
+                }
 
-		$this->display = $display;
-		return $this;
-	}
+                $valid = false;
+                for ($i = 0, $rule = $rules[$i]; $i < count($rules) && !$valid; $i++) {
+                    $function = 'is_' . $rule;
+                    $valid = $function($custom[$field]);
+                }
+                if (!$valid) {
+                    throw new CustomCurrencyWrongFieldTypeException(implode(':', [$field, implode('|', $rules)]));
+                }
+            }
+        }
 
-	public function setPreferredSymbol(int $index = 0): self
-	{
-		if (is_array($this->symbol)) {
-			if (!array_key_exists($index, $this->symbol)) {
-				throw new NoSuchCurrencySymbolException(
-					__METHOD__,
-					1,
-					'$index',
-					implode(',', [$index, count($this->symbol) - 1])
-				);
-			}
+        foreach ($custom_currencies as $key => $custom) {
+            $except_current_custom = array_filter(
+                $custom_currencies,
+                fn($index) => $index !== $key,
+                ARRAY_FILTER_USE_KEY
+            );
 
-			$this->preferred_symbol = $index;
-		}
-
-		return $this;
-	}
+            foreach (array_merge($all, $except_current_custom) as $currency) {
+                if (
+                    strtoupper($currency['iso_code']) === strtoupper($custom['iso_code']) ||
+                    strtoupper($currency['num_code']) === strtoupper($custom['num_code'])
+                ) {
+                    throw new CustomCurrencyTakenCodesException(
+                        implode(',', [$currency['full_name'], $currency['iso_code'], $currency['num_code']])
+                    );
+                }
+            }
+        }
+    }
 }

@@ -9,22 +9,10 @@ use PostScripton\Money\Tests\TestCase;
 
 class CurrencyListsTest extends TestCase
 {
-	private $backup_config;
-
-	protected function setUp(): void
-	{
-		parent::setUp();
-		$this->backup_config = Config::get('money');
-	}
-
-	protected function tearDown(): void
-	{
-		parent::tearDown();
-		Config::set('money', $this->backup_config);
-	}
+    private $backup_config;
 
     /** @test */
-    public function getting_currencies_from_the_popular_list()
+    public function gettingCurrenciesFromThePopularList()
     {
         Currency::setCurrencyList(Currency::LIST_POPULAR);
 
@@ -34,7 +22,7 @@ class CurrencyListsTest extends TestCase
     }
 
     /** @test */
-    public function getting_currencies_from_the_all_list()
+    public function gettingCurrenciesFromTheAllList()
     {
         Currency::setCurrencyList(Currency::LIST_ALL);
 
@@ -43,33 +31,33 @@ class CurrencyListsTest extends TestCase
         $this->assertEquals('AMD', Currency::code('AMD')->getCode());
     }
 
-	/** @test */
-	public function getting_currencies_from_the_config_list()
-	{
-		Config::set('money.custom_currencies', [
-			[
-				'full_name' => 'Bitcoin',
-				'name' => 'BTC',
-				'iso_code' => 'XBT',
-				'num_code' => '1234',
-				'symbol' => '₿',
-				'position' => Currency::POSITION_START,
-			]
-		]);
-
-		Currency::setCurrencyList(Currency::LIST_CUSTOM);
-
-		$btc = currency('xbt');
-		$this->assertInstanceOf(Currency::class, $btc);
-		$this->assertEquals('1234', $btc->getNumCode());
-
-		// No access to ALL list
-		$this->expectException(CurrencyDoesNotExistException::class);
-		currency('AFN');
-	}
-    
     /** @test */
-    public function a_user_can_select_currencies_he_needs()
+    public function gettingCurrenciesFromTheConfigList()
+    {
+        Config::set('money.custom_currencies', [
+            [
+                'full_name' => 'Bitcoin',
+                'name' => 'BTC',
+                'iso_code' => 'XBT',
+                'num_code' => '1234',
+                'symbol' => '₿',
+                'position' => Currency::POSITION_START,
+            ],
+        ]);
+
+        Currency::setCurrencyList(Currency::LIST_CUSTOM);
+
+        $btc = currency('xbt');
+        $this->assertInstanceOf(Currency::class, $btc);
+        $this->assertEquals('1234', $btc->getNumCode());
+
+        // No access to ALL list
+        $this->expectException(CurrencyDoesNotExistException::class);
+        currency('AFN');
+    }
+
+    /** @test */
+    public function aUserCanSelectCurrenciesHeNeeds()
     {
         $backup_config = config('money.currency_list');
         config(['money.currency_list' => ['840', 'EUR', 'RUB']]);
@@ -87,9 +75,9 @@ class CurrencyListsTest extends TestCase
 
         config(['money.currency_list' => $backup_config]);
     }
-    
+
     /** @test */
-    public function switching_back_to_the_config_list()
+    public function switchingBackToTheConfigList()
     {
         $backup_config = config('money.currency_list');
         config(['money.currency_list' => ['840', 'EUR', 'RUB']]);
@@ -117,11 +105,23 @@ class CurrencyListsTest extends TestCase
     }
 
     /** @test */
-    public function an_exception_is_throw_trying_to_get_a_currency_from_all_list_in_the_popular_one()
+    public function anExceptionIsThrowTryingToGetACurrencyFromAllListInThePopularOne()
     {
         $this->expectException(CurrencyDoesNotExistException::class);
 
         Currency::setCurrencyList(Currency::LIST_POPULAR);
         $this->assertEquals('AFN', Currency::code('AFN')->getCode());
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->backup_config = Config::get('money');
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        Config::set('money', $this->backup_config);
     }
 }
