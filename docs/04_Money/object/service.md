@@ -2,6 +2,8 @@
 
 allows you to get access to the selected service from the config file.
 
+See [here](/docs/05_Services/base.md) for more details.
+
 ## Methods
 
 ### `service()`

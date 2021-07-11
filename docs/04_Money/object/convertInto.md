@@ -2,6 +2,8 @@
 
 converts money into another currency using an exchange rate between currencies.
 
+See [here](/docs/05_Services/base.md) for more details.
+
 For example:
 ```text
 USD -> RUB = 75.79 / 1
@@ -22,11 +24,7 @@ RUB -> USD = 1 / 75.79
 
 ## Exceptions
 
-1. `ServiceClassDoesNotExistException` - is thrown when a `services.*.class` property in the config has a class name that doesn't exist.
-2. `ServiceDoesNotExistException` - is thrown when a `service` property doesn't exist.
-3. `ServiceDoesNotHaveClassException` - is thrown when a `service.*.class` property doesn't exist.
-4. `ServiceDoesNotInheritServiceException` - is thrown when a `service.*.class` property class doesn't inherit the `PostScripton\Money\Services\ServiceInterface`.
-5. `ServiceDoesNotSupportCurrencyException` - is thrown when `$currency` argument is not supported by an API service.
+1. `ServiceDoesNotSupportCurrencyException` - is thrown when `$currency` argument is not supported by an API service.
 
 ## Usage
 

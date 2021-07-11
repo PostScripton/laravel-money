@@ -88,6 +88,8 @@ After all, the config file at `config/money.php` should be modified for your own
             - [`convertInto()`](/docs/04_Money/object/convertInto.md)
             - [`upload()`](/docs/04_Money/object/upload.md)
             - [`toString()`](/docs/04_Money/object/toString.md)
+5. [API services](/docs/05_Services/base.md)
+    - [Add your own](/docs/05_Services/add.md)
     
 ## Contributing
 
