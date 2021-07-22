@@ -3,7 +3,6 @@
 namespace PostScripton\Money\Tests\Feature;
 
 use PostScripton\Money\Currency;
-use PostScripton\Money\Exceptions\NoCurrencyInParserStringException;
 use PostScripton\Money\Exceptions\WrongParserStringException;
 use PostScripton\Money\Money;
 use PostScripton\Money\Tests\TestCase;
@@ -11,106 +10,113 @@ use PostScripton\Money\Tests\TestCase;
 class MoneyParseTest extends TestCase
 {
     /** @test */
-    public function parseMoneyWithDefaultValues()
+    public function parseMoneyWithDifferentThousands()
     {
-        $money = Money::parse('$ 1 234.5');
-        $this->assertInstanceOf(Money::class, $money);
-        $this->assertEquals('$', $money->getCurrency()->getSymbol());
-        $this->assertEquals('1 234.5', $money->getAmount());
+        $m1 = Money::parse('$ 1 234');
+        $m2 = Money::parse('$ 1.234');
+        $m3 = Money::parse('$ 1,234');
+        $m4 = Money::parse('$ 1\'234');
 
-        $money = Money::parse('$ 123.4');
-        $this->assertInstanceOf(Money::class, $money);
-        $this->assertEquals('$', $money->getCurrency()->getSymbol());
-        $this->assertEquals('123.4', $money->getAmount());
-
-        $money = Money::parse('USD 123.4');
-        $this->assertInstanceOf(Money::class, $money);
-        $this->assertEquals('$', $money->getCurrency()->getSymbol());
-        $this->assertEquals('123.4', $money->getAmount());
-
-        $money = Money::parse('1 234.5 $');
-        $this->assertInstanceOf(Money::class, $money);
-        $this->assertEquals('$', $money->getCurrency()->getSymbol());
-        $this->assertEquals('1 234.5', $money->getAmount());
-
-        $money = Money::parse('1 234.5 USD');
-        $this->assertInstanceOf(Money::class, $money);
-        $this->assertEquals('$', $money->getCurrency()->getSymbol());
-        $this->assertEquals('1 234.5', $money->getAmount());
-
-        $money = Money::parse('$ -1 234.5');
-        $this->assertInstanceOf(Money::class, $money);
-        $this->assertEquals('$', $money->getCurrency()->getSymbol());
-        $this->assertEquals('-1 234.5', $money->getAmount());
-
-        $money = Money::parse('USD -1 234.5');
-        $this->assertInstanceOf(Money::class, $money);
-        $this->assertEquals('$', $money->getCurrency()->getSymbol());
-        $this->assertEquals('-1 234.5', $money->getAmount());
-
-        $money = Money::parse('$ 1 234.567890');
-        $this->assertInstanceOf(Money::class, $money);
-        $this->assertEquals('1 234.6', $money->getAmount());
+        $this->assertEquals(12340, $m1->getPureAmount());
+        $this->assertEquals(12340, $m2->getPureAmount());
+        $this->assertEquals(12340, $m3->getPureAmount());
+        $this->assertEquals(12340, $m4->getPureAmount());
     }
 
     /** @test */
-    public function parseMoneyWithACertainCurrency()
+    public function parseMoneyWithDifferentDecimals()
     {
-        $money = Money::parse('$ 1 234.5', Currency::code('USD'));
-        $this->assertEquals('USD', $money->getCurrency()->getCode());
+        $m1 = Money::parse('$ 0.5');
+        $m2 = Money::parse('$ 0,5');
 
-        $money = Money::parse('USD 1 234.5', Currency::code('USD'));
-        $this->assertEquals('USD', $money->getCurrency()->getCode());
-
-        $money = Money::parse('₽ 1 234.5', Currency::code('RUB'));
-        $this->assertEquals('RUB', $money->getCurrency()->getCode());
-
-        $money = Money::parse('RUB 1 234.5', Currency::code('RUB'));
-        $this->assertEquals('RUB', $money->getCurrency()->getCode());
+        $this->assertEquals(5, $m1->getPureAmount());
+        $this->assertEquals(5, $m2->getPureAmount());
     }
 
     /** @test */
-    public function parseMoneyWithACertainThousandsSeparator()
+    public function parseMoneyWithoutThousandsAndDecimals()
     {
-        $money = Money::parse("$ 1'234.5", null, '\'');
+        $money = Money::parse('$ 123');
 
-        $this->assertInstanceOf(Money::class, $money);
-        $this->assertEquals('1 234.5', $money->getAmount());
+        $this->assertEquals(1230, $money->getPureAmount());
     }
 
     /** @test */
-    public function parseMoneyWithACertainDecimalSeparator()
+    public function parseMoneyWithNegativeAmount()
     {
-        $money = Money::parse("$ 1 234,5", null, null, ',');
+        $m1 = Money::parse('$ -123');
+        $m2 = Money::parse('-123$');
+        $m3 = Money::parse('-123 $');
 
-        $this->assertInstanceOf(Money::class, $money);
-        $this->assertEquals('1 234.5', $money->getAmount());
+        $this->assertEquals(-1230, $m1->getPureAmount());
+        $this->assertEquals(-1230, $m2->getPureAmount());
+        $this->assertEquals(-1230, $m3->getPureAmount());
     }
 
     /** @test */
-    public function parseMoneyWithPassedParameters()
+    public function parseMoneyWithCurrenciesAtTheBeginning()
     {
-        $money = Money::parse("1.234,5 ₽", Currency::code('RUB'), '.', ',');
+        $usd1 = Money::parse('$ 100');
+        $usd2 = Money::parse('$100');
+        $usd3 = Money::parse('USD 100');
+        $rub1 = Money::parse('₽ 100');
+        $rub2 = Money::parse('₽100');
+        $rub3 = Money::parse('RUB 100');
 
-        $this->assertInstanceOf(Money::class, $money);
-        $this->assertEquals('1 234.5', $money->getAmount());
-        $this->assertEquals('₽', $money->getCurrency()->getSymbol());
-        $this->assertEquals('RUB', $money->getCurrency()->getCode());
-        $this->assertEquals(' ', $money->settings()->getThousandsSeparator());
-        $this->assertEquals('.', $money->settings()->getDecimalSeparator());
+        $this->assertEquals(1000, $usd1->getPureAmount());
+        $this->assertEquals('$', $usd1->getCurrency()->getSymbol());
+        $this->assertEquals(1000, $usd2->getPureAmount());
+        $this->assertEquals('$', $usd2->getCurrency()->getSymbol());
+        $this->assertEquals(1000, $usd3->getPureAmount());
+        $this->assertEquals('USD', $usd3->getCurrency()->getCode());
+        $this->assertEquals(1000, $rub1->getPureAmount());
+        $this->assertEquals('₽', $rub1->getCurrency()->getSymbol());
+        $this->assertEquals(1000, $rub2->getPureAmount());
+        $this->assertEquals('₽', $rub2->getCurrency()->getSymbol());
+        $this->assertEquals(1000, $rub3->getPureAmount());
+        $this->assertEquals('RUB', $rub3->getCurrency()->getCode());
     }
 
     /** @test */
-    public function anExceptionIsThrownWhenThereIsNoCurrencyInTheGivenStringForParser()
+    public function parseMoneyWithCurrenciesAtTheEnd()
     {
-        $this->expectException(NoCurrencyInParserStringException::class);
-        Money::parse('1 234.5');
+        $usd1 = Money::parse('100 $');
+        $usd2 = Money::parse('100$');
+        $usd3 = Money::parse('100 USD');
+        $rub1 = Money::parse('100 ₽');
+        $rub2 = Money::parse('100₽');
+        $rub3 = Money::parse('100 RUB');
+
+        $this->assertEquals(1000, $usd1->getPureAmount());
+        $this->assertEquals('$', $usd1->getCurrency()->getSymbol());
+        $this->assertEquals(1000, $usd2->getPureAmount());
+        $this->assertEquals('$', $usd2->getCurrency()->getSymbol());
+        $this->assertEquals(1000, $usd3->getPureAmount());
+        $this->assertEquals('USD', $usd3->getCurrency()->getCode());
+        $this->assertEquals(1000, $rub1->getPureAmount());
+        $this->assertEquals('₽', $rub1->getCurrency()->getSymbol());
+        $this->assertEquals(1000, $rub2->getPureAmount());
+        $this->assertEquals('₽', $rub2->getCurrency()->getSymbol());
+        $this->assertEquals(1000, $rub3->getPureAmount());
+        $this->assertEquals('RUB', $rub3->getCurrency()->getCode());
+    }
+
+    /** @test */
+    public function unknownCurrencyIsParsedAsDefaultOne()
+    {
+        $m1 = Money::parse('# 100');
+        $m2 = Money::parse('100 #');
+
+        $this->assertInstanceOf(Currency::class, $m1->getCurrency());
+        $this->assertEquals('USD', $m1->getCurrency()->getCode());
+        $this->assertInstanceOf(Currency::class, $m2->getCurrency());
+        $this->assertEquals('USD', $m2->getCurrency()->getCode());
     }
 
     /** @test */
     public function anExceptionIsThrownWhenThereIsAnErrorInTheGivenStringForParser()
     {
         $this->expectException(WrongParserStringException::class);
-        Money::parse('qwerty 1234');
+        Money::parse('qwerty');
     }
 }

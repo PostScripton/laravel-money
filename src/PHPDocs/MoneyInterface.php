@@ -321,15 +321,7 @@ interface MoneyInterface
     /**
      * Parses the string and turns it into a money instance
      * @param string $money
-     * @param Currency|null $currency
-     * @param string|null $thousands
-     * @param string|null $decimals
      * @return Money
      */
-    public static function parse(
-        string $money,
-        Currency $currency = null,
-        string $thousands = null,
-        string $decimals = null
-    ): Money;// ========== OBJECT ========== //
+    public static function parse(string $money): Money;
 }
