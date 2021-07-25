@@ -293,7 +293,7 @@ class Currency
 
     private static function getList(string $list, bool $custom = true)
     {
-        $list = require __DIR__ . "/List/" . $list . "_currencies.php";
+        $list = require __DIR__ . "/Lists/" . $list . "_currencies.php";
 
         return $custom
             ? array_merge($list, config(self::CONFIG_CUSTOM))
