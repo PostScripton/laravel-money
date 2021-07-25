@@ -51,6 +51,7 @@ After all, the config file at `config/money.php` should be modified for your own
     - [Position](/docs/03_Currencies/position.md)
     - [Display](/docs/03_Currencies/display.md)
     - [Currency List](/docs/03_Currencies/currency_list.md)
+    - [Preferred symbol](/docs/03_Currencies/preferred_symbol.md)
 4. [💵 Money](/docs/04_Money/base.md)
     - Static methods
         - [Getters](/docs/04_Money/static/getters.md)

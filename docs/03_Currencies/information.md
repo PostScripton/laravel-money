@@ -36,6 +36,7 @@ $usd->getName();        // "dollar"
 $usd->getCode();        // "USD"
 $usd->getNumCode();     // "840"
 $usd->getSymbol();      // "$"
+$usd->getSymbols();     // ["$"]
 $usd->getPosition();    // 0 (Currency::POSITION_START)
 $usd->getDisplay();     // 10 (Currency::DISPLAY_SYMBOL)
 ```
@@ -53,6 +54,8 @@ $currency = currency("EGP");
 $currency->getSymbol();     // "£"
 $currency->getSymbol(1);    // "ج.م"
 ```
+
+See about [choosing a preferred symbol](/docs/03_Currencies/preferred_symbol.md) for a currency with multiple symbols as well.
 
 ---
 
