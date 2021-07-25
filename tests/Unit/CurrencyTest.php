@@ -10,6 +10,8 @@ use PostScripton\Money\Tests\TestCase;
 
 class CurrencyTest extends TestCase
 {
+    private string $list;
+
     /** @test */
     public function checkingCurrencyPropsByCodeTest()
     {
@@ -84,5 +86,31 @@ class CurrencyTest extends TestCase
         $this->assertEquals('$', $money->getCurrency()->getSymbol(1));
 
         Currency::setCurrencyList(Currency::LIST_CONFIG);
+    }
+
+    /** @test */
+    public function getAllTheCurrenciesAsArray()
+    {
+        Currency::setCurrencyList(Currency::LIST_POPULAR);
+        $actual = require __DIR__ . '/../../src/Lists/popular_currencies.php';
+        $allCurrencies = Currency::getCurrencies();
+
+        $this->assertCount(count($actual), $allCurrencies);
+        $this->assertEquals(
+            collect($actual)->map(fn(array $currency) => $currency['iso_code'])->toArray(),
+            $allCurrencies
+        );
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->list = Currency::currentList();
+    }
+
+    protected function tearDown(): void
+    {
+        Currency::setCurrencyList($this->list);
+        parent::tearDown();
     }
 }
