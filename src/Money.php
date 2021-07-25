@@ -16,6 +16,9 @@ class Money implements MoneyInterface
     use MoneyStatic;
     use MoneyHelpers;
 
+    public const FREQUENT_THOUSAND_SEPARATORS = [' ', '.', ',', '\''];
+    public const FREQUENT_DECIMAL_SEPARATORS = ['.', ','];
+
     private float $amount;
     private ?MoneySettings $settings;
 
