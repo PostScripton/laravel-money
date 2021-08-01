@@ -13,7 +13,7 @@ interface MoneySettingsInterface
      * @param int $decimals
      * @return MoneySettings
      */
-    public function setDecimals(int $decimals = 1): MoneySettings;
+    public function setDecimals(int $decimals = MoneySettings::MIN_DECIMALS): MoneySettings;
 
     /**
      * Sets a thousand separator <p>

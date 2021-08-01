@@ -11,6 +11,8 @@ class MoneySettings implements MoneySettingsInterface
 {
     public const ORIGIN_INT = 0;
     public const ORIGIN_FLOAT = 1;
+    public const MAX_DECIMALS = 4;
+    public const MIN_DECIMALS = 1;
 
     private int $decimals;
     private string $thousands_separator;
@@ -67,10 +69,12 @@ class MoneySettings implements MoneySettingsInterface
 
     // ========== SETTERS ==========
 
-    public function setDecimals(int $decimals = 1): self
+    public function setDecimals(int $decimals = self::MIN_DECIMALS): self
     {
-        if ($decimals < 0) {
-            $decimals = 0;
+        if ($decimals < self::MIN_DECIMALS) {
+            $decimals = self::MIN_DECIMALS;
+        } elseif ($decimals > self::MAX_DECIMALS) {
+            $decimals = self::MAX_DECIMALS;
         }
 
         $this->decimals = $decimals;

@@ -76,7 +76,10 @@ class Parser
         }
 
         // Return a new money instance
-        $money = money((float)$amount, $currency, settings()->setOrigin(MoneySettings::ORIGIN_FLOAT));
+        $settings = settings()
+            ->setDecimals(self::getNumberOfDecimals($amount))
+            ->setOrigin(MoneySettings::ORIGIN_FLOAT);
+        $money = money((float)$amount, $currency, $settings);
         $money->settings()->setOrigin(Money::getDefaultOrigin());
         return $money;
     }
@@ -84,5 +87,13 @@ class Parser
     public static function quote(string $str): string
     {
         return trim($str) === '' ? '\s' : preg_quote($str);
+    }
+
+    private static function getNumberOfDecimals(string $amount): int
+    {
+        $decimals = explode('.', $amount);
+        return array_key_exists(1, $decimals)
+            ? strlen($decimals[1])
+            : Money::getDefaultDecimals();
     }
 }
