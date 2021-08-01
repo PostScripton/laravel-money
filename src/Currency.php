@@ -183,6 +183,13 @@ class Currency
         return $this;
     }
 
+    public static function getCurrencies(): array
+    {
+        return self::currencies()
+            ->map(fn(self $currency) => $currency->getCode())
+            ->toArray();
+    }
+
     public static function isIncorrectList(string $list): bool
     {
         return !in_array(

@@ -30,6 +30,7 @@ You can also get or change some data from Currency object:
 3. [Display](/docs/03_Currencies/display.md)
 4. [Currency List](/docs/03_Currencies/currency_list.md)
 5. [Preferred symbol](/docs/03_Currencies/preferred_symbol.md)
+6. [Get current currencies](/docs/03_Currencies/get_currencies.md)
 
 ---
 
