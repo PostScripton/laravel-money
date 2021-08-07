@@ -18,7 +18,7 @@ You can choose whatever you like by changing it in the property `service` of the
 
 ## What if there is no service I want?
 
-In this case, you can add your own service, see [here](/docs/05_Services/add.md) for full details.
+In this case, you can add your own service, see [here](/docs/05_services/add.md) for full details.
 
 ---
 

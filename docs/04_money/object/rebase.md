@@ -7,7 +7,7 @@ rebases the money on an amount.
 ### `rebase($money, int $origin = MoneySettings::ORIGIN_INT)`
 **Parameters**:
 1. `int|float|Money $money` - an amount or Money to which the money will be rebased.
-2. `[int $origin = MoneySettings::ORIGIN_INT]` - one of the [constants](/docs/02_Settings/origin.md#constants).
+2. `[int $origin = MoneySettings::ORIGIN_INT]` - one of the [constants](/docs/02_settings/origin.md#constants).
 
 **Returns**: `Money`
 

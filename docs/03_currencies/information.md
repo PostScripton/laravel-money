@@ -21,10 +21,10 @@
 **Returns**: `string` - a symbol `$`.
 
 ### `getPosition()`
-**Returns**: `int` - one of [the constants](/docs/03_Currencies/position.md#constants).
+**Returns**: `int` - one of [the constants](/docs/03_currencies/position.md#constants).
 
 ### `getDisplay()`
-**Returns**: `int` - one of [the constants](/docs/03_Currencies/display.md#constants).
+**Returns**: `int` - one of [the constants](/docs/03_currencies/display.md#constants).
 
 ## Usage
 
@@ -55,7 +55,7 @@ $currency->getSymbol();     // "£"
 $currency->getSymbol(1);    // "ج.م"
 ```
 
-See about [choosing a preferred symbol](/docs/03_Currencies/preferred_symbol.md) for a currency with multiple symbols as well.
+See about [choosing a preferred symbol](/docs/03_currencies/preferred_symbol.md) for a currency with multiple symbols as well.
 
 ---
 

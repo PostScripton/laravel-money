@@ -2,7 +2,7 @@
 
 converts money into another currency using an exchange rate between currencies.
 
-See [here](/docs/05_Services/base.md) for more details.
+See [here](/docs/05_services/base.md) for more details.
 
 For example:
 ```text

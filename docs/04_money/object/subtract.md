@@ -7,7 +7,7 @@ subtracts an amount, or a money object from the money.
 ### `subtract($money, int $origin = MoneySettings::ORIGIN_INT)`
 **Parameters**:
 1. `int|float|Money $money` - an amount or Money that will be subtracted.
-2. `[int $origin = MoneySettings::ORIGIN_INT]` (*optional*) - one of the [constants](/docs/02_Settings/origin.md#constants).
+2. `[int $origin = MoneySettings::ORIGIN_INT]` (*optional*) - one of the [constants](/docs/02_settings/origin.md#constants).
 
 **Returns**: `Money`
 

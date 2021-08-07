@@ -27,13 +27,13 @@ All the settings that are not provided or not changed will have default values, 
 ---
 
 ### Following settings are provided:
-1. [Decimals](/docs/02_Settings/decimals.md)
-2. [Thousands separator](/docs/02_Settings/thousands_separator.md)
-3. [Decimal separator](/docs/02_Settings/decimal_separator.md)
-4. [Ends with zero](/docs/02_Settings/ends_with_zero.md)
-5. [Space between currency and amount](/docs/02_Settings/space_between.md)
-6. [Currency](/docs/02_Settings/currency.md)
-7. [Origin amount](/docs/02_Settings/origin.md)
+1. [Decimals](/docs/02_settings/decimals.md)
+2. [Thousands separator](/docs/02_settings/thousands_separator.md)
+3. [Decimal separator](/docs/02_settings/decimal_separator.md)
+4. [Ends with zero](/docs/02_settings/ends_with_zero.md)
+5. [Space between currency and amount](/docs/02_settings/space_between.md)
+6. [Currency](/docs/02_settings/currency.md)
+7. [Origin amount](/docs/02_settings/origin.md)
 
 ---
 

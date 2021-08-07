@@ -2,7 +2,7 @@
 represents Money object as a string.
 You may not use it if you explicitly assign the object to a string.
 
-All the ways to output money are mentioned [here](/docs/01_Usage/output.md).
+All the ways to output money are mentioned [here](/docs/01_usage/output.md).
 
 ## Methods
 

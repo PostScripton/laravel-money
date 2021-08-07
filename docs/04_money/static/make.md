@@ -18,7 +18,7 @@ Money::make(12345, Currency::code('RUB'));    // "1 234.5 ₽"
 ```
 
 Method `make()` is one of the variants to create a Money object.
-All the ways to pass parameters have already been discussed [here](/docs/01_Usage/creating.md).
+All the ways to pass parameters have already been discussed [here](/docs/01_usage/creating.md).
 
 ---
 

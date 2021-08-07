@@ -15,7 +15,7 @@ Money::getDefaultCurrency();
 Money::getDefaultOrigin();
 ```
 
-About all these default settings you can read [here](/docs/02_Settings/base.md).
+About all these default settings you can read [here](/docs/02_settings/base.md).
 
 ---
 

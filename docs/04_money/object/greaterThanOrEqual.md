@@ -7,7 +7,7 @@
 ### `greaterThanOrEqual($money, [int $origin = MoneySettings::ORIGIN_INT])`
 **Parameters**:
 1. `$money` - an amount or a money object.
-2. `[int $origin = MoneySettings::ORIGIN_INT]` (*optional*) - one of the [constants](/docs/02_Settings/origin.md#constants).
+2. `[int $origin = MoneySettings::ORIGIN_INT]` (*optional*) - one of the [constants](/docs/02_settings/origin.md#constants).
 
 **Returns**: `bool`
 

@@ -4,8 +4,8 @@ converts the money into the number according to origin for storing in a database
 It helps you to save the money back into your database because it gives you a certain number according to the way your database store money data.
 
 There are some settings that effect the result:
-1. [Number of decimals](/docs/02_Settings/decimals.md)
-2. [Origin](/docs/02_Settings/origin.md)
+1. [Number of decimals](/docs/02_settings/decimals.md)
+2. [Origin](/docs/02_settings/origin.md)
 
 ## Methods
 
