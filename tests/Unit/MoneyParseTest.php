@@ -1,6 +1,6 @@
 <?php
 
-namespace PostScripton\Money\Tests\Feature;
+namespace PostScripton\Money\Tests\Unit;
 
 use PostScripton\Money\Currency;
 use PostScripton\Money\Exceptions\WrongParserStringException;

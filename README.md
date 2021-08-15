@@ -59,7 +59,7 @@ After all, the config file at `config/money.php` should be modified for your own
         - [`Money::set()`](/docs/04_money/static/set.md)
         - [`Money::make()`](/docs/04_money/static/make.md)
         - [`Money::correctInput()`](/docs/04_money/static/correctInput.md)
-        - [`Money::parse()` (will be reworked)](/docs/04_money/static/parse.md)
+        - [`Money::parse()`](/docs/04_money/static/parse.md)
     - Object methods
         - Getters
             - [`getAmount()`](/docs/04_money/object/getAmount.md)
