@@ -106,11 +106,18 @@ interface MoneyInterface
     public function rebase($money, int $origin = MoneySettings::ORIGIN_INT): Money;
 
     /**
-     * Removes decimals. It's like <p>
+     * Round fractions down <p>
      * `$10.25 -> $10.00` </p>
      * @return Money
      */
-    public function clear(): Money;
+    public function floor(): Money;
+
+    /**
+     * Round fractions up <p>
+     * `$10.25 -> $11.00` </p>
+     * @return Money
+     */
+    public function ceil(): Money;
 
     /**
      * Checks whether two money objects have the same currency
