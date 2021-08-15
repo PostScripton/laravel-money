@@ -113,6 +113,13 @@ interface MoneyInterface
     public function floor(): Money;
 
     /**
+     * Round fractions up <p>
+     * `$10.25 -> $11.00` </p>
+     * @return Money
+     */
+    public function ceil(): Money;
+
+    /**
      * Checks whether two money objects have the same currency
      * @param Money $money
      * @return bool

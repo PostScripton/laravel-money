@@ -73,6 +73,7 @@ After all, the config file at `config/money.php` should be modified for your own
             - [`rebase()`](/docs/04_money/object/rebase.md)
         - Object manipulations
             - [`floor()`](/docs/04_money/object/floor.md)
+            - [`ceil()`](/docs/04_money/object/ceil.md)
             - [`clone()` (soon)](#)
         - Logical operations
             - [`isSameCurrency()`](/docs/04_money/object/isSameCurrency.md)

@@ -85,6 +85,35 @@ class MoneyTest extends TestCase
     }
 
     /** @test */
+    public function originIntMoneyGetsRidOfDecimalsWithCeilMethod()
+    {
+        $money = new Money(132.76);
+
+        $this->assertEquals(132.76, $money->getPureAmount());
+        $this->assertEquals('$ 13.3', $money->toString());
+
+        $money->ceil();
+
+        $this->assertEquals(140, $money->getPureAmount());
+        $this->assertEquals('$ 14', $money->toString());
+    }
+
+    /** @test */
+    public function originFloatMoneyGetsRidOfDecimalsWithCeilMethod()
+    {
+        $settings = new MoneySettings();
+        $money = new Money(13.276, $settings->setOrigin(MoneySettings::ORIGIN_FLOAT));
+
+        $this->assertEquals(13.276, $money->getPureAmount());
+        $this->assertEquals('$ 13.3', $money->toString());
+
+        $money->ceil();
+
+        $this->assertEquals(14, $money->getPureAmount());
+        $this->assertEquals('$ 14', $money->toString());
+    }
+
+    /** @test */
     public function anErrorThatMoneyObjectsAreImmutable()
     {
         $johnReward = $bobReward = new Money(1000);

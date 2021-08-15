@@ -149,6 +149,15 @@ class Money implements MoneyInterface
         return $this;
     }
 
+    public function ceil(): self
+    {
+        $this->amount = $this->settings()->getOrigin() === MoneySettings::ORIGIN_INT
+            ? ceil($this->getPureAmount() / $this->getDivisor()) * $this->getDivisor()
+            : ceil($this->getPureAmount());
+
+        return $this;
+    }
+
     public function isSameCurrency(self $money): bool
     {
         return $this->settings()->getCurrency()->getCode() === $money->settings()->getCurrency()->getCode();
