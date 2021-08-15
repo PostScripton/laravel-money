@@ -38,7 +38,7 @@ After all, the config file at `config/money.php` should be modified for your own
 1. ✅ Usage
     - [🧰 Creating](/docs/01_usage/creating.md)
     - [🖨️ Output](/docs/01_usage/output.md)
-2. [⚙ Settings](/docs/02_settings/base.md)
+2. [⚙ Settings](/docs/02_settings/README.md)
     - [Decimals](/docs/02_settings/decimals.md)
     - [Thousands separator](/docs/02_settings/thousands_separator.md)
     - [Decimal separator](/docs/02_settings/decimal_separator.md)
@@ -46,14 +46,14 @@ After all, the config file at `config/money.php` should be modified for your own
     - [Space between currency and amount](/docs/02_settings/space_between.md)
     - [Currency](/docs/02_settings/currency.md)
     - [Origin amount](/docs/02_settings/origin.md)
-3. [💲 Currencies](/docs/03_currencies/base.md)
+3. [💲 Currencies](/docs/03_currencies/README.md)
     - [Information](/docs/03_currencies/information.md)
     - [Position](/docs/03_currencies/position.md)
     - [Display](/docs/03_currencies/display.md)
     - [Currency List](/docs/03_currencies/currency_list.md)
     - [Preferred symbol](/docs/03_currencies/preferred_symbol.md)
     - [Get current currencies](/docs/03_currencies/get_currencies.md)
-4. [💵 Money](/docs/04_money/base.md)
+4. [💵 Money](/docs/04_money/README.md)
     - Static methods
         - [Getters](/docs/04_money/static/getters.md)
         - [`Money::set()`](/docs/04_money/static/set.md)
@@ -90,7 +90,7 @@ After all, the config file at `config/money.php` should be modified for your own
             - [`convertInto()`](/docs/04_money/object/convertInto.md)
             - [`upload()`](/docs/04_money/object/upload.md)
             - [`toString()`](/docs/04_money/object/toString.md)
-5. [API services](/docs/05_services/base.md)
+5. [API services](/docs/05_services/README.md)
     - [Add your own](/docs/05_services/add.md)
     
 ## Contributing
