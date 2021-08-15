@@ -9,8 +9,8 @@ Laravel-money is an open source library that simplifies life to convert numbers 
 With all being said, you can calculate money, output it as a string, convert it between currencies online via API services as well as offline and more!
 
 ## Requirements
-- PHP >= 7.4
-- `guzzlehttp/guzzle` >= 7.0
+- PHP: `^7.4` or `^8.0`
+- `guzzlehttp/guzzle`: `^7.0`
 
 ## Installation
 
@@ -93,7 +93,7 @@ After all, the config file at `config/money.php` should be modified for your own
             - [`toString()`](/docs/04_money/object/toString.md)
 5. [API services](/docs/05_services/README.md)
     - [Add your own](/docs/05_services/add.md)
-    
+
 ## Contributing
 
 Contributions are **welcome** and will be fully **credited**.
