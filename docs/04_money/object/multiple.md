@@ -19,4 +19,4 @@ $money->multiple(1.5);  // "$ 150"
 
 ---
 
-📌 Back to the [contents](/README.md#table-of-contents).
+📌 Back to the [contents](/docs/04_money/README.md).

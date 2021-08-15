@@ -22,4 +22,4 @@ $money->service()->rate('USD', 'RUB', Carbon::createFromDate(2010, 4, 27));
 
 ---
 
-📌 Back to the [contents](/README.md#table-of-contents).
+📌 Back to the [contents](/docs/04_money/README.md).

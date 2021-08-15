@@ -74,4 +74,4 @@ $rub->getPureAmount() === $back_rub->getPureAmount();       // true
 
 ---
 
-📌 Back to the [contents](/README.md#table-of-contents).
+📌 Back to the [contents](/docs/04_money/README.md).

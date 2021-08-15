@@ -16,4 +16,4 @@ $money->getPureAmount(); // 132.76686139139672
 
 ---
 
-📌 Back to the [contents](/README.md#table-of-contents).
+📌 Back to the [contents](/docs/04_money/README.md).

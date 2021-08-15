@@ -28,4 +28,4 @@ $currency->getSymbol(1);    // "ج.م"
 
 ---
 
-📌 Back to the [contents](/README.md#table-of-contents).
+📌 Back to the [contents](/docs/03_currencies/README.md).

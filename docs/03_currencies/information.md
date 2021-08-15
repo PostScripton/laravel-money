@@ -59,4 +59,4 @@ See about [choosing a preferred symbol](/docs/03_currencies/preferred_symbol.md)
 
 ---
 
-📌 Back to the [contents](/README.md#table-of-contents).
+📌 Back to the [contents](/docs/03_currencies/README.md).

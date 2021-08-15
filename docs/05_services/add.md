@@ -193,4 +193,4 @@ $this->config['your_additional_property_here'];
 
 ---
 
-📌 Back to the [contents](/README.md#table-of-contents).
+📌 Back to the [contents](/docs/05_services/README.md).

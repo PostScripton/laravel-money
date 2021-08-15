@@ -22,4 +22,4 @@ All the ways to pass parameters have already been discussed [here](/docs/01_usag
 
 ---
 
-📌 Back to the [contents](/README.md#table-of-contents).
+📌 Back to the [contents](/docs/04_money/README.md).

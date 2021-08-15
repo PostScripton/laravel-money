@@ -19,4 +19,4 @@ About all these default settings you can read [here](/docs/02_settings/README.md
 
 ---
 
-📌 Back to the [contents](/README.md#table-of-contents).
+📌 Back to the [contents](/docs/04_money/README.md).

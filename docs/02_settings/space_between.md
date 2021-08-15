@@ -34,4 +34,4 @@ $money->toString();                     // "$100"
 
 ---
 
-📌 Back to the [contents](/README.md#table-of-contents).
+📌 Back to the [contents](/docs/02_settings/README.md).
