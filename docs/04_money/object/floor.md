@@ -1,17 +1,17 @@
-# `clear()`
+# `floor()`
 
-removes decimals. `$10.25 -> $10.00`
+Round fractions down. `$10.25 -> $10.00`
 
 ## Methods
 
-### `clear()`
+### `floor()`
 **Returns**: `Money`
 
 ## Usage
 
 ```php
 $money = money(105);    // "$ 10.5"
-$money->clear();        // "$ 10"
+$money->floor();        // "$ 10"
 ```
 
 ---

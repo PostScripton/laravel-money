@@ -56,21 +56,21 @@ class MoneyTest extends TestCase
     }
 
     /** @test */
-    public function originIntMoneyGetsRidOfDecimalsWithClearMethod()
+    public function originIntMoneyGetsRidOfDecimalsWithFloorMethod()
     {
         $money = new Money(132.76);
 
         $this->assertEquals(132.76, $money->getPureAmount());
         $this->assertEquals('$ 13.3', $money->toString());
 
-        $money->clear();
+        $money->floor();
 
         $this->assertEquals(130, $money->getPureAmount());
         $this->assertEquals('$ 13', $money->toString());
     }
 
     /** @test */
-    public function originFloatMoneyGetsRidOfDecimalsWithClearMethod()
+    public function originFloatMoneyGetsRidOfDecimalsWithFloorMethod()
     {
         $settings = new MoneySettings();
         $money = new Money(13.276, $settings->setOrigin(MoneySettings::ORIGIN_FLOAT));
@@ -78,7 +78,7 @@ class MoneyTest extends TestCase
         $this->assertEquals(13.276, $money->getPureAmount());
         $this->assertEquals('$ 13.3', $money->toString());
 
-        $money->clear();
+        $money->floor();
 
         $this->assertEquals(13, $money->getPureAmount());
         $this->assertEquals('$ 13', $money->toString());

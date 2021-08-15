@@ -140,7 +140,7 @@ class Money implements MoneyInterface
         return $this;
     }
 
-    public function clear(): self
+    public function floor(): self
     {
         $this->amount = $this->settings()->getOrigin() === MoneySettings::ORIGIN_INT
             ? floor($this->getPureAmount() / $this->getDivisor()) * $this->getDivisor()
