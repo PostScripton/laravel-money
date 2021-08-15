@@ -52,7 +52,7 @@ Money::parse('-100 BYN');
 
 
 // If you want Australian, Canadian or any other dollar, you should specify ISO-code,
-// otherwise it would be parsed as default currency.
+// otherwise it would be parsed as USD.
 Money::parse('AUD 100');
 Money::parse('100 CAD');
 ```
