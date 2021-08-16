@@ -3,8 +3,6 @@
 [![Total Downloads](https://img.shields.io/packagist/dt/postscripton/laravel-money.svg)](https://packagist.org/packages/postscripton/laravel-money)
 [![License](https://img.shields.io/packagist/l/postscripton/laravel-money)](https://packagist.org/packages/postscripton/laravel-money)
 
-## Introduction
-
 Laravel-money is an open source library that simplifies life to convert numbers from a database (`'balance': 12340`) into money objects.
 With all being said, you can calculate money, output it as a string, convert it between currencies online via API services as well as offline and more!
 
