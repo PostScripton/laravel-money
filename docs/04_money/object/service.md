@@ -2,7 +2,7 @@
 
 allows you to get access to the selected service from the config file.
 
-See [here](/docs/05_services/README.md) for full details.
+👀 See [here](/docs/05_services/README.md) for full details.
 
 ## Methods
 
