@@ -1,6 +1,6 @@
 # `ceil()`
 
-Round fractions up. `$10.25 -> $11.00`
+rounds fractions up. `$10.25 -> $11.00`
 
 ## Methods
 

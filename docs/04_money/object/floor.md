@@ -1,6 +1,6 @@
 # `floor()`
 
-Round fractions down. `$10.25 -> $10.00`
+rounds fractions down. `$10.25 -> $10.00`
 
 ## Methods
 

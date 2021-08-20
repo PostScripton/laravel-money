@@ -19,9 +19,23 @@ $usd = currency('840');
 ❗ Only international codes such as USD / 840, EUR / 978, RUB / 643 and so on should be used as a code.
 (And your own currencies' codes 😉)
 
+## Global settings
+
+Remember that all the settings, which are applied to a currency will be saved for the next times.
+
+```php
+use PostScripton\Money\Currency;
+
+$usd = currency('usd');
+$usd->setDisplay(Currency::DISPLAY_CODE);
+
+$usd = currency('usd');
+$usd->getDisplay(); // 11 (Currency::DISPLAY_CODE)
+```
+
 ---
 
-### Currency's data
+## Currency's data
 
 You can also get or change some data from Currency object:
 
