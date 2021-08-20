@@ -114,32 +114,20 @@ class MoneyTest extends TestCase
     }
 
     /** @test */
-    public function anErrorThatMoneyObjectsAreImmutable()
-    {
-        $johnReward = $bobReward = new Money(1000);
-
-        // John has additional bonus $50
-        $winCoupon = new Money(500);
-
-        $johnReward->add($winCoupon);
-
-        $this->assertTrue($johnReward->equals($bobReward));
-    }
-
-    /** @test */
     public function correctWayToHandleImmutableMoneyObjects()
     {
-        $johnReward = new Money(1000);
-        $bobReward = new Money(1000);
+        $m1 = money(1000);
 
-        // John has additional bonus $50
-        $winCoupon = new Money(500);
+        $m2 = $m1
+            // adds to the both
+            ->add(500)
+            // $m2 is 1500 as long as $m1 but $m2 is independent now
+            ->clone()
+            // $m2 is 3000 whereas $m1 is still 1500
+            ->multiple(2);
 
-        $johnReward = $johnReward->add($winCoupon);
-
-        $this->assertEquals(1000, $bobReward->getPureAmount());
-        $this->assertEquals(1500, $johnReward->getPureAmount());
-        $this->assertNotTrue($johnReward->equals($bobReward));
-        $this->assertNotTrue($johnReward->settings() === $bobReward->settings());
+        $this->assertEquals(1500, $m1->getPureAmount());
+        $this->assertEquals(3000, $m2->getPureAmount());
+        $this->assertFalse($m1->equals($m2));
     }
 }

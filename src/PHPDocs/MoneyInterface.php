@@ -26,6 +26,12 @@ interface MoneyInterface
     public function settings(): MoneySettings;
 
     /**
+     * Creates an absolutely identical instance of the object
+     * @return Money
+     */
+    public function clone(): Money;
+
+    /**
      * Returns a formatted number <p>
      * For example, "$ 1 234.5" -> "1 234.5" </p>
      * @return string

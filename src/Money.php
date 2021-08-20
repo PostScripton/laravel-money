@@ -74,6 +74,11 @@ class Money implements MoneyInterface
         return $this->settings;
     }
 
+    public function clone(): self
+    {
+        return money($this->amount, $this->getCurrency(), clone $this->settings());
+    }
+
     public function getPureAmount(): float
     {
         return $this->amount;
