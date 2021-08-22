@@ -1,660 +1,136 @@
 # 💵 Money for Laravel PHP
-[![Latest Stable Version](https://img.shields.io/packagist/v/postscripton/laravel-money.svg)](https://packagist.org/packages/postscripton/laravel-money)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/PostScripton/laravel-money)](https://packagist.org/packages/postscripton/laravel-money)
 [![Total Downloads](https://img.shields.io/packagist/dt/postscripton/laravel-money.svg)](https://packagist.org/packages/postscripton/laravel-money)
 [![License](https://img.shields.io/packagist/l/postscripton/laravel-money)](https://packagist.org/packages/postscripton/laravel-money)
 
-This package provides a convenient way to convert numbers from a database like (`'balance': 123450`) into money strings for humans.
+## Introduction
+
+Laravel-money is an open source library that simplifies life to convert numbers from a database (`'balance': 12340`) into money objects.
+With all being said, you can calculate money, output it as a string, convert it between currencies online via API services as well as offline and more!
 
 ## Requirements
-+ PHP 7.4+
+- PHP: `^7.4` or `^8.0`
+- `guzzlehttp/guzzle`: `^7.0`
 
 ## Installation
+
 ### via composer
-```console
+```bash
 composer require postscripton/laravel-money 
 ```
+
 ### Publishing
 Publish the config file through:
-```console
+```bash
 php artisan vendor:publish --provider=PostScription\Money\MoneyServiceProvider
 ```
+
 or
-```console
+
+```bash
 php artisan vendor:publish --tag=money
 ```
 
-After all, the config file at `config/money.php` should be modified for your own purposes. 
+After all, the config file at `config/money.php` should be modified for your own purposes.
 
-## Usage
+## Table of Contents
 
-### 🧰 Creating
-In order to use this package, you need to create a Money object:
+1. ✅ Usage
+    - [🧰 Creating](/docs/01_usage/creating.md)
+    - [🖨️ Output](/docs/01_usage/output.md)
+    - [📄 Cloning](/docs/01_usage/cloning.md)
+2. [⚙ Settings](/docs/02_settings/README.md)
+    - [Decimals](/docs/02_settings/decimals.md)
+    - [Thousands separator](/docs/02_settings/thousands_separator.md)
+    - [Decimal separator](/docs/02_settings/decimal_separator.md)
+    - [Ends with zero](/docs/02_settings/ends_with_zero.md)
+    - [Space between currency and amount](/docs/02_settings/space_between.md)
+    - [Currency](/docs/02_settings/currency.md)
+    - [Origin amount](/docs/02_settings/origin.md)
+3. [💲 Currencies](/docs/03_currencies/README.md)
+    - [Information](/docs/03_currencies/information.md)
+    - [Position](/docs/03_currencies/position.md)
+    - [Display](/docs/03_currencies/display.md)
+    - [Currency List](/docs/03_currencies/currency_list.md)
+    - [Preferred symbol](/docs/03_currencies/preferred_symbol.md)
+    - [Get current currencies](/docs/03_currencies/get_currencies.md)
+4. [💵 Money](/docs/04_money/README.md)
+    - Static methods
+        - [Getters](/docs/04_money/static/getters.md)
+        - [`Money::set()`](/docs/04_money/static/set.md)
+        - [`Money::make()`](/docs/04_money/static/make.md)
+        - [`Money::correctInput()`](/docs/04_money/static/correctInput.md)
+        - [`Money::parse()`](/docs/04_money/static/parse.md)
+    - Object methods
+        - Getters
+            - [`getAmount()`](/docs/04_money/object/getAmount.md)
+            - [`getPureAmount()`](/docs/04_money/object/getPureAmount.md)
+            - [`getCurrency()`](/docs/04_money/object/getCurrency.md)
+        - Calculations
+            - [`add()`](/docs/04_money/object/add.md)
+            - [`subtract()`](/docs/04_money/object/subtract.md)
+            - [`multiple()`](/docs/04_money/object/multiple.md)
+            - [`divide()`](/docs/04_money/object/divide.md)
+            - [`rebase()`](/docs/04_money/object/rebase.md)
+        - Object manipulations
+            - [`floor()`](/docs/04_money/object/floor.md)
+            - [`ceil()`](/docs/04_money/object/ceil.md)
+            - [`clone()` (soon)](#)
+        - Logical operations
+            - [`isSameCurrency()`](/docs/04_money/object/isSameCurrency.md)
+            - [`isNegative()`](/docs/04_money/object/isNegative.md)
+            - [`isPositive()`](/docs/04_money/object/isPositive.md)
+            - [`isEmpty()`](/docs/04_money/object/isEmpty.md)
+            - [`lessThan()`](/docs/04_money/object/lessThan.md)
+            - [`lessThanOrEqual()`](/docs/04_money/object/lessThanOrEqual.md)
+            - [`greaterThan()`](/docs/04_money/object/greaterThan.md)
+            - [`greaterThanOrEqual()`](/docs/04_money/object/greaterThanOrEqual.md)
+            - [`equals()`](/docs/04_money/object/equals.md)
+        - Other
+            - [`bind()`](/docs/04_money/object/bind.md)
+            - [`service()`](/docs/04_money/object/service.md)
+            - [`convertInto()`](/docs/04_money/object/convertInto.md)
+            - [`upload()`](/docs/04_money/object/upload.md)
+            - [`toString()`](/docs/04_money/object/toString.md)
+5. [API services](/docs/05_services/README.md)
+    - [Add your own](/docs/05_services/add.md)
 
-```php
-use PostScripton\Money\Money;
+## Contributing
 
-$money = new Money(1234);
-$money = Money::make(1234);
-```
+Contributions are **welcome** and will be fully **credited**.
 
-You can add following parameters for both object and static variants:
-```php
-use PostScripton\Money\Currency;
-use PostScripton\Money\Money;
-use PostScripton\Money\MoneySettings;
+We accept contributions via Pull Requests on [Github](https://github.com/PostScripton/laravel-money/).
 
-$money = new Money(1234, Currency::code('RUB'));
-$money = new Money(1234, new MoneySettings);
-$money = new Money(1234, Currency::code('RUB'), new MoneySettings);
+### Pull Requests
 
-// NOT: new Money(1234, new MoneySettings, Currency::code('RUB'))
-```
+- **[PSR-2 Coding Standard](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md)** - The easiest way to apply the conventions is to use [PHP Code Sniffer](https://github.com/squizlabs/PHP_CodeSniffer) just by running:
+    - ```bash
+      composer app:check-build
+      ```
+    - ```bash
+      composer app:cs-fix
+      ```
+- **Add tests!** - Your patch won't be accepted if it doesn't have tests.
+- **Document any change in behaviour** - Make sure the `README.md` and any other relevant documentation are kept up-to-date.
+- Create feature branches - Don't ask us to pull from your master branch.
+- **One pull request per a feature** - If you want to do more than one thing, send multiple pull requests. Features must be atomic, that is, do not contain unnecessary things.
+- **Send coherent history** - Make sure each individual commit in your pull request is meaningful. If you had to make multiple intermediate commits while developing, please [squash them](http://www.git-scm.com/book/en/v2/Git-Tools-Rewriting-History#Changing-Multiple-Commit-Messages) before submitting.
 
-### 🖨️ Output
-After creating and manipulating with the Money object, you'd like to print the money out to somewhere.
+### Security
 
-You can use one of the following ways:
-```php
-use PostScripton\Money\Money;
+If you discover any security-related issues, please email [postscripton.sp@gmail.com](mailto:postscripton.sp@gmail.com) instead of using the issue tracker.
 
-$money = new Money(1234);
+### Wishes
 
-// Use toString()
-$string = $money->toString();           // "$ 123.4"
-
-// Explicitly assign object to string
-$string = "Your balance is {$money}";   // "Your balance is $ 123.4"
-```
-In Blade:
-```html
-<p>Balance: {{ $money }}</p>
-```
-
-### ⚙️ Settings
-If you want to customize settings for your Money object, you need to specify settings for it.
-
-To set setting:
-```php
-use PostScripton\Money\Money;
-use PostScripton\Money\MoneySettings;
-
-// Set #1
-$money = new Money(1234, new MoneySettings);
-
-// Set #2
-$money = new Money(1234);
-$settings = new MoneySettings;
-$money->settings = $settings;
-
-// Set #3
-$money = new Money(1234); // Every Money object has settings by default even if it is not provided
-```
-
-To get settings:
-```php
-use PostScripton\Money\Money;
-
-$money = new Money(1234);
-$money->settings;
-```
-
-❗ **NOTE**
-All the settings that are not provided or not changed will have default values, which were configured in the config file.
-
----
-
-Following settings are provided:
-
-#### Decimals
-You may get or specify number of decimals `123.(4)`:
-
-```php
-use PostScripton\Money\Money;
-use PostScripton\Money\MoneySettings;
-
-$settings = new MoneySettings;
-$money = new Money(1234, $settings);
-
-$money->settings->getDecimals();    // 1
-$money->toString();                 // "$ 123.4"
-
-$money->settings->setDecimals(2); 
-
-$money->settings->getDecimals();    // 2
-$money->toString();                 // "$ 12.34" 
-```
+We would be really pleased if you considered helping us with:
+1. **A brand-new name of the library in one word**. At the same time it has to make sense, be meaningful.
+   For example, [Carbon](https://carbon.nesbot.com/) sounds quite good.
+2. **Logo**. The README would look much better with an attractive banner-logo at the top.
 
 ---
 
-#### Thousands separator
-You may get or specify a separator between thousands `1( )000( )000`:
+**Happy coding!** 😄🎉⌨️
 
-```php
-use PostScripton\Money\Money;
-use PostScripton\Money\MoneySettings;
+## License
 
-$settings = new MoneySettings;
-$money = new Money(10000000, $settings);
-
-$money->settings->getThousandsSeparator();  // " "
-$money->toString();                         // "$ 1 000 000"
-
-$money->settings->setThousandsSeparator("'"); 
-
-$money->settings->getThousandsSeparator();  // "'"
-$money->toString();                         // "$ 1'000'000"
-```
-
----
-
-#### Decimal separator
-You may get or specify a separator for decimals `123(.)4`:
-
-```php
-use PostScripton\Money\Money;
-use PostScripton\Money\MoneySettings;
-
-$settings = new MoneySettings;
-$money = new Money(1234, $settings);
-
-$money->settings->getDecimalSeparator();    // "."
-$money->toString();                         // "$ 123.4"
-
-$money->settings->setDecimalSeparator(","); 
-
-$money->settings->getDecimalSeparator();    // ","
-$money->toString();                         // "$ 123,4"
-```
-
----
-
-#### Ends with Zero
-You may get or specify whether money ends with 0 or not `100(.0)`:
-
-```php
-use PostScripton\Money\Money;
-use PostScripton\Money\MoneySettings;
-
-$settings = new MoneySettings;
-$money = new Money(1000, $settings);
-
-$money->settings->endsWith0();  // false
-$money->toString();             // "$ 100"
-
-$money->settings->setEndsWith0(true); 
-
-$money->settings->endsWith0();  // true
-$money->toString();             // "$ 100.0"
-```
-
----
-
-#### Space between currency and number
-You may get or specify whether there is a space between currency and number `$( )123.4`:
-
-```php
-use PostScripton\Money\Money;
-use PostScripton\Money\MoneySettings;
-
-$settings = new MoneySettings;
-$money = new Money(1234, $settings);
-
-$money->settings->hasSpaceBetween();    // true
-$money->toString();                     // "$ 100"
-
-$money->settings->setHasSpaceBetween(false);
-
-$money->settings->hasSpaceBetween();    // false
-$money->toString();                     // "$100"
-```
-
----
-
-#### Currency
-You may get or specify currency for money `($) 123.4`:
-
-```php
-use PostScripton\Money\Currency;
-use PostScripton\Money\Money;
-use PostScripton\Money\MoneySettings;
-
-$settings = new MoneySettings;
-$money = new Money(1234, $settings);
-
-$money->settings->getCurrency();                // PostScripton\Money\Currency class
-$money->settings->getCurrency()->getSymbol();   // "$"
-$money->toString();                             // "$ 123.4"
-
-$money->settings->setCurrency(Currency::code('RUB'));
-
-$money->settings->getCurrency();                // PostScripton\Money\Currency class
-$money->settings->getCurrency()->getSymbol();   // "₽"
-$money->toString();                             // "123.4 ₽"
-```
-
-There is a shortcut for getting a currency:
-```php
-use PostScripton\Money\Money;
-
-$money = new Money(1234);
-$money->getCurrency(); // the same as: $money->settings->getCurrency()
-```
-
----
-
-#### Origin number
-You may get or specify origin number whether it is integer or float.
-Means in which way numbers are stored in a database:
-
-```php
-use PostScripton\Money\Money;
-use PostScripton\Money\MoneySettings;
-
-$settings = new MoneySettings;
-$money = new Money(1234, $settings);
-
-$money->settings->getOrigin();  // 0 (MoneySettings::ORIGIN_INT)
-$money->toString();             // "$ 123.4"
-```
-
-```php
-use PostScripton\Money\Money;
-use PostScripton\Money\MoneySettings;
-
-$settings = new MoneySettings;
-$money = new Money(1234.567, $settings);
-
-$money->settings->setOrigin(MoneySettings::ORIGIN_FLOAT);
-
-$money->settings->getOrigin();  // 1 (MoneySettings::ORIGIN_FLOAT)
-$money->toString();             // "$ 1234.6"
-```
-
-❗ If origin is set as **integer**, then the number divides on computed value to get a number with right amount of decimals.
-
-❗ If origin is set as **float**, then the numbers leaves the same but removes unnecessary decimal digits.
-
----
-
-### 💲 Currencies
-Along with Money, as you have already noticed, Currencies are also provided. In many methods you have to pass a Currency object.
-
-In order to get a specific currency:
-
-```php
-use PostScripton\Money\Currency;
-
-$usd = Currency::code('USD');
-$usd = Currency::code('usd');
-$usd = Currency::code('840');
-```
-
-❗ Only international codes such as USD / 840, EUR / 978, RUB / 643 and so on should be used as a code.
-
----
-
-You can also get or change some data from Currency object:
-
-#### Information
-
-```php
-use PostScripton\Money\Currency;
-
-$usd = Currency::code('USD');
-
-$usd->getFullName();    // "United States dollar"
-$usd->getName();        // "dollar"
-$usd->getCode();        // "USD"
-$usd->getNumCode();     // "840"
-$usd->getSymbol();      // "$"
-$usd->getPosition();    // 0 (Currency::POS_START)
-$usd->getDisplay();     // 10 (Currency::DISPLAY_SYMBOL)
-```
-
-`getSymbol()` takes an index as first parameter only if there are more than one symbol for the currency.
-
-```php
-use PostScripton\Money\Currency;
-
-Currency::setCurrencyList(Currency::LIST_ALL);
-
-$currency = Currency::code('EGP');
-
-// ['£', 'ج.م']
-$currency->getSymbol();     // '£'
-$currency->getSymbol(1);    // 'ج.م'
-```
-
----
-
-#### Position
-You may specify the position of the currency on display.
-Use following constants:
-
-```php
-use PostScripton\Money\Currency;
-use PostScripton\Money\Money;
-
-$money = new Money(1234);
-
-$money->settings->getCurrency()->getPosition(); // 0 (Currency::POS_START)
-$money->toString();                             // "$ 123.4"
-
-$money->settings->getCurrency()->setPosition(Currency::POS_END);
-
-$money->settings->getCurrency()->getPosition(); // 1 (Currency::POS_END)
-$money->toString();                             // "123.4 $"
-```
-
----
-
-#### Display
-You may specify the way to display the currency whether it will be as an iso-code or a symbol.
-Use following constants:
-
-```php
-use PostScripton\Money\Currency;
-use PostScripton\Money\Money;
-
-$money = new Money(1234);
-
-$money->settings->getCurrency()->getDisplay();  // 10 (Currency::DISPLAY_SYMBOL)
-$money->toString();                             // "$ 123.4"
-
-$money->settings->getCurrency()->setDisplay(Currency::DISPLAY_CODE);
-
-$money->settings->getCurrency()->getDisplay();  // 11 (Currency::DISPLAY_CODE)
-$money->toString();                             // "USD 123.4"
-
-// If you don't like the look of the code at the beginning
-$money->settings->getCurrency()->setPosition(Currency::POS_END);
-$money->toString();                             // "123.4 USD"
-```
-
----
-
-#### Currency List
-If you wish, you may select another currency list.
-To select currency list by default, go to the `config/money.php` and find there `currency_list`.
-
-All the lists are located at `vendor/postscripton/money/src/List`, so if you want, you can check something up there.
-
-```php
-use PostScripton\Money\Currency;
-
-Currency::setCurrencyList(Currency::LIST_POPULAR);
-Currency::code('USD');
-
-Currency::setCurrencyList(Currency::LIST_ALL);
-Currency::code('EGP');
-```
-Following constants are provided:
-```php
-use PostScripton\Money\Currency;
-
-Currency::LIST_ALL;
-Currency::LIST_POPULAR;
-Currency::LIST_CONFIG; // returns back to list what you've written in the config
-```
-
----
-
-### 💵 Money
-Here we are, prepared and ready to create our own Money objects.
-
-There are separation into static methods and object ones.
-
-Let's start with static:
-
----
-
-#### Available static methods
-
-##### `Money::make()`
-creates a Money object
-
-```php
-use PostScripton\Money\Currency;
-use PostScripton\Money\Money;
-
-// Default currency: USD
-
-Money::make(0);                               // "$ 0"
-Money::make(1230);                            // "$ 123"
-Money::make(1234);                            // "$ 123.4"
-Money::make(12345);                           // "$ 1 234.5"
-
-Money::make(12345, Currency::code('RUB'));    // "1 234.5 ₽"
-```
-
-Method `make()` is a synonym of an object's constructor.
-All the ways to pass parameters have already been discussed at the beginning.
-
----
-
-##### `Money::purify()`
-gives you formatted number from Money object
-
-```php
-use PostScripton\Money\Money;
-
-$money = Money::make(12345);    // "$ 1 234.5"
-Money::purify($money);          // "1 234.5"
-```
-
----
-
-##### `Money::integer()`
-converts Money object back into integer or float according to origin settings
-
-```php
-use PostScripton\Money\Money;
-
-$money = Money::make(12345);    // "$ 1 234.5"
-Money::integer($money);         // 12345
-```
-
----
-
-##### `Money::convert()`
-converts money from one currency to another
-
-```php
-use PostScripton\Money\Currency;
-use PostScripton\Money\Money;
-
-$coeff = 75.32;
-$rub = Money::make(10000, Currency::code('RUB'));                       // "1 000 ₽"
-
-$usd = Money::convertOffline($rub, Currency::code('USD'), 1 / $coeff);  // "$ 13.3"
-$rub = Money::convertOffline($usd, Currency::code('RUB'), $coeff / 1);  // "1 000 ₽"
-```
-
----
-
-##### `Money::correctInput()`
-corrects an `<input type="number" />`'s value to the correct one
-
-```php
-use PostScripton\Money\Money;
-
-// Number of digits after decimal: 2
-
-$input_value = "1234.567890";       // value that comes from <input> tag
-Money::correctInput($input_value);  // "1234.56"
-```
-It simply adjusts a number string to the expected number string with default settings applied
-
----
-
-#### Available object's methods
-
-##### `getNumber()`
-gives you the formatted number
-
-```php
-use PostScripton\Money\Money;
-
-$money = new Money(12345);
-$money->getNumber(); // "1 234.5"
-```
-
----
-
-##### `getPureNumber()`
-gives you pure number for calculating
-
-```php
-use PostScripton\Money\Money;
-
-$money = new Money(132.76686139139672);
-$money->getPureNumber(); // 132.76686139139672
-```
-
----
-
-##### `add()`
-
-adds a number to the money
-
-```php
-use PostScripton\Money\Money;
-
-$money = new Money(1000);   // "$ 100"
-$money->add(500);           // "$ 150"
-```
-
-```php
-use PostScripton\Money\Money;
-use PostScripton\Money\MoneySettings;
-
-$money = new Money(1000);                       // "$ 100"
-$money->add(50.0, MoneySettings::ORIGIN_FLOAT); // "$ 150"
-```
-
-```php
-use PostScripton\Money\Money;
-use PostScripton\Money\Currency;
-
-$m1 = new Money(1000);                          // "$ 100"
-$m2 = new Money(500);                           // "$ 50"
-$m3 = new Money(500, Currency::code('RUB'));    // "50 ₽"
-
-$m1->add($m2);                                  // "$ 150"
-$m1->add($m3);                                  // MoneyHasDifferentCurrenciesException
-```
-
----
-
-##### `subtract()`
-
-subtracts a number from the money
-
-```php
-use PostScripton\Money\Money;
-
-$money = new Money(1500);   // "$ 150"
-$money->subtract(500);      // "$ 100"
-```
-
-```php
-use PostScripton\Money\Money;
-use PostScripton\Money\MoneySettings;
-
-$money = new Money(1500);                               // "$ 150"
-$money->subtract(50.0, MoneySettings::ORIGIN_FLOAT);    // "$ 100"
-```
-
-```php
-use PostScripton\Money\Money;
-use PostScripton\Money\Currency;
-
-$m1 = new Money(1500);                          // "$ 150"
-$m2 = new Money(500);                           // "$ 50"
-$m3 = new Money(500, Currency::code('RUB'));    // "50 ₽"
-
-$m1->subtract($m2);                             // "$ 100"
-$m1->subtract($m3);                             // MoneyHasDifferentCurrenciesException
-```
-
----
-
-##### `rebase()`
-
-a number to which the money will be rebased
-
-```php
-use PostScripton\Money\Money;
-
-$money = new Money(1500);   // "$ 150"
-$money->rebase(100);        // "$ 10"
-```
-
-```php
-use PostScripton\Money\Money;
-use PostScripton\Money\MoneySettings;
-
-$money = new Money(1500);                           // "$ 150"
-$money->rebase(10.0, MoneySettings::ORIGIN_FLOAT);  // "$ 10"
-```
-
-```php
-use PostScripton\Money\Money;
-use PostScripton\Money\Currency;
-
-$m1 = new Money(1000);                          // "$ 100"
-$m2 = new Money(750);                           // "$ 75"
-$m3 = new Money(750, Currency::code('RUB'));    // "75 ₽"
-
-$m1->rebase($m2);                               // "$ 75"
-$m1->rebase($m3);                               // MoneyHasDifferentCurrenciesException
-```
-
----
-
-##### `convertOfflineInto()`
-
-converts Money object into the chosen currency
-
-```php
-use PostScripton\Money\Currency;
-use PostScripton\Money\Money;
-
-$coeff = 75.32;
-$rub = new Money(10000, Currency::code('RUB'));
-
-$usd = $rub->convertOfflineInto(Currency::code('USD'), 1 / $coeff);
-$usd->getPureNumber(); // 132.76686139139672
-// gives you the same object, not cloned but changed
-```
-
----
-
-##### `toInteger()`
-converts the number into integer according to origin settings whether it is integer or float
-
-```php
-use PostScripton\Money\Money;
-use PostScripton\Money\MoneySettings;
-
-$settings = (new MoneySettings())
-    ->setOrigin(MoneySettings::ORIGIN_FLOAT);
-
-$int = new Money(1234.5);
-$float = new Money(1234.5, $settings);
-
-$int->toInteger();      // 12345
-$float->toInteger();    // 12345
-```
-
----
-
-##### `toString()`
-represents Money object as a string. The ways to convert into a string have already been mentioned at the beginning
-
-```php
-use PostScripton\Money\Money;
-
-$money = new Money(1234);
-$money->toString(); // "$ 123.4"
-```
+Laravel-money is an open-source library under the [MIT license](/LICENSE.txt). 

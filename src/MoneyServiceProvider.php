@@ -3,34 +3,34 @@
 namespace PostScripton\Money;
 
 use Illuminate\Support\ServiceProvider;
-use PostScripton\Money\Exceptions\CurrencyDoesNotExistException;
-use PostScripton\Money\Exceptions\ShouldPublishConfigFileException;
+use PostScripton\Money\Exceptions\ServiceClassDoesNotExistException;
+use PostScripton\Money\Exceptions\ServiceDoesNotExistException;
+use PostScripton\Money\Exceptions\ServiceDoesNotHaveClassException;
+use PostScripton\Money\Exceptions\ServiceDoesNotInheritServiceException;
 use PostScripton\Money\Exceptions\UndefinedOriginException;
+use PostScripton\Money\Services\ServiceInterface;
 
 class MoneyServiceProvider extends ServiceProvider
 {
-    public function register()
-    {
-        $this->mergeConfigFrom($this->getConfigPath(), 'money');
-    }
-
     public function boot()
     {
+        $this->mergeConfigFrom($this->getConfigPath(), 'money');
+
+        $this->registerService();
+
         if ($this->app->runningInConsole()) {
             $this->registerPublishing();
         }
 
-        $settings = new MoneySettings();
-
         try {
-            $settings->setDecimals(config('money.decimals', 1))
+            $settings = (new MoneySettings())
+                ->setDecimals(config('money.decimals', 1))
                 ->setThousandsSeparator(config('money.thousands_separator', ' '))
                 ->setDecimalSeparator(config('money.decimal_separator', '.'))
                 ->setEndsWith0(config('money.ends_with_0', false))
                 ->setHasSpaceBetween(config('money.space_between', true))
-                ->setCurrency(Currency::code(Currency::getConfigCurrency()))
                 ->setOrigin(config('money.origin', MoneySettings::ORIGIN_INT));
-        } catch (UndefinedOriginException | CurrencyDoesNotExistException | ShouldPublishConfigFileException $e) {
+        } catch (UndefinedOriginException $e) {
             dd($e->getMessage());
         }
 
@@ -45,6 +45,33 @@ class MoneyServiceProvider extends ServiceProvider
             ],
             'money'
         );
+    }
+
+    protected function registerService()
+    {
+        $this->app->bind(ServiceInterface::class, function () {
+            $config = config('money.services.' . config('money.service'));
+
+            if (is_null($config)) {
+                throw new ServiceDoesNotExistException(config('money.service'));
+            }
+
+            if (!array_key_exists('class', $config = $config ?? [])) {
+                throw new ServiceDoesNotHaveClassException(config('money.service'));
+            }
+
+            $class = $config['class'];
+
+            if (!class_exists($class)) {
+                throw new ServiceClassDoesNotExistException($class);
+            }
+
+            if (!is_subclass_of($class, ServiceInterface::class)) {
+                throw new ServiceDoesNotInheritServiceException($class);
+            }
+
+            return new $class($config);
+        });
     }
 
     private function getConfigPath(): string
