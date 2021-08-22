@@ -1,7 +1,7 @@
 # 💵 Money for Laravel PHP
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/PostScripton/laravel-money)](https://packagist.org/packages/postscripton/laravel-money)
 [![Total Downloads](https://img.shields.io/packagist/dt/postscripton/laravel-money.svg)](https://packagist.org/packages/postscripton/laravel-money)
-[![License](https://img.shields.io/packagist/l/postscripton/laravel-money)](https://packagist.org/packages/postscripton/laravel-money)
+[![License](https://img.shields.io/github/license/PostScripton/laravel-money)](https://packagist.org/packages/postscripton/laravel-money)
 
 ## Introduction
 
@@ -75,7 +75,7 @@ After all, the config file at `config/money.php` should be modified for your own
         - Object manipulations
             - [`floor()`](/docs/04_money/object/floor.md)
             - [`ceil()`](/docs/04_money/object/ceil.md)
-            - [`clone()` (soon)](#)
+            - [`clone()`](/docs/04_money/object/clone.md)
         - Logical operations
             - [`isSameCurrency()`](/docs/04_money/object/isSameCurrency.md)
             - [`isNegative()`](/docs/04_money/object/isNegative.md)
