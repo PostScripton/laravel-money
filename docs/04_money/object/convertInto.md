@@ -15,9 +15,9 @@ RUB -> USD = 1 / 75.79
 ### `convertInto(Currency $currency, [?float $rate = null], [?Carbon $date = null])`
 **Parameters**:
 1. `Currency $currency` - currency you want to convert into.
-2. `[?float $rate = null]` - rate of the money's currency and the chosen one.
+2. `[?float $rate = null]` (*optional*) - rate of the money's currency and the chosen one.
    - If `$rate` is not passed, then currencies will be converted online via API services.
-3. `[?Carbon $date = null]` - historical mode. Pass the date you want to get rate of.
+3. `[?Carbon $date = null]` (*optional*) - historical mode. Pass the date you want to get rate of.
    - Works only if `$rate` is not passed because it works with API.
     
 **Returns**: `Money` - new money instance.
