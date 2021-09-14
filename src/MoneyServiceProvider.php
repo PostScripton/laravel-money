@@ -22,17 +22,13 @@ class MoneyServiceProvider extends ServiceProvider
             $this->registerPublishing();
         }
 
-        try {
-            $settings = (new MoneySettings())
-                ->setDecimals(config('money.decimals', 1))
-                ->setThousandsSeparator(config('money.thousands_separator', ' '))
-                ->setDecimalSeparator(config('money.decimal_separator', '.'))
-                ->setEndsWith0(config('money.ends_with_0', false))
-                ->setHasSpaceBetween(config('money.space_between', true))
-                ->setOrigin(config('money.origin', MoneySettings::ORIGIN_INT));
-        } catch (UndefinedOriginException $e) {
-            dd($e->getMessage());
-        }
+        $settings = (new MoneySettings())
+            ->setDecimals(config('money.decimals', 1))
+            ->setThousandsSeparator(config('money.thousands_separator', ' '))
+            ->setDecimalSeparator(config('money.decimal_separator', '.'))
+            ->setEndsWith0(config('money.ends_with_0', false))
+            ->setHasSpaceBetween(config('money.space_between', true))
+            ->setOrigin(config('money.origin', MoneySettings::ORIGIN_INT));
 
         Money::set($settings);
     }

@@ -36,17 +36,13 @@ class MoneySettings implements MoneySettingsInterface
         $this->money = null;
         $this->origin = MoneySettings::ORIGIN_INT;
 
-        try {
-            $this->setDecimals($decimals ?? Money::getDefaultDecimals())
-                ->setThousandsSeparator($thousands_separator ?? Money::getDefaultThousandsSeparator())
-                ->setDecimalSeparator($decimal_separator ?? Money::getDefaultDecimalSeparator())
-                ->setEndsWith0($ends_with_0 ?? Money::getDefaultEndsWith0())
-                ->setHasSpaceBetween($space_between ?? Money::getDefaultSpaceBetween())
-                ->setCurrency($currency ?? Currency::code(Currency::getConfigCurrency()))
-                ->setOrigin($origin ?? Money::getDefaultOrigin());
-        } catch (CurrencyDoesNotExistException | ShouldPublishConfigFileException | UndefinedOriginException $e) {
-            dd($e->getMessage());
-        }
+        $this->setDecimals($decimals ?? Money::getDefaultDecimals())
+            ->setThousandsSeparator($thousands_separator ?? Money::getDefaultThousandsSeparator())
+            ->setDecimalSeparator($decimal_separator ?? Money::getDefaultDecimalSeparator())
+            ->setEndsWith0($ends_with_0 ?? Money::getDefaultEndsWith0())
+            ->setHasSpaceBetween($space_between ?? Money::getDefaultSpaceBetween())
+            ->setCurrency($currency ?? Currency::code(Currency::getConfigCurrency()))
+            ->setOrigin($origin ?? Money::getDefaultOrigin());
     }
 
     public function bind(Money $money): self
