@@ -18,7 +18,6 @@ class OriginTest extends TestCase
 
         $this->assertEquals('13.3', $money->getAmount());
         $this->assertEquals(132.76686139139672, $money->getPureAmount());
-        $this->assertEquals(132, $money->upload());
     }
 
     /** @test */
@@ -31,7 +30,6 @@ class OriginTest extends TestCase
 
         $this->assertEquals('13.3', $money->getAmount());
         $this->assertEquals(13.276686139139672, $money->getPureAmount());
-        $this->assertEquals(13.2, $money->upload());
     }
 
     /** @test */
@@ -47,7 +45,6 @@ class OriginTest extends TestCase
 
         $this->assertEquals('13.3', $money->getAmount());
         $this->assertEquals(13.276686139139672, $money->getPureAmount());
-        $this->assertEquals(13.2, $money->upload());
     }
 
     /** @test */
@@ -63,6 +60,5 @@ class OriginTest extends TestCase
 
         $this->assertEquals('13.3', $money->getAmount());
         $this->assertEquals(132.76686139139672, $money->getPureAmount());
-        $this->assertEquals(132, $money->upload());
     }
 }

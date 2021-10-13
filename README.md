@@ -39,6 +39,7 @@ After all, the config file at `config/money.php` should be modified for your own
     - [🧰 Creating](/docs/01_usage/creating.md)
     - [🖨️ Output](/docs/01_usage/output.md)
     - [📄 Cloning](/docs/01_usage/cloning.md)
+    - [🎯 Casting](/docs/01_usage/casting.md)
 2. [⚙ Settings](/docs/02_settings/README.md)
     - [Decimals](/docs/02_settings/decimals.md)
     - [Thousands separator](/docs/02_settings/thousands_separator.md)

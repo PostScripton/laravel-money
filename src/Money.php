@@ -288,9 +288,12 @@ class Money implements MoneyInterface
 
     public function upload()
     {
-        return $this->settings()->getOrigin() === MoneySettings::ORIGIN_INT
-            ? (int)floor($this->getPureAmount())
-            : (float)floor($this->getPureAmount() * $this->getDivisor()) / $this->getDivisor();
+        $origin = config('money.origin');
+        $amount = $this->amountIntoOrigin($origin);
+
+        return $origin === MoneySettings::ORIGIN_INT
+            ? (int)floor($amount)
+            : (float)floor($amount * $this->getDivisor()) / $this->getDivisor();
     }
 
     public function toString(): string

@@ -7,7 +7,6 @@ use PostScripton\Money\Exceptions\ServiceClassDoesNotExistException;
 use PostScripton\Money\Exceptions\ServiceDoesNotExistException;
 use PostScripton\Money\Exceptions\ServiceDoesNotHaveClassException;
 use PostScripton\Money\Exceptions\ServiceDoesNotInheritServiceException;
-use PostScripton\Money\Exceptions\UndefinedOriginException;
 use PostScripton\Money\Services\ServiceInterface;
 
 class MoneyServiceProvider extends ServiceProvider
