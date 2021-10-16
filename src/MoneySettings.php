@@ -2,8 +2,6 @@
 
 namespace PostScripton\Money;
 
-use PostScripton\Money\Exceptions\CurrencyDoesNotExistException;
-use PostScripton\Money\Exceptions\ShouldPublishConfigFileException;
 use PostScripton\Money\Exceptions\UndefinedOriginException;
 use PostScripton\Money\PHPDocs\MoneySettingsInterface;
 

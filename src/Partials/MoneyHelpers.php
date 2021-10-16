@@ -15,6 +15,20 @@ trait MoneyHelpers
         return 10 ** $this->settings()->getDecimals();
     }
 
+    private function amountIntoOrigin(int $origin)
+    {
+        $amount = $this->getPureAmount();
+
+        // If origins are not the same
+        if ($this->settings()->getOrigin() !== $origin) {
+            $amount = $this->settings()->getOrigin() === MoneySettings::ORIGIN_INT
+                ? $amount / $this->getDivisor()
+                : $amount * $this->getDivisor();
+        }
+
+        return $amount;
+    }
+
     private function numberIntoCorrectOrigin($money, int $origin = MoneySettings::ORIGIN_INT, ?string $method = null)
     {
         list($money, $origin) = $this->numberOrMoney($money, $origin, $method ?? __METHOD__);
@@ -22,7 +36,7 @@ trait MoneyHelpers
         // If origins are not the same
         if ($this->settings()->getOrigin() !== $origin) {
             return $this->settings()->getOrigin() === MoneySettings::ORIGIN_INT
-                ? floor($money * $this->getDivisor()) // $origin is float
+                ? $money * $this->getDivisor()  // $origin is float
                 : $money / $this->getDivisor(); // $origin is int
         }
 
