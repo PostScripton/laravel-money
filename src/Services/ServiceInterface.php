@@ -17,10 +17,14 @@ interface ServiceInterface
 
     /**
      * Whether the service supports currencies or not
-     * @param string $iso
-     * @return bool
+     * @param string|string[] $isos <p>
+     * ISO-codes: "USD", "RUB", etc.
+     * </p>
+     * @return array <p>
+     * NOT supported currencies
+     * </p>
      */
-    public function supports(string $iso): bool;
+    public function supports($isos): array;
 
     /**
      * Gives a full service class name with namespace

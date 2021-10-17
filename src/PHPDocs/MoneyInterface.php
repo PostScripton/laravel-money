@@ -6,7 +6,6 @@ use Carbon\Carbon;
 use PostScripton\Money\Currency;
 use PostScripton\Money\Money;
 use PostScripton\Money\MoneySettings;
-use PostScripton\Money\Services\ServiceInterface;
 
 interface MoneyInterface
 {
@@ -238,9 +237,8 @@ interface MoneyInterface
 
     /**
      * Allows you to get access to the selected service from the config file
-     * @return ServiceInterface
      */
-    public function service(): ServiceInterface;
+    public function service();
 
     /**
      * Converts the money into the number according to origin for storing in database <p>

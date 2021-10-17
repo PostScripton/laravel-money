@@ -68,14 +68,20 @@ abstract class AbstractService implements ServiceInterface
             $this->latestData($data, $this->result($from, $from));
     }
 
-    public function supports(string $iso): bool
+    public function supports($isos): array
     {
         $response = $this->client->get($this->supportedUri());
         $data = json_decode($response->getBody()->getContents(), true);
 
         $this->validateResponse($data);
 
-        return in_array($iso, array_keys($this->supportedData($data, $this->currencies)));
+        $not_supported = [];
+        foreach ((array)$isos as $iso) {
+            if (!in_array($iso, array_keys($this->supportedData($data, $this->currencies)))) {
+                $not_supported[] = $iso;
+            }
+        }
+        return $not_supported;
     }
 
     public function boot(): void

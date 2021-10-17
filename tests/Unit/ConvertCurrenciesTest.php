@@ -1,10 +1,9 @@
 <?php
 
-namespace PostScripton\Money\Tests\Feature;
+namespace PostScripton\Money\Tests\Unit;
 
 use Illuminate\Support\Facades\Config;
 use PostScripton\Money\Currency;
-use PostScripton\Money\Exceptions\ServiceDoesNotSupportCurrencyException;
 use PostScripton\Money\Tests\TestCase;
 
 class ConvertCurrenciesTest extends TestCase
@@ -27,27 +26,6 @@ class ConvertCurrenciesTest extends TestCase
         $this->assertFalse($rub->equals($back_rub));
         $this->assertTrue($rub->isSameCurrency($back_rub));
         $this->assertEquals($rub->getPureAmount(), $back_rub->getPureAmount());
-    }
-
-    /** @test */
-    public function theGivenCurrencyIsNotSupportedForConvertingByAService()
-    {
-        Config::set('money.custom_currencies', [
-            [
-                'full_name' => 'QWERTY',
-                'name' => 'QWERTY',
-                'iso_code' => 'QWERTY',
-                'num_code' => '1234',
-                'symbol' => 'QWERTY',
-                'position' => Currency::POSITION_START,
-            ],
-        ]);
-        Currency::setCurrencyList(Currency::currentList());
-
-        $this->expectException(ServiceDoesNotSupportCurrencyException::class);
-
-        $money = money(1000);
-        $money->convertInto(currency('1234'));
     }
 
     protected function setUp(): void
