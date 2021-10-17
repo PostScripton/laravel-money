@@ -260,8 +260,9 @@ class Money implements MoneyInterface
     {
         // Convert online
         if (is_null($rate)) {
-            if (!$this->service()->supports($currency->getCode())) {
-                throw new ServiceDoesNotSupportCurrencyException($this->service()->getClassName());
+            $not_supported = $this->service()->supports([$currency->getCode(), $this->getCurrency()->getCode()]);
+            if (!empty($not_supported)) {
+                throw new ServiceDoesNotSupportCurrencyException($not_supported, $this->service()->getClassName());
             }
 
             $rate = $this->service()->rate($this->getCurrency()->getCode(), $currency->getCode(), $date);
@@ -301,7 +302,7 @@ class Money implements MoneyInterface
         return self::bindMoneyWithCurrency($this, $this->settings()->getCurrency());
     }
 
-    public function service(): ServiceInterface
+    public function service()
     {
         return app(ServiceInterface::class);
     }
