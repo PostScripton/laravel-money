@@ -41,6 +41,7 @@ After all, the config file at `config/money.php` should be modified for your own
     - [🖨️ Output](/docs/01_usage/output.md)
     - [📄 Cloning](/docs/01_usage/cloning.md)
     - [🎯 Casting](/docs/01_usage/casting.md)
+    - [🚨 Validation rule](/docs/01_usage/validation_rule.md)
 4. [⚙ Settings](/docs/02_settings/README.md)
     - [Decimals](/docs/02_settings/decimals.md)
     - [Thousands separator](/docs/02_settings/thousands_separator.md)
