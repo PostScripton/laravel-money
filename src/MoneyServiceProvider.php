@@ -2,11 +2,13 @@
 
 namespace PostScripton\Money;
 
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
 use PostScripton\Money\Exceptions\ServiceClassDoesNotExistException;
 use PostScripton\Money\Exceptions\ServiceDoesNotExistException;
 use PostScripton\Money\Exceptions\ServiceDoesNotHaveClassException;
 use PostScripton\Money\Exceptions\ServiceDoesNotInheritServiceException;
+use PostScripton\Money\Rules\Money as MoneyRule;
 use PostScripton\Money\Services\ServiceInterface;
 
 class MoneyServiceProvider extends ServiceProvider
@@ -30,6 +32,8 @@ class MoneyServiceProvider extends ServiceProvider
             ->setOrigin(config('money.origin', MoneySettings::ORIGIN_INT));
 
         Money::set($settings);
+
+        Validator::extend(MoneyRule::RULE_NAME, (MoneyRule::class . '@passes'), app(MoneyRule::class)->message());
     }
 
     protected function registerPublishing()
