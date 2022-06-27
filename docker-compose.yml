@@ -1,0 +1,19 @@
+version: '3.2'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./config:/src/config
+      - ./src:/src/src
+      - ./tests:/src/tests
+      - ./composer.json:/src/composer.json
+      - ./phpunit.xml:/src/phpunit.xml
+      - ./ruleset.xml:/src/ruleset.xml
+      - composer-data:/tmp/composer:cached
+    tty: true
+
+volumes:
+  composer-data:
