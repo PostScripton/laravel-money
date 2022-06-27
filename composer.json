@@ -12,13 +12,13 @@
 	],
 	"require": {
 		"php": "^7.4|^8.0",
-		"guzzlehttp/guzzle": "^7.0",
-		"ext-json": "*"
-	},
+        "ext-json": "*",
+        "guzzlehttp/guzzle": "^7.0"
+    },
 	"require-dev": {
 		"orchestra/testbench": "^6.15",
-		"squizlabs/php_codesniffer": "3.6",
-		"slevomat/coding-standard": "7.0"
+		"squizlabs/php_codesniffer": "^3.6",
+		"slevomat/coding-standard": "^7.0"
 	},
 	"autoload": {
 		"files": [
@@ -65,5 +65,10 @@
 			"phpcbf --standard=PSR12 --encoding=utf-8 -p src -p tests -p config",
 			"phpcbf --standard=ruleset.xml --extensions=php --tab-width=4 -sp src tests config"
 		]
+	},
+	"config": {
+		"allow-plugins": {
+			"dealerdirect/phpcodesniffer-composer-installer": true
+		}
 	}
 }
