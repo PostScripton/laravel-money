@@ -3,25 +3,28 @@
 namespace PostScripton\Money;
 
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\ServiceProvider;
 use PostScripton\Money\Exceptions\ServiceClassDoesNotExistException;
 use PostScripton\Money\Exceptions\ServiceDoesNotExistException;
 use PostScripton\Money\Exceptions\ServiceDoesNotHaveClassException;
 use PostScripton\Money\Exceptions\ServiceDoesNotInheritServiceException;
 use PostScripton\Money\Rules\Money as MoneyRule;
 use PostScripton\Money\Services\ServiceInterface;
+use Spatie\LaravelPackageTools\Package;
+use Spatie\LaravelPackageTools\PackageServiceProvider;
 
-class MoneyServiceProvider extends ServiceProvider
+class MoneyServiceProvider extends PackageServiceProvider
 {
-    public function boot()
+    public const PACKAGE_NAME = 'laravel-money';
+
+    public function configurePackage(Package $package): void
     {
-        $this->mergeConfigFrom($this->getConfigPath(), 'money');
+        $package->name(self::PACKAGE_NAME)
+            ->hasConfigFile();
+    }
 
+    public function packageBooted(): void
+    {
         $this->registerService();
-
-        if ($this->app->runningInConsole()) {
-            $this->registerPublishing();
-        }
 
         $settings = (new MoneySettings())
             ->setDecimals(config('money.decimals', 1))
@@ -34,16 +37,6 @@ class MoneyServiceProvider extends ServiceProvider
         Money::set($settings);
 
         Validator::extend(MoneyRule::RULE_NAME, (MoneyRule::class . '@passes'), app(MoneyRule::class)->message());
-    }
-
-    protected function registerPublishing()
-    {
-        $this->publishes(
-            [
-                $this->getConfigPath() => config_path('money.php'),
-            ],
-            'money'
-        );
     }
 
     protected function registerService()
@@ -71,10 +64,5 @@ class MoneyServiceProvider extends ServiceProvider
 
             return new $class($config);
         });
-    }
-
-    private function getConfigPath(): string
-    {
-        return __DIR__ . '/../config/money.php';
     }
 }
