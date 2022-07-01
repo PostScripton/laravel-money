@@ -1,75 +1,75 @@
 {
-	"name": "postscripton/laravel-money",
-	"description": "A convenient way to convert numbers from DB or inputs into money strings for humans",
-	"version": "3.1.0",
-	"type": "library",
-	"license": "MIT",
-	"authors": [
-		{
-			"name": "PostScripton",
-			"email": "postscripton.sp@gmail.com"
-		}
-	],
-	"require": {
-		"php": "^7.4|^8.0",
+    "name": "postscripton/laravel-money",
+    "description": "A convenient way to convert numbers from DB or inputs into money strings for humans",
+    "version": "3.1.0",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "PostScripton",
+            "email": "postscripton.sp@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^7.4|^8.0",
         "ext-json": "*",
         "guzzlehttp/guzzle": "^7.0",
-		"spatie/laravel-package-tools": "^1.12"
+        "spatie/laravel-package-tools": "^1.12"
     },
-	"require-dev": {
-		"orchestra/testbench": "^6.15",
-		"squizlabs/php_codesniffer": "^3.6",
-		"slevomat/coding-standard": "^7.0"
-	},
-	"autoload": {
-		"files": [
-			"src/helpers.php"
-		],
-		"psr-4": {
-			"PostScripton\\Money\\": "src/"
-		}
-	},
-	"autoload-dev": {
-		"psr-4": {
-			"PostScripton\\Money\\Tests\\": "tests/"
-		}
-	},
-	"extra": {
-		"laravel": {
-			"providers": [
-				"PostScripton\\Money\\MoneyServiceProvider"
-			]
-		}
-	},
-	"scripts": {
-		"app:check-build": [
-			"@app:cs",
-			"@app:test"
-		],
-		"app:cs": [
-			"@app:cs-slevomat-coding-standard-rules",
-			"@app:cs-folders"
-		],
-		"app:cs-folders": [
-			"phpcs --standard=PSR12 --encoding=utf-8 -p src -p tests -p config"
-		],
-		"app:cs-slevomat-coding-standard-rules": [
-			"phpcs --standard=ruleset.xml --extensions=php --tab-width=4 -sp src tests config"
-		],
-		"app:test": [
-			"phpunit"
-		],
-		"app:test-fast": [
-			"phpunit --no-coverage"
-		],
-		"app:cs-fix": [
-			"phpcbf --standard=PSR12 --encoding=utf-8 -p src -p tests -p config",
-			"phpcbf --standard=ruleset.xml --extensions=php --tab-width=4 -sp src tests config"
-		]
-	},
-	"config": {
-		"allow-plugins": {
-			"dealerdirect/phpcodesniffer-composer-installer": true
-		}
-	}
+    "require-dev": {
+        "orchestra/testbench": "^6.15",
+        "squizlabs/php_codesniffer": "^3.6",
+        "slevomat/coding-standard": "^7.0"
+    },
+    "autoload": {
+        "files": [
+            "src/helpers.php"
+        ],
+        "psr-4": {
+            "PostScripton\\Money\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "PostScripton\\Money\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "PostScripton\\Money\\MoneyServiceProvider"
+            ]
+        }
+    },
+    "scripts": {
+        "app:check-build": [
+            "@app:cs",
+            "@app:test"
+        ],
+        "app:cs": [
+            "@app:cs-slevomat-coding-standard-rules",
+            "@app:cs-folders"
+        ],
+        "app:cs-slevomat-coding-standard-rules": [
+            "phpcs --standard=ruleset.xml --extensions=php --tab-width=4 -sp src tests config"
+        ],
+        "app:cs-folders": [
+            "phpcs --standard=PSR12 --encoding=utf-8 -p src -p tests -p config"
+        ],
+        "app:test": [
+            "phpunit"
+        ],
+        "app:test-fast": [
+            "phpunit --no-coverage"
+        ],
+        "app:cs-fix": [
+            "phpcbf --standard=ruleset.xml --extensions=php --tab-width=4 -sp src tests config",
+            "phpcbf --standard=PSR12 --encoding=utf-8 -p src -p tests -p config"
+        ]
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
+    }
 }
