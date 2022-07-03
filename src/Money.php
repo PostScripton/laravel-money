@@ -127,7 +127,7 @@ class Money implements MoneyInterface
         return $this;
     }
 
-    public function multiple(float $number): self
+    public function multiply(float $number): self
     {
         $this->amount = $this->getPureAmount() * $number;
         return $this;

@@ -80,13 +80,13 @@ interface MoneyInterface
     public function subtract($money, int $origin = MoneySettings::ORIGIN_INT): Money;
 
     /**
-     * Multiples an amount from the money. It's like <p>
+     * Multiplies an amount from the money. It's like <p>
      * `$100 * 2 = $200` </p>
      * @param float $number <p>
      * A number on which the money will be multiplied </p>
      * @return Money
      */
-    public function multiple(float $number): Money;
+    public function multiply(float $number): Money;
 
     /**
      * Divides an amount from the money. It's like <p>
