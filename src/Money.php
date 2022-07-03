@@ -42,28 +42,13 @@ class Money implements MoneyInterface
             $settings = $currency;
         }
 
-        if ($settings->bound()) {
-            $settings = clone $settings;
-        }
         $this->bind($settings);
     }
 
     public function bind(MoneySettings $settings): self
     {
-        if (!is_null($this->settings)) {
-            $this->settings()->unbind();
-        }
-
         $this->settings = $settings;
-        $this->settings()->bind($this);
-        return $this;
-    }
 
-    public function unbind(): self
-    {
-        // Can't exist without Settings
-        $this->settings = clone $this->settings;
-        $this->settings()->bind($this);
         return $this;
     }
 
@@ -219,9 +204,8 @@ class Money implements MoneyInterface
         }
 
         $new_amount = $this->amount * $rate;
-        $settings = clone $this->settings;
 
-        return money($new_amount, $currency, $settings);
+        return money($new_amount, $currency, clone $this->settings());
     }
 
     public function difference(self $money, ?MoneySettings $settings = null): string
