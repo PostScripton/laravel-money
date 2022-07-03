@@ -1,10 +1,10 @@
-# `multiple()`
+# `multiply()`
 
-multiples an amount from the money.
+multiplies an amount from the money.
 
 ## Methods
 
-### `multiple(float $number)`
+### `multiply(float $number)`
 **Parameters**:
 1. `float $number` - a number on which the money will be multiplied.
 
@@ -14,7 +14,7 @@ multiples an amount from the money.
 
 ```php
 $money = money(1000);   // "$ 100"
-$money->multiple(1.5);  // "$ 150"
+$money->multiply(1.5);  // "$ 150"
 ```
 
 ---

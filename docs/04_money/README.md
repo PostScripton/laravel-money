@@ -17,7 +17,7 @@ There are *static* methods as well as *object* ones.
     - Calculations
         - [`add()`](/docs/04_money/object/add.md)
         - [`subtract()`](/docs/04_money/object/subtract.md)
-        - [`multiple()`](/docs/04_money/object/multiple.md)
+        - [`multiply()`](/docs/04_money/object/multiply.md)
         - [`divide()`](/docs/04_money/object/divide.md)
         - [`rebase()`](/docs/04_money/object/rebase.md)
     - Object manipulations
