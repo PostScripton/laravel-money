@@ -262,7 +262,7 @@ class ManipulatingMoneyNumberTest extends TestCase
     public function moneyCanBeMultipliedByANumber()
     {
         $money = new Money(500);
-        $money->multiple(1.5);
+        $money->multiply(1.5);
 
         $this->assertEquals(750, $money->getPureAmount());
         $this->assertEquals('$ 75', $money->toString());

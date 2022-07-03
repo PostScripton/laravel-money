@@ -124,7 +124,7 @@ class MoneyTest extends TestCase
             // $m2 is 1500 as long as $m1 but $m2 is independent now
             ->clone()
             // $m2 is 3000 whereas $m1 is still 1500
-            ->multiple(2);
+            ->multiply(2);
 
         $this->assertEquals(1500, $m1->getPureAmount());
         $this->assertEquals(3000, $m2->getPureAmount());

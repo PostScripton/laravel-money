@@ -18,7 +18,7 @@ $johnReward = $bobReward
     // John's reward is 1500 as long as Bob's one but John's reward is independent now
     ->clone()
     // Multiplies John's reward by 2 without affecting Bob's reward at all
-    ->multiple(2);
+    ->multiply(2);
 
 $bobReward->getPureAmount();    // 1500
 $johnReward->getPureAmount();   // 3000
@@ -33,7 +33,7 @@ $johnReward = $bobReward
     // Add for both John and Bob because John refers to Bob's object
     ->add(500)
     // Multiplies both John and Bob because John refers to Bob's object
-    ->multiple(2);
+    ->multiply(2);
 
 $bobReward->getPureAmount();    // 3000
 $johnReward->getPureAmount();   // 3000
