@@ -7,12 +7,7 @@ To set setting:
 $money = money('12345000', settings());
 
 // Method #2
-$money = money('12345000');
-$settings = settings(); // customize it as you want
-$money->bind($settings);
-
-// Method #3
-$money = money('12345000'); // Every Money object has settings by default even if it is not provided
+$money = money('12345000'); // Every monetary object has settings by default even if it is not provided
 ```
 
 To get settings:
