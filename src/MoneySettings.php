@@ -16,8 +16,6 @@ class MoneySettings implements MoneySettingsInterface
     private bool $space_between;
     private Currency $currency;
 
-    private ?Money $money;
-
     public function __construct(
         int $decimals = null,
         string $thousands_separator = null,
@@ -26,32 +24,12 @@ class MoneySettings implements MoneySettingsInterface
         bool $space_between = null,
         Currency $currency = null,
     ) {
-        $this->money = null;
-
         $this->setDecimals($decimals ?? Money::getDefaultDecimals())
             ->setThousandsSeparator($thousands_separator ?? Money::getDefaultThousandsSeparator())
             ->setDecimalSeparator($decimal_separator ?? Money::getDefaultDecimalSeparator())
             ->setEndsWith0($ends_with_0 ?? Money::getDefaultEndsWith0())
             ->setHasSpaceBetween($space_between ?? Money::getDefaultSpaceBetween())
             ->setCurrency($currency ?? Currency::code(Currency::getConfigCurrency()));
-    }
-
-    public function bind(Money $money): self
-    {
-        $this->money = $money;
-        return $this;
-    }
-
-    public function unbind(): self
-    {
-        $this->money->unbind();
-        $this->money = null;
-        return $this;
-    }
-
-    public function bound(): bool
-    {
-        return !is_null($this->money);
     }
 
     // ========== SETTERS ==========
