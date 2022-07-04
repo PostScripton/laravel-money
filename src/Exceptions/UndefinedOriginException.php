@@ -4,6 +4,7 @@ namespace PostScripton\Money\Exceptions;
 
 use PostScripton\Money\MoneySettings;
 
+/** @deprecated Will be removed in the next update when origin is completely removed */
 class UndefinedOriginException extends ValueErrorException
 {
     public function __construct(

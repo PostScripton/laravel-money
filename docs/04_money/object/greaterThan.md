@@ -1,39 +1,16 @@
 # `greaterThan()`
 
-сompares with an amount, or a money object whether it is greater than the number, or the money object.
+is the current monetary object greater than the given one?
 
 ## Methods
 
-### `greaterThan($money, [int $origin = MoneySettings::ORIGIN_INT])`
+### `greaterThan(Money $money)`
 **Parameters**:
-1. `$money` - an amount or a money object.
-2. `[int $origin = MoneySettings::ORIGIN_INT]` (*optional*) - one of the [constants](/docs/02_settings/origin.md#constants).
+1. `Money $money` - Money being compared.
 
 **Returns**: `bool`
 
 ## Usage
-
-### Greater than int amount
-
-```php
-$money = money(1000);
-
-$money->greaterThan(500);   // true
-$money->greaterThan(1000);  // false
-```
-
-### Greater than float amount
-
-```php
-use PostScripton\Money\MoneySettings;
-
-$money = money(1000);
-
-$money->greaterThan(50.0, MoneySettings::ORIGIN_FLOAT);     // true
-$money->greaterThan(100.0, MoneySettings::ORIGIN_FLOAT);    // false
-```
-
-### Greater than money object
 
 ```php
 $m1 = money(1000);
