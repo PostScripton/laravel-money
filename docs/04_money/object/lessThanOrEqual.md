@@ -1,41 +1,16 @@
 # `lessThanOrEqual()`
 
-сompares with an amount, or a money object whether it is less than or equals to the number, or the money object.
+is the current monetary object less than or equal to the given one?
 
 ## Methods
 
-### `lessThanOrEqual($money, [int $origin = MoneySettings::ORIGIN_INT])`
+### `lessThanOrEqual(Money $money)`
 **Parameters**:
-1. `$money` - an amount or a money object.
-2. `[int $origin = MoneySettings::ORIGIN_INT]` (*optional*) - one of the [constants](/docs/02_settings/origin.md#constants).
+1. `Money $money` - Money being compared.
 
 **Returns**: `bool`
 
 ## Usage
-
-### Less than or equal to int amount
-
-```php
-$money = money(500);
-
-$money->lessThanOrEqual(1000); // true
-$money->lessThanOrEqual(500);  // true
-$money->lessThanOrEqual(100);  // false
-```
-
-### Less than or equal to float amount
-
-```php
-use PostScripton\Money\MoneySettings;
-
-$money = money(500);
-
-$money->lessThanOrEqual(100.0, MoneySettings::ORIGIN_FLOAT); // true
-$money->lessThanOrEqual(50.0, MoneySettings::ORIGIN_FLOAT);  // true
-$money->lessThanOrEqual(10.0, MoneySettings::ORIGIN_FLOAT);  // false
-```
-
-### Less than or equal to money object
 
 ```php
 $m1 = money(500);

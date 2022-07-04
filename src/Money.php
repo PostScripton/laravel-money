@@ -3,8 +3,6 @@
 namespace PostScripton\Money;
 
 use Carbon\Carbon;
-use PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException;
-use PostScripton\Money\Exceptions\NotNumericOrMoneyException;
 use PostScripton\Money\Exceptions\ServiceDoesNotSupportCurrencyException;
 use PostScripton\Money\Partials\MoneyHelpers;
 use PostScripton\Money\Partials\MoneyStatic;
@@ -115,15 +113,15 @@ class Money implements MoneyInterface
         return $this->settings()->getCurrency();
     }
 
-    public function add($money, int $origin = MoneySettings::ORIGIN_INT): self
+    public function add(Money $money): self
     {
-        $this->amount += $this->numberIntoCorrectOrigin($money, $origin, __METHOD__);
+        $this->amount += $this->numberIntoCorrectOrigin($money, __METHOD__);
         return $this;
     }
 
-    public function subtract($money, int $origin = MoneySettings::ORIGIN_INT): self
+    public function subtract(Money $money): self
     {
-        $this->amount -= $this->numberIntoCorrectOrigin($money, $origin, __METHOD__);
+        $this->amount -= $this->numberIntoCorrectOrigin($money, __METHOD__);
         return $this;
     }
 
@@ -139,9 +137,9 @@ class Money implements MoneyInterface
         return $this;
     }
 
-    public function rebase($money, int $origin = MoneySettings::ORIGIN_INT): self
+    public function rebase(Money $money): self
     {
-        $this->amount = $this->numberIntoCorrectOrigin($money, $origin, __METHOD__);
+        $this->amount = $this->numberIntoCorrectOrigin($money, __METHOD__);
         return $this;
     }
 
@@ -183,75 +181,27 @@ class Money implements MoneyInterface
         return empty($this->getPureAmount());
     }
 
-    public function lessThan($money, int $origin = MoneySettings::ORIGIN_INT): bool
+    public function lessThan(Money $money): bool
     {
-        if (!is_numeric($money) && !$money instanceof self) {
-            throw new NotNumericOrMoneyException(__METHOD__, 1, '$money');
-        }
-
-        if (is_numeric($money)) {
-            $money = $this->numberIntoCorrectOrigin($money, $origin);
-        }
-
-        if ($money instanceof self) {
-            $money = $money->getPureAmount();
-        }
-
-        return $this->getPureAmount() < $money;
+        return $this->getPureAmount() < $money->getPureAmount();
     }
 
-    public function lessThanOrEqual($money, int $origin = MoneySettings::ORIGIN_INT): bool
+    public function lessThanOrEqual(Money $money): bool
     {
-        if (!is_numeric($money) && !$money instanceof self) {
-            throw new NotNumericOrMoneyException(__METHOD__, 1, '$money');
-        }
-
-        if (is_numeric($money)) {
-            $money = $this->numberIntoCorrectOrigin($money, $origin);
-        }
-
-        if ($money instanceof self) {
-            $money = $money->getPureAmount();
-        }
-
-        return $this->getPureAmount() <= $money;
+        return $this->getPureAmount() <= $money->getPureAmount();
     }
 
-    public function greaterThan($money, int $origin = MoneySettings::ORIGIN_INT): bool
+    public function greaterThan(Money $money): bool
     {
-        if (!is_numeric($money) && !$money instanceof self) {
-            throw new NotNumericOrMoneyException(__METHOD__, 1, '$money');
-        }
-
-        if (is_numeric($money)) {
-            $money = $this->numberIntoCorrectOrigin($money, $origin);
-        }
-
-        if ($money instanceof self) {
-            $money = $money->getPureAmount();
-        }
-
-        return $this->getPureAmount() > $money;
+        return $this->getPureAmount() > $money->getPureAmount();
     }
 
-    public function greaterThanOrEqual($money, int $origin = MoneySettings::ORIGIN_INT): bool
+    public function greaterThanOrEqual(Money $money): bool
     {
-        if (!is_numeric($money) && !$money instanceof self) {
-            throw new NotNumericOrMoneyException(__METHOD__, 1, '$money');
-        }
-
-        if (is_numeric($money)) {
-            $money = $this->numberIntoCorrectOrigin($money, $origin);
-        }
-
-        if ($money instanceof self) {
-            $money = $money->getPureAmount();
-        }
-
-        return $this->getPureAmount() >= $money;
+        return $this->getPureAmount() >= $money->getPureAmount();
     }
 
-    public function equals(self $money, bool $strict = true): bool
+    public function equals(Money $money, bool $strict = true): bool
     {
         return $strict ? $this === $money : $this == $money;
     }
@@ -274,13 +224,9 @@ class Money implements MoneyInterface
         return money($new_amount, $currency, $settings);
     }
 
-    public function difference(self $money, ?MoneySettings $settings = null): string
+    public function difference(Money $money, ?MoneySettings $settings = null): string
     {
-        if (!$this->isSameCurrency($money)) {
-            throw new MoneyHasDifferentCurrenciesException(__METHOD__, 1, '$money');
-        }
-
-        $money_amount = $this->numberIntoCorrectOrigin($money, $money->settings()->getOrigin(), __METHOD__);
+        $money_amount = $this->numberIntoCorrectOrigin($money, __METHOD__);
         $amount = $this->getPureAmount() - $money_amount;
         $settings = is_null($settings) ? clone $this->settings() : $settings;
 

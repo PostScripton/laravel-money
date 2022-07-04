@@ -3,8 +3,6 @@
 namespace PostScripton\Money\Partials;
 
 use PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException;
-use PostScripton\Money\Exceptions\NotNumericOrMoneyException;
-use PostScripton\Money\Exceptions\UndefinedOriginException;
 use PostScripton\Money\Money;
 use PostScripton\Money\MoneySettings;
 
@@ -29,40 +27,25 @@ trait MoneyHelpers
         return $amount;
     }
 
-    private function numberIntoCorrectOrigin($money, int $origin = MoneySettings::ORIGIN_INT, ?string $method = null)
+    private function numberIntoCorrectOrigin(Money $money, ?string $method = null): float
     {
-        list($money, $origin) = $this->numberOrMoney($money, $origin, $method ?? __METHOD__);
+        $this->validateMoney($money, $method);
 
         // If origins are not the same
-        if ($this->settings()->getOrigin() !== $origin) {
+        if ($this->settings()->getOrigin() !== $money->settings()->getOrigin()) {
             return $this->settings()->getOrigin() === MoneySettings::ORIGIN_INT
-                ? $money * $this->getDivisor()  // $origin is float
-                : $money / $this->getDivisor(); // $origin is int
+                ? $money->getPureAmount() * $this->getDivisor()  // $origin is float
+                : $money->getPureAmount() / $this->getDivisor(); // $origin is int
         }
 
-        return $money;
+        return $money->getPureAmount();
     }
 
-    private function numberOrMoney($money, int $origin, string $method): array
+    private function validateMoney(Money $money, string $method): void
     {
-        if (!is_numeric($money) && !$money instanceof self) {
-            throw new NotNumericOrMoneyException(__METHOD__, 1, '$money');
+        if (!$this->isSameCurrency($money)) {
+            // In the future it will be converted automatically with no exceptions
+            throw new MoneyHasDifferentCurrenciesException($method, 1, '$money');
         }
-
-        if ($money instanceof Money) {
-            if (!$this->isSameCurrency($money)) {
-                // In the future it will be converted automatically with no exceptions
-                throw new MoneyHasDifferentCurrenciesException($method, 1, '$money');
-            }
-
-            $origin = $money->settings()->getOrigin();
-            $money = $money->getPureAmount();
-        }
-
-        if (MoneySettings::isIncorrectOrigin($origin)) {
-            throw new UndefinedOriginException($method, 2, '$origin');
-        }
-
-        return [$money, $origin];
     }
 }
