@@ -1,41 +1,16 @@
 # `greaterThanOrEqual()`
 
-сompares with an amount, or a money object whether it is greater than or equals to the number, or the money object.
+is the current monetary object greater than or equal to the given one?
 
 ## Methods
 
-### `greaterThanOrEqual($money, [int $origin = MoneySettings::ORIGIN_INT])`
+### `greaterThanOrEqual(Money $money)`
 **Parameters**:
-1. `$money` - an amount or a money object.
-2. `[int $origin = MoneySettings::ORIGIN_INT]` (*optional*) - one of the [constants](/docs/02_settings/origin.md#constants).
+1. `Money $money` - Money being compared.
 
 **Returns**: `bool`
 
 ## Usage
-
-### Greater than or equal to int amount
-
-```php
-$money = money(1000);
-
-$money->greaterThanOrEqual(500);   // true
-$money->greaterThanOrEqual(1000);  // true
-$money->greaterThanOrEqual(5000);  // false
-```
-
-### Greater than or equal to float amount
-
-```php
-use PostScripton\Money\MoneySettings;
-
-$money = money(1000);
-
-$money->greaterThanOrEqual(50.0, MoneySettings::ORIGIN_FLOAT);     // true
-$money->greaterThanOrEqual(100.0, MoneySettings::ORIGIN_FLOAT);    // true
-$money->greaterThanOrEqual(500.0, MoneySettings::ORIGIN_FLOAT);    // false
-```
-
-### Greater than or equal to money object
 
 ```php
 $m1 = money(1000);

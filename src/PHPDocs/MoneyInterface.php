@@ -12,6 +12,22 @@ interface MoneyInterface
     // ========== STATIC ========== //
 
     /**
+     * Creates a Money object
+     * @param float $amount
+     * @param null $currency
+     * @param null $settings
+     * @return self
+     */
+    public static function make(float $amount, $currency = null, $settings = null): self;
+
+    /**
+     * Parses the string and turns it into a money instance
+     * @param string $money
+     * @return self
+     */
+    public static function parse(string $money): self;
+
+    /**
      * Binds the money object with settings
      * @param MoneySettings $settings
      * @return Money
@@ -54,30 +70,22 @@ interface MoneyInterface
     /**
      * Adds an amount to the money. It's like <p>
      * `$100 + $50 = $150` </p>
-     * @param int|float|Money $money <p>
-     * An amount or Money that will be added </p>
-     * @param int $origin <p>
-     * Origin of the number whether it is integer of float </p> <p>
-     * Use `Money::ORIGIN_*` to ensure it's correct </p>
+     * @param Money $money <p>
+     * Money that will be added </p>
      * @throws \PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException
-     * @throws \PostScripton\Money\Exceptions\NotNumericOrMoneyException
      * @return Money
      */
-    public function add($money, int $origin = MoneySettings::ORIGIN_INT): Money;
+    public function add(Money $money): self;
 
     /**
      * Subtracts an amount from the money. It's like <p>
      * `$150 - $50 = $100` </p>
-     * @param int|float|Money $money <p>
-     * An amount or Money that will be subtracted </p>
-     * @param int $origin <p>
-     * Origin of the number whether it is integer of float </p> <p>
-     * Use `Money::ORIGIN_*` to ensure it's correct </p>
+     * @param Money $money <p>
+     * Money that will be subtracted </p>
      * @throws \PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException
-     * @throws \PostScripton\Money\Exceptions\NotNumericOrMoneyException
      * @return Money
      */
-    public function subtract($money, int $origin = MoneySettings::ORIGIN_INT): Money;
+    public function subtract(Money $money): self;
 
     /**
      * Multiplies an amount from the money. It's like <p>
@@ -86,7 +94,7 @@ interface MoneyInterface
      * A number on which the money will be multiplied </p>
      * @return Money
      */
-    public function multiply(float $number): Money;
+    public function multiply(float $number): self;
 
     /**
      * Divides an amount from the money. It's like <p>
@@ -95,32 +103,28 @@ interface MoneyInterface
      * A number on which the money will be divided </p>
      * @return Money
      */
-    public function divide(float $number): Money;
+    public function divide(float $number): self;
 
     /**
      * Rebases the money on an amount
-     * @param int|float|Money $money <p>
-     * An amount or Money to which the money will be rebased </p>
-     * @param int $origin <p>
-     * Origin of the number whether it is integer of float </p> <p>
-     * Use `Money::ORIGIN_*` to ensure it's correct </p>
+     * @param Money $money <p>
+     * A monetary object to which the current money will be rebased </p>
      * @throws \PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException
-     * @throws \PostScripton\Money\Exceptions\NotNumericOrMoneyException
-     * @return Money
+     * @return self
      */
-    public function rebase($money, int $origin = MoneySettings::ORIGIN_INT): Money;
+    public function rebase(Money $money): self;
 
     /**
      * Round fractions down <p>
      * `$10.25 -> $10.00` </p>
-     * @return Money
+     * @return self
      */
-    public function floor(): Money;
+    public function floor(): self;
 
     /**
      * Round fractions up <p>
      * `$10.25 -> $11.00` </p>
-     * @return Money
+     * @return self
      */
     public function ceil(): Money;
 
@@ -150,53 +154,40 @@ interface MoneyInterface
     public function isEmpty(): bool;
 
     /**
-     * Compares with an amount, or a money object whether it is less than the number, or the money object
-     * @param $money <p>
-     * An amount or a money object </p>
-     * @param int $origin <p>
-     * If the previous parameter is the number then it sets an origin for that number </p><p>
-     * 1000, MoneySettings::ORIGIN_INT </p><p>
-     * 100.0, MoneySettings::ORIGIN_FLOAT </p>
+     * Is the current monetary object less than the given one? <p>
+     * NOTE: monetary objects must be the same currency. </p>
+     * @param Money $money <p>
+     * Money being compared </p>
      * @return bool
      */
-    public function lessThan($money, int $origin = MoneySettings::ORIGIN_INT): bool;
+    public function lessThan(Money $money): bool;
 
     /**
-     * Compares with an amount, or a money object whether it is less than or equals to the number, or the money object
-     * @param $money <p>
-     * An amount or a money object </p>
-     * @param int $origin <p>
-     * If the previous parameter is the number then it sets an origin for that number </p><p>
-     * 1000, MoneySettings::ORIGIN_INT </p><p>
-     * 100.0, MoneySettings::ORIGIN_FLOAT </p>
+     * Is the current monetary object less than or equal to the given one? <p>
+     * NOTE: monetary objects must be the same currency. </p>
+     * @param Money $money <p>
+     * Money being compared </p>
      * @return bool
      */
-    public function lessThanOrEqual($money, int $origin = MoneySettings::ORIGIN_INT): bool;
+    public function lessThanOrEqual(Money $money): bool;
 
     /**
-     * Compares with an amount, or a money object whether it is greater than the number, or the money object
-     * @param $money <p>
-     * An amount or a money object </p>
-     * @param int $origin <p>
-     * If the previous parameter is the number then it sets an origin for that number </p><p>
-     * 1000, MoneySettings::ORIGIN_INT </p><p>
-     * 100.0, MoneySettings::ORIGIN_FLOAT </p>
+     * Is the current monetary object greater than the given one? <p>
+     * NOTE: monetary objects must be the same currency. </p>
+     * @param Money $money <p>
+     * Money being compared </p>
      * @return bool
      */
-    public function greaterThan($money, int $origin = MoneySettings::ORIGIN_INT): bool;
+    public function greaterThan(Money $money): bool;
 
     /**
-     * Compares with an amount, or a money object whether it is greater than or equals to the number,
-     * or the money object
-     * @param $money <p>
-     * An amount or a money object </p>
-     * @param int $origin <p>
-     * If the previous parameter is the number then it sets an origin for that number </p><p>
-     * 1000, MoneySettings::ORIGIN_INT </p><p>
-     * 100.0, MoneySettings::ORIGIN_FLOAT </p>
+     * Is the current monetary object greater than or equal to the given one? <p>
+     * NOTE: monetary objects must be the same currency. </p>
+     * @param Money $money <p>
+     * Money being compared </p>
      * @return bool
      */
-    public function greaterThanOrEqual($money, int $origin = MoneySettings::ORIGIN_INT): bool;
+    public function greaterThanOrEqual(Money $money): bool;
 
     /**
      * Checks whether two money objects are equal or not
@@ -220,7 +211,7 @@ interface MoneyInterface
      * @param Carbon|null $date <p>
      * Historical mode. Pass the date you want to get rate of
      * </p>
-     * @return Money
+     * @return self
      */
     public function convertInto(Currency $currency, ?float $rate = null, ?Carbon $date = null): Money;
 
@@ -255,22 +246,11 @@ interface MoneyInterface
      */
     public function toString(): string;
 
-
-
     /**
      * Sets default settings for any Money object
      * @param MoneySettings $setting
      */
     public static function set(MoneySettings $setting): void;
-
-    /**
-     * Creates a Money object
-     * @param float $amount
-     * @param null $currency
-     * @param null $settings
-     * @return Money
-     */
-    public static function make(float $amount, $currency = null, $settings = null): Money;
 
     /**
      * Corrects input &lt;input type="number" /&gt; using default settings
@@ -328,11 +308,4 @@ interface MoneyInterface
      * @return int
      */
     public static function getDefaultOrigin(): int;
-
-    /**
-     * Parses the string and turns it into a money instance
-     * @param string $money
-     * @return Money
-     */
-    public static function parse(string $money): Money;
 }

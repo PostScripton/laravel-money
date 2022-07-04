@@ -120,7 +120,7 @@ class MoneyTest extends TestCase
 
         $m2 = $m1
             // adds to the both
-            ->add(500)
+            ->add(money(500))
             // $m2 is 1500 as long as $m1 but $m2 is independent now
             ->clone()
             // $m2 is 3000 whereas $m1 is still 1500
