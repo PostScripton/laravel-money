@@ -115,17 +115,17 @@ class MoneySettings implements MoneySettingsInterface
             return $this;
         }
 
-        $old_origin = $this->origin ?? self::ORIGIN_INT;
+        $old_origin = $this->origin;
         $this->origin = $origin;
 
         if (!is_null($this->money)) {
-            if ($old_origin !== $origin) {
-                $number = $old_origin === MoneySettings::ORIGIN_INT
-                    ? $this->money->getPureAmount() / $this->getDivisor()
-                    : $this->money->getPureAmount() * $this->getDivisor();
+            $number = $old_origin === MoneySettings::ORIGIN_INT
+                ? $this->money->getPureAmount() / $this->getDivisor()
+                : $this->money->getPureAmount() * $this->getDivisor();
 
-                $this->money->rebase($number, $origin);
-            }
+            $money = money($number, $this->money->getCurrency(), settings()->setOrigin($origin));
+
+            $this->money->rebase($money);
         }
 
         return $this;
