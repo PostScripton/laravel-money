@@ -1,11 +1,25 @@
-# 💵 Money for Laravel PHP
-[![GitHub release (latest by date)](https://img.shields.io/github/v/release/PostScripton/laravel-money)](https://packagist.org/packages/postscripton/laravel-money)
-[![Total Downloads](https://img.shields.io/packagist/dt/postscripton/laravel-money.svg)](https://packagist.org/packages/postscripton/laravel-money)
-[![License](https://img.shields.io/github/license/PostScripton/laravel-money)](https://packagist.org/packages/postscripton/laravel-money)
+<div align="center">
+    <img src="./.github/banner-logo.png" alt="Banner Logo"/>
+</div>
+
+<div align="center">
+<a href="https://packagist.org/packages/postscripton/laravel-money" target="_blank">
+    <img src="https://img.shields.io/github/v/release/PostScripton/laravel-money?style=for-the-badge" alt="Release version"/>
+</a>
+<a href="https://packagist.org/packages/postscripton/laravel-money" target="_blank">
+    <img src="https://img.shields.io/packagist/dt/postscripton/laravel-money.svg?style=for-the-badge" alt="Total downloads"/>
+</a>
+<a href="https://packagist.org/packages/postscripton/laravel-money" target="_blank">
+    <img src="https://img.shields.io/packagist/dm/postscripton/laravel-money?style=for-the-badge" alt="Downloads per month"/>
+</a>
+<a href="./LICENSE.txt" target="_blank">
+    <img src="https://img.shields.io/github/license/PostScripton/laravel-money?style=for-the-badge" alt="License"/>
+</a>
+</div>
 
 ## Introduction
 
-Laravel-money is an open source library that simplifies life to convert numbers from a database (`'balance': 12340`) into money objects.
+**Laravel Money** is an open source library that simplifies life to convert numbers from a database (`'balance': 12340`) into money objects.
 With all being said, you can calculate money, output it as a string, convert it between currencies online via API services as well as offline and more!
 
 ## Upgrade guide
@@ -132,7 +146,6 @@ If you discover any security-related issues, please email [postscripton.sp@gmail
 We would be really pleased if you considered helping us with:
 1. **A brand-new name of the library in one word**. At the same time it has to make sense, be meaningful.
    For example, [Carbon](https://carbon.nesbot.com/) sounds quite good.
-2. **Logo**. The README would look much better with an attractive banner-logo at the top.
 
 ---
 
