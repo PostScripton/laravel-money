@@ -33,7 +33,7 @@ RUB -> USD = 1 / 75.79
 In order to convert currencies with real-time rate.
 
 ```php
-$rub = money(10000, currency('RUB'));
+$rub = money('10000000', currency('RUB'));
 
 $usd = $rub->convertInto(currency('USD'));
 $back_rub = $usd->convertInto(currency('RUB'));
@@ -48,7 +48,7 @@ To convert currencies according to the exact date.
 ```php
 use Carbon\Carbon;
 
-$rub = money(10000, currency('RUB'));
+$rub = money('10000000', currency('RUB'));
 
 $usd = $rub->convertInto(currency('USD'));
 $historical_usd = $rub->convertInto(currency('USD'), null, Carbon::createFromDate(2010, 4, 27)))
@@ -62,7 +62,7 @@ For converting offline, you need to know the rate.
 
 ```php
 $rate = 75.32;
-$rub = money(10000, currency('RUB'));                       // "1 000 ₽"
+$rub = money('10000000', currency('RUB'));                  // "1 000 ₽"
 
 $usd = $rub->convertInto(currency('USD'), 1 / $rate);       // "$ 13.3"
 $back_rub = $usd->convertInto(currency('RUB'), $rate / 1);  // "1 000 ₽"

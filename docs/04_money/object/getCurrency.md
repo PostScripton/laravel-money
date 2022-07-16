@@ -11,13 +11,13 @@ A shortcut for getting the currency.
 
 The full way:
 ```php
-$money = money(1000);
+$money = money('1000000');
 $money->settings()->getCurrency();
 ```
 
 The shortcut:
 ```php
-$money = money(1000);
+$money = money('1000000');
 $money->getCurrency(); // PostScripton\Money\Currency object
 ```
 

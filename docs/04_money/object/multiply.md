@@ -13,8 +13,8 @@ multiplies an amount from the money.
 ## Usage
 
 ```php
-$money = money(1000);   // "$ 100"
-$money->multiply(1.5);  // "$ 150"
+$money = money('1000000');  // "$ 100"
+$money->multiply(1.5);      // "$ 150"
 ```
 
 ---

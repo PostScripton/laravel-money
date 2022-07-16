@@ -164,24 +164,4 @@ return [
     |
     */
     'space_between' => true,
-
-    /*
-    |--------------------------------------------------------------------------
-    | Origin number from database
-    |--------------------------------------------------------------------------
-    |
-    | This option controls the default origin for any number that will be passed
-    | for creating a Money object.
-    | It is used, for instance, if all of your money numbers from database are
-    | represented as integer or float.
-    |
-    | For integer you would save money like: 1234, and would like to get "$ 123.4"
-    | For float you would save money line: 123.4, and you would get "$ 123.4"
-    |
-    | Now only two values are provided:
-    | MoneySettings::ORIGIN_INT
-    | MoneySettings::ORIGIN_FLOAT
-    |
-    */
-    'origin' => MoneySettings::ORIGIN_INT,
 ];

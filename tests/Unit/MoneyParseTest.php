@@ -17,10 +17,10 @@ class MoneyParseTest extends TestCase
         $m3 = Money::parse('$ 1,234');
         $m4 = Money::parse('$ 1\'234');
 
-        $this->assertEquals(12340, $m1->getPureAmount());
-        $this->assertEquals(12340, $m2->getPureAmount());
-        $this->assertEquals(12340, $m3->getPureAmount());
-        $this->assertEquals(12340, $m4->getPureAmount());
+        $this->assertEquals('12340000', $m1->getPureAmount());
+        $this->assertEquals('12340000', $m2->getPureAmount());
+        $this->assertEquals('12340000', $m3->getPureAmount());
+        $this->assertEquals('12340000', $m4->getPureAmount());
     }
 
     /** @test */
@@ -29,8 +29,8 @@ class MoneyParseTest extends TestCase
         $m1 = Money::parse('$ 0.5');
         $m2 = Money::parse('$ 0,5');
 
-        $this->assertEquals(5, $m1->getPureAmount());
-        $this->assertEquals(5, $m2->getPureAmount());
+        $this->assertEquals('5000', $m1->getPureAmount());
+        $this->assertEquals('5000', $m2->getPureAmount());
     }
 
     /** @test */
@@ -38,7 +38,7 @@ class MoneyParseTest extends TestCase
     {
         $money = Money::parse('$ 123');
 
-        $this->assertEquals(1230, $money->getPureAmount());
+        $this->assertEquals('1230000', $money->getPureAmount());
     }
 
     /** @test */
@@ -48,9 +48,9 @@ class MoneyParseTest extends TestCase
         $m2 = Money::parse('-123$');
         $m3 = Money::parse('-123 $');
 
-        $this->assertEquals(-1230, $m1->getPureAmount());
-        $this->assertEquals(-1230, $m2->getPureAmount());
-        $this->assertEquals(-1230, $m3->getPureAmount());
+        $this->assertEquals('-1230000', $m1->getPureAmount());
+        $this->assertEquals('-1230000', $m2->getPureAmount());
+        $this->assertEquals('-1230000', $m3->getPureAmount());
     }
 
     /** @test */
@@ -63,17 +63,17 @@ class MoneyParseTest extends TestCase
         $rub2 = Money::parse('₽100');
         $rub3 = Money::parse('RUB 100');
 
-        $this->assertEquals(1000, $usd1->getPureAmount());
+        $this->assertEquals('1000000', $usd1->getPureAmount());
         $this->assertEquals('$', $usd1->getCurrency()->getSymbol());
-        $this->assertEquals(1000, $usd2->getPureAmount());
+        $this->assertEquals('1000000', $usd2->getPureAmount());
         $this->assertEquals('$', $usd2->getCurrency()->getSymbol());
-        $this->assertEquals(1000, $usd3->getPureAmount());
+        $this->assertEquals('1000000', $usd3->getPureAmount());
         $this->assertEquals('USD', $usd3->getCurrency()->getCode());
-        $this->assertEquals(1000, $rub1->getPureAmount());
+        $this->assertEquals('1000000', $rub1->getPureAmount());
         $this->assertEquals('₽', $rub1->getCurrency()->getSymbol());
-        $this->assertEquals(1000, $rub2->getPureAmount());
+        $this->assertEquals('1000000', $rub2->getPureAmount());
         $this->assertEquals('₽', $rub2->getCurrency()->getSymbol());
-        $this->assertEquals(1000, $rub3->getPureAmount());
+        $this->assertEquals('1000000', $rub3->getPureAmount());
         $this->assertEquals('RUB', $rub3->getCurrency()->getCode());
     }
 
@@ -87,17 +87,17 @@ class MoneyParseTest extends TestCase
         $rub2 = Money::parse('100₽');
         $rub3 = Money::parse('100 RUB');
 
-        $this->assertEquals(1000, $usd1->getPureAmount());
+        $this->assertEquals('1000000', $usd1->getPureAmount());
         $this->assertEquals('$', $usd1->getCurrency()->getSymbol());
-        $this->assertEquals(1000, $usd2->getPureAmount());
+        $this->assertEquals('1000000', $usd2->getPureAmount());
         $this->assertEquals('$', $usd2->getCurrency()->getSymbol());
-        $this->assertEquals(1000, $usd3->getPureAmount());
+        $this->assertEquals('1000000', $usd3->getPureAmount());
         $this->assertEquals('USD', $usd3->getCurrency()->getCode());
-        $this->assertEquals(1000, $rub1->getPureAmount());
+        $this->assertEquals('1000000', $rub1->getPureAmount());
         $this->assertEquals('₽', $rub1->getCurrency()->getSymbol());
-        $this->assertEquals(1000, $rub2->getPureAmount());
+        $this->assertEquals('1000000', $rub2->getPureAmount());
         $this->assertEquals('₽', $rub2->getCurrency()->getSymbol());
-        $this->assertEquals(1000, $rub3->getPureAmount());
+        $this->assertEquals('1000000', $rub3->getPureAmount());
         $this->assertEquals('RUB', $rub3->getCurrency()->getCode());
     }
 

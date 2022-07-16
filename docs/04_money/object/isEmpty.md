@@ -10,9 +10,9 @@ checks whether the money's number is zero.
 ## Usage
 
 ```php
-$m1 = money(0);
-$m2 = money(1000);
-$m3 = money(-1000);
+$m1 = money('0');
+$m2 = money('1000000');
+$m3 = money('-10000000');
 
 $m1->isEmpty(); // true
 $m2->isEmpty(); // false

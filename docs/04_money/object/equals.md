@@ -16,31 +16,31 @@ checks whether two money objects are equal or not.
 ### Immutable way
 
 ```php
-$johnReward = $bobReward = money(1000);
+$johnReward = $bobReward = money('1000000');
 
 // John has additional bonus $50
-$winCoupon = money(500);
+$winCoupon = money('500000');
 
 $johnReward->add($winCoupon);
 
-$bobReward->getPureAmount();        // 1500
-$johnReward->getPureAmount();       // 1500
+$bobReward->getPureAmount();        // "1500000"
+$johnReward->getPureAmount();       // "1500000"
 $johnReward->equals($bobReward);    // true
 ```
 
 ### Mutable way
 
 ```php
-$johnReward = money(1000);
-$bobReward = money(1000);
+$johnReward = money('1000000');
+$bobReward = money('1000000');
 
 // John has additional bonus $50
-$winCoupon = money(500);
+$winCoupon = money('500000');
 
 $johnReward = $johnReward->add($winCoupon);
 
-$bobReward->getPureAmount();                        // 1000
-$johnReward->getPureAmount();                       // 1500
+$bobReward->getPureAmount();                        // "1000000"
+$johnReward->getPureAmount();                       // "1500000"
 $johnReward->equals($bobReward);                    // false
 $johnReward->settings() === $bobReward->settings(); // false
 ```

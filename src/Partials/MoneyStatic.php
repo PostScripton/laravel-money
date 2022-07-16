@@ -16,7 +16,6 @@ trait MoneyStatic
     private static bool $default_ends_with_0 = false;
     private static bool $default_space_between = true;
     private static Currency $default_currency;
-    private static int $default_origin = MoneySettings::ORIGIN_INT;
 
     public static function set(MoneySettings $settings): void
     {
@@ -26,7 +25,6 @@ trait MoneyStatic
         self::$default_ends_with_0 = $settings->endsWith0();
         self::$default_space_between = $settings->hasSpaceBetween();
         self::$default_currency = $settings->getCurrency();
-        self::$default_origin = $settings->getOrigin();
     }
 
     public static function configNotPublished(): bool
@@ -40,11 +38,6 @@ trait MoneyStatic
     }
 
     // ========== GETTERS ==========
-
-    public static function getDefaultDivisor(): int
-    {
-        return 10 ** self::$default_decimals;
-    }
 
     public static function getDefaultDecimals(): int
     {
@@ -76,14 +69,9 @@ trait MoneyStatic
         return self::$default_currency;
     }
 
-    public static function getDefaultOrigin(): int
-    {
-        return self::$default_origin;
-    }
-
     // ========== METHODS ==========
 
-    public static function make(float $amount, $currency = null, $settings = null): Money
+    public static function make(string $amount, $currency = null, $settings = null): Money
     {
         return money($amount, $currency, $settings);
     }
@@ -171,6 +159,11 @@ trait MoneyStatic
             Currency::code($monies[0]->getCurrency()->getCode()),
             clone $monies[0]->settings()
         );
+    }
+
+    public static function getDefaultDivisor(): int
+    {
+        return 10 ** 4;
     }
 
     private static function currenciesAreNotSame(array $monies, string $method, int $arg_num, string $arg_name): void

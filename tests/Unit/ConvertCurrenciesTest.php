@@ -14,7 +14,7 @@ class ConvertCurrenciesTest extends TestCase
     public function moneyCanBeOfflineConvertedBetweenTwoCurrenciesWithoutFailsInNumber()
     {
         $rate = 75.32;
-        $rub = money(10000, currency('RUB'));
+        $rub = money('10000000', currency('RUB'));
         $this->assertEquals('1 000 ₽', $rub->toString());
 
         $usd = $rub->convertInto(currency('USD'), 1 / $rate);

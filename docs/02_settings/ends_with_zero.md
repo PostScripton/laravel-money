@@ -15,7 +15,7 @@ You may get or specify whether money ends with 0 or not `100(.0)`:
 ## Usage
 
 ```php
-$money = money(1000);
+$money = money('1000000');
 
 $money->settings()->endsWith0();    // false
 $money->toString();                 // "$ 100"

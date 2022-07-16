@@ -57,14 +57,6 @@ interface MoneySettingsInterface
     public function setCurrency(Currency $currency): MoneySettings;
 
     /**
-     * Sets origin of number data from database, whether it is stored there as integer or float <p>
-     * For supported values use MoneySettings::ORIGIN_* </p>
-     * @param int $origin
-     * @return MoneySettings
-     */
-    public function setOrigin(int $origin): MoneySettings;
-
-    /**
      * Returns the decimals
      * @return int
      */
@@ -98,10 +90,4 @@ interface MoneySettingsInterface
      * @return Currency
      */
     public function getCurrency(): Currency;
-
-    /**
-     * Returns the origin
-     * @return int
-     */
-    public function getOrigin(): int;
 }

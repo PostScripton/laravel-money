@@ -13,9 +13,9 @@ checks whether two money objects have the same currency.
 ## Usage
 
 ```php
-$m1 = money(1000);
-$m2 = money(5000);
-$m3 = money(5000, currency('RUB'));
+$m1 = money('1000000');
+$m2 = money('5000000');
+$m3 = money('5000000', currency('RUB'));
 
 $m1->isSameCurrency($m2); // true
 $m1->isSameCurrency($m3); // false

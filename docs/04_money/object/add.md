@@ -13,12 +13,12 @@ adds another monetary object to the current one.
 ## Usage
 
 ```php
-$m1 = money(1000);                  // "$ 100"
-$m2 = money(500);                   // "$ 50"
-$m3 = money(500, currency('RUB'));  // "50 ₽"
+$m1 = money('1000000');                 // "$ 100"
+$m2 = money('500000');                  // "$ 50"
+$m3 = money('500000', currency('RUB')); // "50 ₽"
 
-$m1->add($m2);                      // "$ 150"
-$m1->add($m3);                      // MoneyHasDifferentCurrenciesException
+$m1->add($m2);                          // "$ 150"
+$m1->add($m3);                          // MoneyHasDifferentCurrenciesException
 ```
 
 ---

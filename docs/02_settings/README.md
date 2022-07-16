@@ -4,20 +4,20 @@ If you want to customize settings for your Money object, you need to specify set
 To set setting:
 ```php
 // Method #1
-$money = money(1234, settings());
+$money = money('12345000', settings());
 
 // Method #2
-$money = money(1234);
+$money = money('12345000');
 $settings = settings(); // customize it as you want
 $money->bind($settings);
 
 // Method #3
-$money = money(1234); // Every Money object has settings by default even if it is not provided
+$money = money('12345000'); // Every Money object has settings by default even if it is not provided
 ```
 
 To get settings:
 ```php
-$money = money(1234);
+$money = money('12345000');
 $money->settings();
 ```
 
@@ -33,7 +33,6 @@ All the settings that are not provided or not changed will have default values, 
 4. [Ends with zero](/docs/02_settings/ends_with_zero.md)
 5. [Space between currency and amount](/docs/02_settings/space_between.md)
 6. [Currency](/docs/02_settings/currency.md)
-7. [Origin amount](/docs/02_settings/origin.md)
 
 ---
 

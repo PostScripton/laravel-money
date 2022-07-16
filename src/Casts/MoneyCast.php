@@ -13,6 +13,6 @@ class MoneyCast implements CastsAttributes
 
     public function set($model, string $key, $value, array $attributes)
     {
-        return $value->upload();
+        return $value->amount;
     }
 }

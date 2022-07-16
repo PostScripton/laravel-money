@@ -24,7 +24,7 @@ class ServicesTest extends TestCase
     /** @test */
     public function aServiceChangesDependingOnTheConfigValueWhenItCalls()
     {
-        $money = money(1000);
+        $money = money('1000000');
 
         Config::set('money.service', 'exchangerate');
         $this->assertInstanceOf(ExchangeRateService::class, $money->service());
@@ -40,14 +40,14 @@ class ServicesTest extends TestCase
 
         $this->expectException(ServiceDoesNotExistException::class);
 
-        $money = money(1000);
+        $money = money('1000000');
         $money->convertInto(currency('rub'));
     }
 
     /** @test */
     public function gettingInfoAboutTheDefaultService()
     {
-        $money = money(1000);
+        $money = money('1000000');
 
         $this->assertInstanceOf(ExchangeRateService::class, $money->service());
         $this->assertEquals(ExchangeRateService::class, $money->service()->getClassName());
@@ -61,7 +61,7 @@ class ServicesTest extends TestCase
 
         $this->expectException(ServiceDoesNotHaveClassException::class);
 
-        $money = money(1000);
+        $money = money('1000000');
         $money->convertInto(currency('rub'));
     }
 
@@ -73,7 +73,7 @@ class ServicesTest extends TestCase
 
         $this->expectException(ServiceClassDoesNotExistException::class);
 
-        $money = money(1000);
+        $money = money('1000000');
         $money->convertInto(currency('rub'));
     }
 
@@ -85,7 +85,7 @@ class ServicesTest extends TestCase
 
         $this->expectException(ServiceDoesNotInheritServiceException::class);
 
-        $money = money(1000);
+        $money = money('1000000');
         $money->convertInto(currency('rub'));
     }
 
@@ -110,7 +110,7 @@ class ServicesTest extends TestCase
         $this->expectExceptionMessage('The service class "SomeServiceClass" doesn\'t support ' .
             'one of the currencies [QWERTY]');
 
-        $money = money(1000);
+        $money = money('1000000');
         $money->convertInto(currency('1234'));
     }
 
@@ -119,7 +119,7 @@ class ServicesTest extends TestCase
     {
         $this->mockService();
 
-        $rub = money(10000, currency('rub'));
+        $rub = money('10000000', currency('rub'));
         $usd = $rub->convertInto(currency('usd'));
 
         $back_rub = $usd->convertInto(currency('rub'));
@@ -135,7 +135,7 @@ class ServicesTest extends TestCase
     {
         $this->mockService();
 
-        $rub = money(10000, currency('rub'));
+        $rub = money('10000000', currency('rub'));
         $usd_now = $rub->convertInto(currency('usd'));
         $usd_historical = $rub->convertInto(currency('usd'), null, Carbon::createFromDate(2000, 12, 31));
 

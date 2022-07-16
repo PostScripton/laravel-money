@@ -10,8 +10,8 @@ checks whether the money's number is positive (greater than zero).
 ## Usage
 
 ```php
-$m1 = money(1000);
-$m2 = money(-1000);
+$m1 = money('1000000');
+$m2 = money('-1000000');
 
 $m1->isPositive(); // true
 $m2->isPositive(); // false
