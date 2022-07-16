@@ -15,7 +15,7 @@ You may get or specify a number of decimals `123.(4)`:
 ## Usage
 
 ```php
-$money = money(1234);
+$money = money('1234000');
 
 $money->settings()->getDecimals();  // 1
 $money->toString();                 // "$ 123.4"

@@ -2,21 +2,14 @@
 
 ## Migrations
 
-Decide in which origin you want to store your money whether it is integer or float.
 Integer is preferred because of database performance, precision and so on. The database makes more effort to work with DECIMAL, FLOAT, and DOUBLE types, bear in mind they may lose precision as well.
 
 > Using floating point numbers to represent monetary amounts is almost a crime © Robert Martin
 
-More about origins you can read [here](/docs/04_money/object/upload.md).
-
 ```php
 Schema::create('products', function (Blueprint $table) {
     $table->id();
-    
-    // one of them:
-    $table->integer('price')->default(0); // for integer origin
-    $table->decimal('price')->default(0); // for float origin
-    
+    $table->bigInteger('price')->default(0);
     $table->timestamps();
 });
 ```
@@ -48,13 +41,13 @@ class Product extends Model
 ## How to create and output?
 
 ```php
-$money = money(1000); // $ 100
+$money = money('1000000'); // $ 100
 
-$newMoney = $money->clone()                 // clone it to work with independent object
-    ->add(500, MoneySettings::ORIGIN_INT)   // $ 150
-    ->subtract(money(600))                  // $ 90
-    ->divide(1.5);                          // $ 60
-$diff = $money->difference($newMoney);      // new Money instance, $40 ($100 - $60)
+$newMoney = $money->clone()             // clone it to work with independent object
+    ->add(money('500000'))              // $ 150
+    ->subtract(money('600000'))         // $ 90
+    ->divide(1.5);                      // $ 60
+$diff = $money->difference($newMoney);  // new Money instance, $40 ($100 - $60)
 
 $money->toString();             // "$ 100"
 "Your balance is {$newMoney}";  // "Your balance is $ 60"
@@ -66,7 +59,7 @@ $money->toString();             // "$ 100"
 ## Converting currencies
 
 ```php
-$usd = money(1000); // $ 100
+$usd = money('1000000'); // $ 100
 
 $date = Carbon::parse('2000-12-31');
 

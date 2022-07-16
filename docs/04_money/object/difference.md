@@ -18,15 +18,15 @@ shows the difference between two money objects.
 ## Usage
 
 ```php
-$m1 = money(500);
-$m2 = money(1000);
+$m1 = money('500000');
+$m2 = money('1000000');
 
 $m1->difference($m2); // "$ -50"
 ```
 
 ```php
-$m1 = money(500);
-$m2 = money(1000, currency('RUB'));
+$m1 = money('500000');
+$m2 = money('1000000', currency('RUB'));
 
 $m1->difference($m2); // MoneyHasDifferentCurrenciesException
 ```

@@ -17,10 +17,10 @@ class Money implements MoneyInterface
     public const FREQUENT_THOUSAND_SEPARATORS = [' ', '.', ',', '\''];
     public const FREQUENT_DECIMAL_SEPARATORS = ['.', ','];
 
-    private float $amount;
+    private string $amount;
     private ?MoneySettings $settings;
 
-    public function __construct(float $amount, $currency = null, $settings = null)
+    public function __construct(string $amount, $currency = null, $settings = null)
     {
         $this->amount = $amount;
         $this->settings = null;
@@ -77,19 +77,15 @@ class Money implements MoneyInterface
         return money($this->amount, $this->getCurrency(), clone $this->settings());
     }
 
-    public function getPureAmount(): float
+    public function getPureAmount(): string
     {
         return $this->amount;
     }
 
     public function getAmount(): string
     {
-        $amount = $this->settings()->getOrigin() === MoneySettings::ORIGIN_INT
-            ? (float)($this->getPureAmount() / $this->getDivisor())
-            : $this->getPureAmount();
-
         $money = number_format(
-            $amount,
+            (float)($this->getPureAmount() / self::getDefaultDivisor()),
             $this->settings()->getDecimals(),
             $this->settings()->getDecimalSeparator(),
             $this->settings()->getThousandsSeparator()
@@ -113,50 +109,54 @@ class Money implements MoneyInterface
         return $this->settings()->getCurrency();
     }
 
-    public function add(Money $money): self
+    public function add(self $money): self
     {
-        $this->amount += $this->numberIntoCorrectOrigin($money, __METHOD__);
+        $this->validateMoney($money, __METHOD__);
+        $this->amount += $money->amount;
+
         return $this;
     }
 
-    public function subtract(Money $money): self
+    public function subtract(self $money): self
     {
-        $this->amount -= $this->numberIntoCorrectOrigin($money, __METHOD__);
+        $this->validateMoney($money, __METHOD__);
+        $this->amount -= $money->amount;
+
         return $this;
     }
 
     public function multiply(float $number): self
     {
-        $this->amount = $this->getPureAmount() * $number;
+        $this->amount *= $number;
+
         return $this;
     }
 
     public function divide(float $number): self
     {
-        $this->amount = $this->getPureAmount() / $number;
+        $this->amount /= $number;
+
         return $this;
     }
 
-    public function rebase(Money $money): self
+    public function rebase(self $money): self
     {
-        $this->amount = $this->numberIntoCorrectOrigin($money, __METHOD__);
+        $this->validateMoney($money, __METHOD__);
+        $this->amount = $money->amount;
+
         return $this;
     }
 
     public function floor(): self
     {
-        $this->amount = $this->settings()->getOrigin() === MoneySettings::ORIGIN_INT
-            ? floor($this->getPureAmount() / $this->getDivisor()) * $this->getDivisor()
-            : floor($this->getPureAmount());
+        $this->amount = floor($this->amount / self::getDefaultDivisor()) * self::getDefaultDivisor();
 
         return $this;
     }
 
     public function ceil(): self
     {
-        $this->amount = $this->settings()->getOrigin() === MoneySettings::ORIGIN_INT
-            ? ceil($this->getPureAmount() / $this->getDivisor()) * $this->getDivisor()
-            : ceil($this->getPureAmount());
+        $this->amount = ceil($this->amount / self::getDefaultDivisor()) * self::getDefaultDivisor();
 
         return $this;
     }
@@ -168,40 +168,40 @@ class Money implements MoneyInterface
 
     public function isNegative(): bool
     {
-        return $this->getPureAmount() < 0;
+        return $this->amount < 0;
     }
 
     public function isPositive(): bool
     {
-        return $this->getPureAmount() > 0;
+        return $this->amount > 0;
     }
 
     public function isEmpty(): bool
     {
-        return empty($this->getPureAmount());
+        return empty($this->amount);
     }
 
-    public function lessThan(Money $money): bool
+    public function lessThan(self $money): bool
     {
-        return $this->getPureAmount() < $money->getPureAmount();
+        return $this->amount < $money->amount;
     }
 
-    public function lessThanOrEqual(Money $money): bool
+    public function lessThanOrEqual(self $money): bool
     {
-        return $this->getPureAmount() <= $money->getPureAmount();
+        return $this->amount <= $money->amount;
     }
 
-    public function greaterThan(Money $money): bool
+    public function greaterThan(self $money): bool
     {
-        return $this->getPureAmount() > $money->getPureAmount();
+        return $this->amount > $money->amount;
     }
 
-    public function greaterThanOrEqual(Money $money): bool
+    public function greaterThanOrEqual(self $money): bool
     {
-        return $this->getPureAmount() >= $money->getPureAmount();
+        return $this->amount >= $money->amount;
     }
 
-    public function equals(Money $money, bool $strict = true): bool
+    public function equals(self $money, bool $strict = true): bool
     {
         return $strict ? $this === $money : $this == $money;
     }
@@ -218,29 +218,19 @@ class Money implements MoneyInterface
             $rate = $this->service()->rate($this->getCurrency()->getCode(), $currency->getCode(), $date);
         }
 
-        $new_amount = $this->getPureAmount() * $rate;
+        $new_amount = $this->amount * $rate;
         $settings = clone $this->settings;
 
         return money($new_amount, $currency, $settings);
     }
 
-    public function difference(Money $money, ?MoneySettings $settings = null): string
+    public function difference(self $money, ?MoneySettings $settings = null): string
     {
-        $money_amount = $this->numberIntoCorrectOrigin($money, __METHOD__);
-        $amount = $this->getPureAmount() - $money_amount;
+        $this->validateMoney($money, __METHOD__);
+        $amount = $this->amount - $money->amount;
         $settings = is_null($settings) ? clone $this->settings() : $settings;
 
         return money($amount, $this->getCurrency(), $settings)->toString();
-    }
-
-    public function upload()
-    {
-        $origin = config('money.origin');
-        $amount = $this->amountIntoOrigin($origin);
-
-        return $origin === MoneySettings::ORIGIN_INT
-            ? (int)floor($amount)
-            : (float)floor($amount * $this->getDivisor()) / $this->getDivisor();
     }
 
     public function toString(): string

@@ -10,8 +10,8 @@ gives you pure amount for calculations.
 ## Usage
 
 ```php
-$money = money(132.76686139139672);
-$money->getPureAmount(); // 132.76686139139672
+$money = money("12345000");
+$money->getPureAmount(); // "12345000"
 ```
 
 ---

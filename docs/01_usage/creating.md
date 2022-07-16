@@ -4,18 +4,18 @@ In order to use this package, you need to create a Money object:
 ```php
 use PostScripton\Money\Money;
 
-$money = new Money(1234);
-$money = Money::make(1234);
-$money = money(1234); // preferred variant
+$money = new Money('12345000');
+$money = Money::make('12345000');
+$money = money('12345000'); // preferred variant
 ```
 
 You can apply the following parameters for any of the variants above:
 ```php
-$money = money(1234, currency('RUB'));
-$money = money(1234, settings());
-$money = money(1234, currency('RUB'), settings());
+$money = money('12345000', currency('RUB'));
+$money = money('12345000', settings());
+$money = money('12345000', currency('RUB'), settings());
 
-// NOT: money(1234, settings(), currency('RUB'))
+// NOT: money('12345000', settings(), currency('RUB'))
 ```
 
 ---

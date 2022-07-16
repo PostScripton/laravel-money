@@ -31,8 +31,7 @@ class MoneyServiceProvider extends PackageServiceProvider
             ->setThousandsSeparator(config('money.thousands_separator', ' '))
             ->setDecimalSeparator(config('money.decimal_separator', '.'))
             ->setEndsWith0(config('money.ends_with_0', false))
-            ->setHasSpaceBetween(config('money.space_between', true))
-            ->setOrigin(config('money.origin', MoneySettings::ORIGIN_INT));
+            ->setHasSpaceBetween(config('money.space_between', true));
 
         Money::set($settings);
 

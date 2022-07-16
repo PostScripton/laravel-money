@@ -12,7 +12,7 @@ binds the Money object with the given settings.
 ## Usage
 
 ```php
-$money = money(1234);
+$money = money('12345000');
 $settings = settings(); // customize it as you want
 $money->bind($settings);
 ```

@@ -13,12 +13,12 @@ rebases the current monetary object on another money's amount.
 ## Usage
 
 ```php
-$m1 = money(1000);                  // "$ 100"
-$m2 = money(750);                   // "$ 75"
-$m3 = money(750, currency('RUB'));  // "75 ₽"
+$m1 = money('1000000');                 // "$ 100"
+$m2 = money('750000');                  // "$ 75"
+$m3 = money('750000', currency('RUB')); // "75 ₽"
 
-$m1->rebase($m2);                   // "$ 75"
-$m1->rebase($m3);                   // MoneyHasDifferentCurrenciesException
+$m1->rebase($m2);                       // "$ 75"
+$m1->rebase($m3);                       // MoneyHasDifferentCurrenciesException
 ```
 
 ---

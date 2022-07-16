@@ -10,7 +10,7 @@ gives you the formatted number.
 ## Usage
 
 ```php
-$money = money(12345);
+$money = money('12345000');
 $money->getAmount(); // "1 234.5"
 ```
 

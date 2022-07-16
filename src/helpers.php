@@ -6,13 +6,13 @@ use PostScripton\Money\MoneySettings;
 
 if (!function_exists('money')) {
     /**
-     * Creates a Money object
-     * @param float $amount
+     * Creates Money object
+     * @param string $amount
      * @param null $currency
      * @param null $settings
      * @return Money
      */
-    function money(float $amount, $currency = null, $settings = null): Money
+    function money(string $amount, $currency = null, $settings = null): Money
     {
         return new Money($amount, $currency, $settings);
     }

@@ -11,16 +11,16 @@ class HelpersTest extends TestCase
     /** @test */
     public function createMoneyWithMoneyHelper()
     {
-        $money = money(12345);
+        $money = money('12345000');
 
         $this->assertInstanceOf(Money::class, $money);
-        $this->assertEquals(12345, $money->getPureAmount());
+        $this->assertEquals('12345000', $money->getPureAmount());
     }
 
     /** @test */
     public function createMoneyWithMoneyAndCurrencyHelpers()
     {
-        $money = money(12345, currency('RUB'));
+        $money = money('12345000', currency('RUB'));
 
         $this->assertInstanceOf(Money::class, $money);
         $this->assertEquals('₽', $money->getCurrency()->getSymbol());
@@ -30,7 +30,7 @@ class HelpersTest extends TestCase
     /** @test */
     public function createMoneyWithMoneyCurrencyAndSettingsHelpers()
     {
-        $money = money(12345, currency('RUB'), settings()->setHasSpaceBetween(false));
+        $money = money('12345000', currency('RUB'), settings()->setHasSpaceBetween(false));
 
         $this->assertInstanceOf(Money::class, $money);
         $this->assertEquals('1 234.5₽', $money->toString());
@@ -40,7 +40,7 @@ class HelpersTest extends TestCase
     /** @test */
     public function modifyCurrencyBeforeCreatingMoney()
     {
-        $money = money(12345, currency('usd')->setPosition(Currency::POSITION_END));
+        $money = money('12345000', currency('usd')->setPosition(Currency::POSITION_END));
 
         $this->assertInstanceOf(Money::class, $money);
         $this->assertEquals('1 234.5 $', $money->toString());

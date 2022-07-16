@@ -13,12 +13,12 @@ interface MoneyInterface
 
     /**
      * Creates a Money object
-     * @param float $amount
+     * @param string $amount
      * @param null $currency
      * @param null $settings
      * @return self
      */
-    public static function make(float $amount, $currency = null, $settings = null): self;
+    public static function make(string $amount, $currency = null, $settings = null): self;
 
     /**
      * Parses the string and turns it into a money instance
@@ -54,11 +54,11 @@ interface MoneyInterface
     public function getAmount(): string;
 
     /**
-     * Returns a pure number that uses for calculations. Not usually used <p>
-     * For example, you see "13.3" but within it looks like 13.276686139139672 </p>
-     * @return float
+     * Returns a pure number that uses for calculations. <p>
+     * For example, you see "13.3" but within it looks like "132766" </p>
+     * @return string
      */
-    public function getPureAmount(): float;
+    public function getPureAmount(): string;
 
     /**
      * Shortcut for getting the currency <p>
@@ -232,13 +232,6 @@ interface MoneyInterface
     public function service();
 
     /**
-     * Converts the money into the number according to origin for storing in database <p>
-     * For example, "1 234.5" -> 12345, origin INT </p>
-     * @return int|float
-     */
-    public function upload();
-
-    /**
      * Returns the money string applying all the settings <p>
      * You may not use it if you explicitly assign the object to a string </p>
      * @return string <p>
@@ -302,10 +295,4 @@ interface MoneyInterface
      * @return Currency
      */
     public static function getDefaultCurrency(): Currency;
-
-    /**
-     * Returns the default origin. Whether it is integer or float
-     * @return int
-     */
-    public static function getDefaultOrigin(): int;
 }
