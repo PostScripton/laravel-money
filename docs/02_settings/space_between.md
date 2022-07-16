@@ -15,15 +15,15 @@ You may get or specify whether there is a space between currency and number `$( 
 ## Usage
 
 ```php
-$money = money(1234);
+$money = money('1234000');
 
 $money->settings()->hasSpaceBetween();  // true
-$money->toString();                     // "$ 100"
+$money->toString();                     // "$ 123.4"
 
 $money->settings()->setHasSpaceBetween(false);
 
 $money->settings()->hasSpaceBetween();  // false
-$money->toString();                     // "$100"
+$money->toString();                     // "$123.4"
 ```
 
 ## Exceptions

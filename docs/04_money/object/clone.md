@@ -10,33 +10,33 @@ creates an absolutely identical instance of the object.
 ## Usage
 
 ```php
-$bobReward = money(1000);
+$bobReward = money('1000000');
 
 $johnReward = $bobReward
     // Add for both John and Bob because John refers to Bob's object
-    ->add(500)
-    // John's reward is 1500 as long as Bob's one but John's reward is independent now
+    ->add('500000')
+    // John's reward is $150 as long as Bob's one but John's reward is independent now
     ->clone()
     // Multiplies John's reward by 2 without affecting Bob's reward at all
     ->multiply(2);
 
-$bobReward->getPureAmount();    // 1500
-$johnReward->getPureAmount();   // 3000
+$bobReward->getPureAmount();    // "1500000"
+$johnReward->getPureAmount();   // "3000000"
 ```
 
 The next example is wrong for this purpose:
 
 ```php
-$bobReward = money(1000);
+$bobReward = money('1000000');
 
 $johnReward = $bobReward
     // Add for both John and Bob because John refers to Bob's object
-    ->add(500)
+    ->add('500000')
     // Multiplies both John and Bob because John refers to Bob's object
     ->multiply(2);
 
-$bobReward->getPureAmount();    // 3000
-$johnReward->getPureAmount();   // 3000
+$bobReward->getPureAmount();    // "3000000"
+$johnReward->getPureAmount();   // "3000000"
 ```
 
 ---

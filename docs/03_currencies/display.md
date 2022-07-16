@@ -19,7 +19,7 @@ You may specify the way to display the currency whether it will be as an iso-cod
 ```php
 use PostScripton\Money\Currency;
 
-$money = money(1234);
+$money = money('1234000');
 
 $money->settings()->getCurrency()->getDisplay();    // 10 (Currency::DISPLAY_SYMBOL)
 $money->toString();                                 // "$ 123.4"

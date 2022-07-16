@@ -12,7 +12,7 @@ All the ways to output money are mentioned [here](/docs/01_usage/output.md).
 ## Usage
 
 ```php
-$money = money(1234);
+$money = money('1234000');
 $money->toString(); // "$ 123.4"
 ```
 

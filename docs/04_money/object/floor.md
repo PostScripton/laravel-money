@@ -10,8 +10,8 @@ rounds fractions down. `$10.25 -> $10.00`
 ## Usage
 
 ```php
-$money = money(105);    // "$ 10.5"
-$money->floor();        // "$ 10"
+$money = money('102500');   // "$ 10.3"
+$money->floor();            // "$ 10"
 ```
 
 ---

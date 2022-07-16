@@ -32,7 +32,7 @@ $product = new Product();
 $product->price; // Money instance, for example, $ 120 is set somewhere above
 $product->price->divide(2); // sale 50% => $ 60
 
-$commission = money(100); // $ 10
+$commission = money('100000'); // $ 10
 $checkout = $product->price->clone()->add($commission); // Money instance, $ 70
 ```
 > Note that you can't just add the commission because it will affect the price field as well, but we want another money object to work with it independently.

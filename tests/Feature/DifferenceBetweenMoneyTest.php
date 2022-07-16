@@ -14,8 +14,8 @@ class DifferenceBetweenMoneyTest extends TestCase
     /** @test */
     public function differenceReturnsAString()
     {
-        $m1 = money(500);
-        $m2 = money(1000);
+        $m1 = money('500000');
+        $m2 = money('1000000');
 
         $this->assertIsString($m1->difference($m2));
     }
@@ -23,27 +23,27 @@ class DifferenceBetweenMoneyTest extends TestCase
     /** @test */
     public function differenceWithTwoSameCurrencies()
     {
-        $m1 = money(500);
-        $m2 = money(1000);
+        $m1 = money('500000');
+        $m2 = money('1000000');
 
-        $this->assertEquals(money(500)->subtract($m2)->toString(), $m1->difference($m2));
+        $this->assertEquals(money('500000')->subtract($m2)->toString(), $m1->difference($m2));
     }
 
     /** @test */
     public function differenceWithTwoDifferentCurrencies()
     {
-        $usd = money(500);
-        $rub = money(1000, currency('rub'));
+        $usd = money('500000');
+        $rub = money('1000000', currency('rub'));
         $rub_into_usd = $rub->convertInto($usd->getCurrency());
 
-        $this->assertEquals(money(500)->subtract($rub_into_usd)->toString(), $usd->difference($rub_into_usd));
+        $this->assertEquals(money('500000')->subtract($rub_into_usd)->toString(), $usd->difference($rub_into_usd));
     }
 
     /** @test */
     public function anExceptionIsThrownWhenThereAreTwoDifferentCurrencies()
     {
-        $m1 = money(500);
-        $m2 = money(1000, currency('rub'));
+        $m1 = money('500000');
+        $m2 = money('1000000', currency('rub'));
 
         $this->expectException(MoneyHasDifferentCurrenciesException::class);
 
@@ -53,11 +53,11 @@ class DifferenceBetweenMoneyTest extends TestCase
     /** @test */
     public function newSettingsCanBeAppliedToTheDifference()
     {
-        $m1 = money(500);
-        $m2 = money(1000);
+        $m1 = money('500000');
+        $m2 = money('1000000');
 
         $this->assertEquals(
-            money(500)->subtract($m2)->toString() . '.0',
+            money('500000')->subtract($m2)->toString() . '.0',
             $m1->difference($m2, settings()->setEndsWith0(true))
         );
     }

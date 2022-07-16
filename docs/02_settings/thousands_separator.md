@@ -15,7 +15,7 @@ You may get or specify a separator between thousands `1(.)000(.)000`:
 ## Usage
 
 ```php
-$money = money(10000000);
+$money = money('10000000000');
 
 $money->settings()->getThousandsSeparator();    // " "
 $money->toString();                             // "$ 1 000 000"

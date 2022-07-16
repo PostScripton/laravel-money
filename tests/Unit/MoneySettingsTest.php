@@ -22,7 +22,7 @@ class MoneySettingsTest extends TestCase
         $this->assertInstanceOf(Currency::class, $settings->getCurrency());
         $this->assertEquals('$', $settings->getCurrency()->getSymbol());
 
-        $this->assertEquals("$ 1 234.5", Money::make(12345, null, $settings)->toString());
+        $this->assertEquals("$ 1 234.5", money('12345000', null, $settings)->toString());
     }
 
     /** @test */
@@ -44,6 +44,6 @@ class MoneySettingsTest extends TestCase
         $this->assertInstanceOf(Currency::class, $settings->getCurrency());
         $this->assertEquals('₽', $settings->getCurrency()->getSymbol());
 
-        $this->assertEquals("1'234,56₽", Money::make(123456, null, $settings)->toString());
+        $this->assertEquals("1'234,56₽", money('12345600', null, $settings)->toString());
     }
 }

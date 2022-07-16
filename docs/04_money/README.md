@@ -38,7 +38,6 @@ There are *static* methods as well as *object* ones.
         - [`bind()`](/docs/04_money/object/bind.md)
         - [`service()`](/docs/04_money/object/service.md)
         - [`convertInto()`](/docs/04_money/object/convertInto.md)
-        - [`upload()`](/docs/04_money/object/upload.md)
         - [`toString()`](/docs/04_money/object/toString.md)
 
 ---

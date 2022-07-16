@@ -13,8 +13,8 @@ divides an amount from the money.
 ## Usage
 
 ```php
-$money = money(1000);   // "$ 100"
-$money->divide(2);      // "$ 50"
+$money = money('1000000');  // "$ 100"
+$money->divide(2);          // "$ 50"
 ```
 
 ---

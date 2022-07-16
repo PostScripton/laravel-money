@@ -12,7 +12,6 @@ Money::getDefaultDecimalSeparator();
 Money::getDefaultEndsWith0();
 Money::getDefaultSpaceBetween();
 Money::getDefaultCurrency();
-Money::getDefaultOrigin();
 ```
 
 About all these default settings you can read [here](/docs/02_settings/README.md).

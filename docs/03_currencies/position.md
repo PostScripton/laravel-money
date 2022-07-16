@@ -22,7 +22,7 @@ You may specify the position of the currency on display.
 ```php
 use PostScripton\Money\Currency;
 
-$money = money(1234);
+$money = money('1234000');
 
 $money->settings()->getCurrency()->getPosition();   // 0 (Currency::POSITION_START)
 $money->toString();                                 // "$ 123.4"
