@@ -12,9 +12,9 @@ class MoneyFilteringTest extends TestCase
     /** @test */
     public function selectTheMinMoneyOutOfTheManyMoneyObjects()
     {
-        $m1 = new Money(3000);
-        $m2 = new Money(1000);
-        $m3 = new Money(2000);
+        $m1 = money('3000000');
+        $m2 = money('1000000');
+        $m3 = money('2000000');
 
         $min = Money::min($m1, $m2, $m3);
 
@@ -26,9 +26,9 @@ class MoneyFilteringTest extends TestCase
     {
         $this->expectException(MoneyHasDifferentCurrenciesException::class);
 
-        $m1 = new Money(3000, Currency::code('RUB'));
-        $m2 = new Money(1000);
-        $m3 = new Money(2000);
+        $m1 = money('3000000', Currency::code('RUB'));
+        $m2 = money('1000000');
+        $m3 = money('2000000');
 
         Money::min($m1, $m2, $m3);
     }
@@ -42,9 +42,9 @@ class MoneyFilteringTest extends TestCase
     /** @test */
     public function selectTheMaxMoneyOutOfTheManyMoneyObjects()
     {
-        $m1 = new Money(3000);
-        $m2 = new Money(1000);
-        $m3 = new Money(2000);
+        $m1 = money('3000000');
+        $m2 = money('1000000');
+        $m3 = money('2000000');
 
         $min = Money::max($m1, $m2, $m3);
 
@@ -56,9 +56,9 @@ class MoneyFilteringTest extends TestCase
     {
         $this->expectException(MoneyHasDifferentCurrenciesException::class);
 
-        $m1 = new Money(3000, Currency::code('RUB'));
-        $m2 = new Money(1000);
-        $m3 = new Money(2000);
+        $m1 = money('3000000', Currency::code('RUB'));
+        $m2 = money('1000000');
+        $m3 = money('2000000');
 
         Money::max($m1, $m2, $m3);
     }
@@ -72,13 +72,13 @@ class MoneyFilteringTest extends TestCase
     /** @test */
     public function getAnAverageMoneyOutOfTheManyMoneyObjects()
     {
-        $m1 = new Money(3000);
-        $m2 = new Money(1000);
-        $m3 = new Money(2000);
+        $m1 = money('3000000');
+        $m2 = money('1000000');
+        $m3 = money('2000000');
 
         $avg = Money::avg($m1, $m2, $m3);
 
-        $this->assertEquals(2000, $avg->getPureAmount());
+        $this->assertEquals('2000000', $avg->getPureAmount());
     }
 
     /** @test */
@@ -86,9 +86,9 @@ class MoneyFilteringTest extends TestCase
     {
         $this->expectException(MoneyHasDifferentCurrenciesException::class);
 
-        $m1 = new Money(3000, Currency::code('RUB'));
-        $m2 = new Money(1000);
-        $m3 = new Money(2000);
+        $m1 = money('3000000', Currency::code('RUB'));
+        $m2 = money('1000000');
+        $m3 = money('2000000');
 
         Money::avg($m1, $m2, $m3);
     }
@@ -102,13 +102,13 @@ class MoneyFilteringTest extends TestCase
     /** @test */
     public function getASumOfTheManyMoneyObjects()
     {
-        $m1 = new Money(3000);
-        $m2 = new Money(1000);
-        $m3 = new Money(2000);
+        $m1 = money('3000000');
+        $m2 = money('1000000');
+        $m3 = money('2000000');
 
         $avg = Money::sum($m1, $m2, $m3);
 
-        $this->assertEquals(6000, $avg->getPureAmount());
+        $this->assertEquals('6000000', $avg->getPureAmount());
     }
 
     /** @test */
@@ -116,9 +116,9 @@ class MoneyFilteringTest extends TestCase
     {
         $this->expectException(MoneyHasDifferentCurrenciesException::class);
 
-        $m1 = new Money(3000, Currency::code('RUB'));
-        $m2 = new Money(1000);
-        $m3 = new Money(2000);
+        $m1 = money('3000000', Currency::code('RUB'));
+        $m2 = money('1000000');
+        $m3 = money('2000000');
 
         Money::sum($m1, $m2, $m3);
     }

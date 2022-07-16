@@ -13,9 +13,9 @@ is the current monetary object less than the given one?
 ## Usage
 
 ```php
-$m1 = money(500);
-$m2 = money(500);
-$m3 = money(1000);
+$m1 = money('500000');
+$m2 = money('500000');
+$m3 = money('1000000');
 
 $m1->lessThan($m3); // true
 $m1->lessThan($m2); // false

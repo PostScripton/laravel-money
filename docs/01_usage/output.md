@@ -3,13 +3,13 @@ After creating and manipulating with the Money object, you'd like to print the m
 
 You can use one of the following ways:
 ```php
-$money = money(1234);
+$money = money('12345000');
 
 // Use toString()
-$string = $money->toString();           // "$ 123.4"
+$string = $money->toString();           // "$ 1 234.5"
 
 // Explicitly assign object to string
-$string = "Your balance is {$money}";   // "Your balance is $ 123.4"
+$string = "Your balance is {$money}";   // "Your balance is $ 1 234.5"
 ```
 
 In Blade:

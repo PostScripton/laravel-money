@@ -72,7 +72,7 @@ class CurrencyTest extends TestCase
     {
         Currency::setCurrencyList(Currency::LIST_ALL);
 
-        $money = new Money(1234, Currency::code('CVE'));
+        $money = money('1234000', Currency::code('CVE'));
         $this->assertEquals('123.4 Esc', $money->toString());
 
         $this->assertEquals('Esc', $money->getCurrency()->getSymbol()); // because no preferred

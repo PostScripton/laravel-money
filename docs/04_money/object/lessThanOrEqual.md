@@ -13,10 +13,10 @@ is the current monetary object less than or equal to the given one?
 ## Usage
 
 ```php
-$m1 = money(500);
-$m2 = money(500);
-$m3 = money(1000);
-$m4 = money(100);
+$m1 = money('500000');
+$m2 = money('500000');
+$m3 = money('1000000');
+$m4 = money('100000');
 
 $m1->lessThanOrEqual($m2); // true
 $m1->lessThanOrEqual($m3); // true

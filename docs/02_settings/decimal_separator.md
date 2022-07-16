@@ -15,7 +15,7 @@ You may get or specify a separator for decimals `123(.)4`:
 ## Usage
 
 ```php
-$money = money(1234);
+$money = money('1234000');
 
 $money->settings()->getDecimalSeparator();  // "."
 $money->toString();                         // "$ 123.4"

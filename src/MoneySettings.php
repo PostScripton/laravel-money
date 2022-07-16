@@ -2,15 +2,12 @@
 
 namespace PostScripton\Money;
 
-use PostScripton\Money\Exceptions\UndefinedOriginException;
 use PostScripton\Money\PHPDocs\MoneySettingsInterface;
 
 class MoneySettings implements MoneySettingsInterface
 {
-    public const ORIGIN_INT = 0;
-    public const ORIGIN_FLOAT = 1;
-    public const MAX_DECIMALS = 4;
     public const MIN_DECIMALS = 1;
+    public const MAX_DECIMALS = 4;
 
     private int $decimals;
     private string $thousands_separator;
@@ -18,7 +15,6 @@ class MoneySettings implements MoneySettingsInterface
     private bool $ends_with_0;
     private bool $space_between;
     private Currency $currency;
-    private int $origin;
 
     private ?Money $money;
 
@@ -29,18 +25,15 @@ class MoneySettings implements MoneySettingsInterface
         bool $ends_with_0 = null,
         bool $space_between = null,
         Currency $currency = null,
-        int $origin = null
     ) {
         $this->money = null;
-        $this->origin = MoneySettings::ORIGIN_INT;
 
         $this->setDecimals($decimals ?? Money::getDefaultDecimals())
             ->setThousandsSeparator($thousands_separator ?? Money::getDefaultThousandsSeparator())
             ->setDecimalSeparator($decimal_separator ?? Money::getDefaultDecimalSeparator())
             ->setEndsWith0($ends_with_0 ?? Money::getDefaultEndsWith0())
             ->setHasSpaceBetween($space_between ?? Money::getDefaultSpaceBetween())
-            ->setCurrency($currency ?? Currency::code(Currency::getConfigCurrency()))
-            ->setOrigin($origin ?? Money::getDefaultOrigin());
+            ->setCurrency($currency ?? Currency::code(Currency::getConfigCurrency()));
     }
 
     public function bind(Money $money): self
@@ -105,32 +98,6 @@ class MoneySettings implements MoneySettingsInterface
         return $this;
     }
 
-    public function setOrigin(int $origin): self
-    {
-        if (self::isIncorrectOrigin($origin)) {
-            throw new UndefinedOriginException(__METHOD__, 1, '$origin');
-        }
-
-        if ($this->origin === $origin) {
-            return $this;
-        }
-
-        $old_origin = $this->origin;
-        $this->origin = $origin;
-
-        if (!is_null($this->money)) {
-            $number = $old_origin === MoneySettings::ORIGIN_INT
-                ? $this->money->getPureAmount() / $this->getDivisor()
-                : $this->money->getPureAmount() * $this->getDivisor();
-
-            $money = money($number, $this->money->getCurrency(), settings()->setOrigin($origin));
-
-            $this->money->rebase($money);
-        }
-
-        return $this;
-    }
-
     // ========== GETTERS ==========
 
     public function getDecimals(): int
@@ -161,23 +128,5 @@ class MoneySettings implements MoneySettingsInterface
     public function getCurrency(): Currency
     {
         return $this->currency;
-    }
-
-    public function getOrigin(): int
-    {
-        return $this->origin;
-    }
-
-    public static function isIncorrectOrigin(int $origin): bool
-    {
-        return !in_array($origin, [
-            self::ORIGIN_INT,
-            self::ORIGIN_FLOAT,
-        ]);
-    }
-
-    private function getDivisor(): int
-    {
-        return 10 ** $this->getDecimals();
     }
 }
