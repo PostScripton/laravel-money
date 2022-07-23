@@ -44,7 +44,7 @@ return [
     | This option allows you to create you own currencies.
     |
     | Each custom currency represents an array with properties:
-    | 1. full_name  - a full qualified name of an currency
+    | 1. full_name  - a full qualified name of a currency
     | 2. name       - a short name of a currency
     | 3. iso_code   - an alphabetic code
     | 4. num_code   - a numeric code
