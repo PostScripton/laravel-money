@@ -5,7 +5,7 @@ In order to use this package, you need to create a Money object:
 use PostScripton\Money\Money;
 
 $money = new Money('12345000');
-$money = Money::make('12345000');
+$money = Money::of('12345000');
 $money = money('12345000'); // preferred variant
 ```
 

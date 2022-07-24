@@ -12,7 +12,7 @@ class MoneyTest extends TestCase
     /** @test */
     public function allTheWaysToCreateMoney()
     {
-        $money1 = Money::make('12345000');
+        $money1 = Money::of('12345000');
         $money2 = money('12345000');
 
         $this->assertEquals($money1, $money2);
@@ -38,7 +38,7 @@ class MoneyTest extends TestCase
     /** @test */
     public function numbersCanBeFetchedOutOfTheMoney()
     {
-        $money = Money::make('12345000');
+        $money = Money::of('12345000');
 
         $this->assertEquals('1 234.5', $money->getAmount());
         $this->assertEquals('12345000', $money->getPureAmount());
@@ -47,7 +47,7 @@ class MoneyTest extends TestCase
     /** @test */
     public function allCastsToString()
     {
-        $money = Money::make('1234000');
+        $money = Money::of('1234000');
 
         $this->assertEquals('$ 123.4', $money->toString());
         $this->assertEquals('$ 123.4', strval($money));
