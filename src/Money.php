@@ -188,7 +188,13 @@ class Money implements MoneyInterface
 
     public function equals(self $money, bool $strict = true): bool
     {
-        return $strict ? $this === $money : $this == $money;
+        if ($strict) {
+            if ($this->getCurrency()->getCode() !== $money->getCurrency()->getCode()) {
+                return false;
+            }
+        }
+
+        return $this->amount === $money->amount;
     }
 
     public function convertInto(Currency $currency, ?float $rate = null, ?Carbon $date = null): self
