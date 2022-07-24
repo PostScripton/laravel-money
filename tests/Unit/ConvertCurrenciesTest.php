@@ -23,7 +23,7 @@ class ConvertCurrenciesTest extends TestCase
         $back_rub = $usd->convertInto(currency('RUB'), $rate / 1);
         $this->assertEquals('1 000 ₽', $back_rub->toString());
 
-        $this->assertFalse($rub->equals($back_rub));
+        $this->assertTrue($rub->equals($back_rub));
         $this->assertTrue($rub->isSameCurrency($back_rub));
         $this->assertEquals($rub->getPureAmount(), $back_rub->getPureAmount());
     }

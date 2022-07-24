@@ -124,7 +124,7 @@ class ServicesTest extends TestCase
 
         $back_rub = $usd->convertInto(currency('rub'));
 
-        $this->assertFalse($rub->equals($back_rub));
+        $this->assertTrue($rub->equals($back_rub));
         $this->assertEquals('1 000 ₽', $back_rub->toString());
         $this->assertTrue($rub->isSameCurrency($back_rub));
         $this->assertEquals($rub->toString(), $back_rub->toString());
