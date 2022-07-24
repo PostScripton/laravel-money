@@ -96,13 +96,11 @@ class MoneyLogicalOperationsTest extends TestCase
     /** @test */
     public function checkIfMoneyObjectsAreTheSame()
     {
-        $m1 = $m2 = money('1000000');
-        $m3 = money('1000000');
-        $m4 = money('1500000');
+        $m1 = money('12345000');
+        $m2 = money('12345000');
+        $m3 = money('12345000', currency('RUB'));
 
         $this->assertTrue($m1->equals($m2));
-        $this->assertTrue($m1->equals($m3, false));
         $this->assertFalse($m1->equals($m3));
-        $this->assertFalse($m1->equals($m4));
     }
 }
