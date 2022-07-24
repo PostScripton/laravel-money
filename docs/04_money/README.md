@@ -6,7 +6,7 @@ There are *static* methods as well as *object* ones.
 1. Static methods
     - [Getters](/docs/04_money/static/getters.md)
     - [`Money::set()`](/docs/04_money/static/set.md)
-    - [`Money::make()`](/docs/04_money/static/make.md)
+    - [`Money::of()`](/docs/04_money/static/of.md)
     - [`Money::correctInput()`](/docs/04_money/static/correctInput.md)
     - [`Money::parse()`](/docs/04_money/static/parse.md)
 2. Object methods
