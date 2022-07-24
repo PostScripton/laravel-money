@@ -12,13 +12,13 @@ interface MoneyInterface
     // ========== STATIC ========== //
 
     /**
-     * Creates a Money object
+     * Creates a monetary object
      * @param string $amount
      * @param null $currency
      * @param null $settings
      * @return self
      */
-    public static function make(string $amount, $currency = null, $settings = null): self;
+    public static function of(string $amount, $currency = null, $settings = null): self;
 
     /**
      * Parses the string and turns it into a money instance

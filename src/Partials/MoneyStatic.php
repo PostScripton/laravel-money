@@ -71,7 +71,7 @@ trait MoneyStatic
 
     // ========== METHODS ==========
 
-    public static function make(string $amount, $currency = null, $settings = null): Money
+    public static function of(string $amount, $currency = null, $settings = null): Money
     {
         return money($amount, $currency, $settings);
     }
@@ -131,9 +131,9 @@ trait MoneyStatic
 
         self::currenciesAreNotSame($monies, Money::class . '::' . __FUNCTION__, 1, '$monies');
 
-        $sum = array_reduce($monies, function (float $acc, Money $money) {
+        $sum = array_reduce($monies, function (string $acc, Money $money) {
             return $acc + $money->getPureAmount();
-        }, 0);
+        }, '0');
 
         return new Money(
             $sum / count($monies),
@@ -150,9 +150,9 @@ trait MoneyStatic
 
         self::currenciesAreNotSame($monies, Money::class . '::' . __FUNCTION__, 1, '$monies');
 
-        $sum = array_reduce($monies, function (float $acc, Money $money) {
+        $sum = array_reduce($monies, function (string $acc, Money $money) {
             return $acc + $money->getPureAmount();
-        }, 0);
+        }, '0');
 
         return new Money(
             $sum,
