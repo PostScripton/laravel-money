@@ -161,7 +161,7 @@ return [
         'iso_code' => 'BRL',
         'num_code' => '986',
         'symbol' => 'R$',
-        'position' => Currency::POSITION_END,
+        'position' => Currency::POSITION_START,
     ],
     [
         'full_name' => 'New Taiwan dollar',
