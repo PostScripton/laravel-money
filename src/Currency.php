@@ -26,6 +26,13 @@ class Currency
     public const LIST_CUSTOM = 'custom';
     public const LIST_CONFIG = 'config';
 
+    public const LISTS = [
+        self::LIST_ALL,
+        self::LIST_POPULAR,
+        self::LIST_CUSTOM,
+        self::LIST_CONFIG,
+    ];
+
     private const CONFIG_LIST = 'money.currency_list';
     private const CONFIG_CUSTOM = 'money.custom_currencies';
 
@@ -192,21 +199,13 @@ class Currency
 
     public static function isIncorrectList(string $list): bool
     {
-        return !in_array(
-            $list,
-            [
-                self::LIST_ALL,
-                self::LIST_POPULAR,
-                self::LIST_CONFIG,
-                self::LIST_CONFIG,
-            ]
-        );
+        return !in_array($list, self::LISTS);
     }
 
     public static function setCurrencyList(string $list = self::LIST_POPULAR): void
     {
         if (self::isIncorrectList($list)) {
-            $list = self::LIST_POPULAR;
+            throw new CurrencyListConfigException($list);
         }
         self::$list = $list;
 
