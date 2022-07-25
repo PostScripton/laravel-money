@@ -3,7 +3,6 @@
 namespace PostScripton\Money\Tests\Feature;
 
 use PostScripton\Money\Currency;
-use PostScripton\Money\Money;
 use PostScripton\Money\Tests\TestCase;
 
 class CurrencyDisplayTest extends TestCase

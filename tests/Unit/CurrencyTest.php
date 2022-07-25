@@ -5,7 +5,6 @@ namespace PostScripton\Money\Tests\Unit;
 use PostScripton\Money\Currency;
 use PostScripton\Money\Exceptions\CurrencyDoesNotExistException;
 use PostScripton\Money\Exceptions\NoSuchCurrencySymbolException;
-use PostScripton\Money\Money;
 use PostScripton\Money\Tests\TestCase;
 
 class CurrencyTest extends TestCase
