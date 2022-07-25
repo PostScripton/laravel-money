@@ -4,7 +4,6 @@ namespace PostScripton\Money\Tests\Unit;
 
 use PostScripton\Money\Currency;
 use PostScripton\Money\Money;
-use PostScripton\Money\MoneySettings;
 use PostScripton\Money\Tests\TestCase;
 
 class MoneyTest extends TestCase

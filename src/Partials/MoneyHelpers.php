@@ -4,7 +4,6 @@ namespace PostScripton\Money\Partials;
 
 use PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException;
 use PostScripton\Money\Money;
-use PostScripton\Money\MoneySettings;
 
 trait MoneyHelpers
 {

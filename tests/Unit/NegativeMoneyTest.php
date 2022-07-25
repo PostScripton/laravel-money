@@ -3,7 +3,6 @@
 namespace PostScripton\Money\Tests\Unit;
 
 use PostScripton\Money\Currency;
-use PostScripton\Money\Money;
 use PostScripton\Money\Tests\TestCase;
 
 class NegativeMoneyTest extends TestCase
