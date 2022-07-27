@@ -9,24 +9,6 @@ use PostScripton\Money\MoneySettings;
 
 interface MoneyInterface
 {
-    // ========== STATIC ========== //
-
-    /**
-     * Creates a monetary object
-     * @param string $amount
-     * @param null $currency
-     * @param null $settings
-     * @return self
-     */
-    public static function of(string $amount, $currency = null, $settings = null): self;
-
-    /**
-     * Parses the string and turns it into a money instance
-     * @param string $money
-     * @return self
-     */
-    public static function parse(string $money): self;
-
     /**
      * Binds the money object with settings
      * @param MoneySettings $settings
@@ -39,6 +21,21 @@ interface MoneyInterface
      * @return MoneySettings
      */
     public function settings(): MoneySettings;
+
+    /**
+     * Get currency of the monetary object
+     * @return Currency
+     */
+    public function getCurrency(): Currency;
+
+    /**
+     * Set a new currency <p>
+     * Note that changes only currency itself without converting </p>
+     * For converting between currencies use `convertInto()` method
+     * @param Currency $currency
+     * @return Money
+     */
+    public function setCurrency(Currency $currency): Money;
 
     /**
      * Creates an absolutely identical instance of the object
@@ -59,13 +56,6 @@ interface MoneyInterface
      * @return string
      */
     public function getPureAmount(): string;
-
-    /**
-     * Shortcut for getting the currency <p>
-     * Full: `$money->settings()->getCurrency()` </p>
-     * @return Currency
-     */
-    public function getCurrency(): Currency;
 
     /**
      * Adds an amount to the money. It's like <p>
@@ -238,6 +228,24 @@ interface MoneyInterface
      * "$ 1 234.5" </p>
      */
     public function toString(): string;
+
+    // ========== STATIC ========== //
+
+    /**
+     * Creates a monetary object
+     * @param string $amount
+     * @param null $currency
+     * @param null $settings
+     * @return self
+     */
+    public static function of(string $amount, $currency = null, $settings = null): self;
+
+    /**
+     * Parses the string and turns it into a money instance
+     * @param string $money
+     * @return self
+     */
+    public static function parse(string $money): self;
 
     /**
      * Sets default settings for any Money object

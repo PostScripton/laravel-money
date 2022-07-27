@@ -1,16 +1,19 @@
 # Display
-You may specify the way to display the currency whether it will be as an iso-code or a symbol.
+You may specify the way to display the currency whether it will be as a symbol or iso-code.
 
 ## Constants
 
-1. `Currency::DISPLAY_SYMBOL` (displays a currency as an ISO-code `USD`)
-2. `Currency::DISPLAY_CODE` (displays a currency as a symbol `$`)
+1. `Currency::DISPLAY_SYMBOL` (displays a currency as an ISO-code `$`)
+2. `Currency::DISPLAY_CODE` (displays a currency as a symbol `USD`)
 
 ## Methods
 
-### `setCurrencyList([string $list = Currency::LIST_POPULAR])`
+### `getDisplay()`
+**Returns**: `int` - one of the constants.
+
+### `setDisplay([int $display = Currency::DISPLAY_SYMBOL])`
 **Parameters**:
-1. `[string $list = Currency::LIST_POPULAR]` (*optional*) - one of the constants of the lists of currencies.
+1. `[int $display = Currency::DISPLAY_SYMBOL]` (*optional*) - one of the constants.
 
 **Returns**: `void`
 
@@ -21,17 +24,17 @@ use PostScripton\Money\Currency;
 
 $money = money('1234000');
 
-$money->settings()->getCurrency()->getDisplay();    // 10 (Currency::DISPLAY_SYMBOL)
-$money->toString();                                 // "$ 123.4"
+$money->getCurrency()->getDisplay();    // 10 (Currency::DISPLAY_SYMBOL)
+$money->toString();                     // "$ 123.4"
 
-$money->settings()->getCurrency()->setDisplay(Currency::DISPLAY_CODE);
+$money->getCurrency()->setDisplay(Currency::DISPLAY_CODE);
 
-$money->settings()->getCurrency()->getDisplay();    // 11 (Currency::DISPLAY_CODE)
-$money->toString();                                 // "USD 123.4"
+$money->getCurrency()->getDisplay();    // 11 (Currency::DISPLAY_CODE)
+$money->toString();                     // "USD 123.4"
 
 // If you don't like the look of the iso-code at the beginning
-$money->settings()->getCurrency()->setPosition(Currency::POSITION_END);
-$money->toString();                                 // "123.4 USD"
+$money->getCurrency()->setPosition(Currency::POSITION_END);
+$money->toString();                     // "123.4 USD"
 ```
 
 ---

@@ -18,8 +18,6 @@ class MoneySettingsTest extends TestCase
         $this->assertEquals('.', $settings->getDecimalSeparator());
         $this->assertFalse($settings->endsWith0());
         $this->assertTrue($settings->hasSpaceBetween());
-        $this->assertInstanceOf(Currency::class, $settings->getCurrency());
-        $this->assertEquals('$', $settings->getCurrency()->getSymbol());
 
         $this->assertEquals("$ 1 234.5", money('12345000', null, $settings)->toString());
     }
@@ -32,17 +30,14 @@ class MoneySettingsTest extends TestCase
             ->setThousandsSeparator('\'')
             ->setDecimalSeparator(',')
             ->setEndsWith0(true)
-            ->setHasSpaceBetween(false)
-            ->setCurrency(Currency::code('RUB'));
+            ->setHasSpaceBetween(false);
 
         $this->assertEquals(2, $settings->getDecimals());
         $this->assertEquals('\'', $settings->getThousandsSeparator());
         $this->assertEquals(',', $settings->getDecimalSeparator());
         $this->assertTrue($settings->endsWith0());
         $this->assertFalse($settings->hasSpaceBetween());
-        $this->assertInstanceOf(Currency::class, $settings->getCurrency());
-        $this->assertEquals('₽', $settings->getCurrency()->getSymbol());
 
-        $this->assertEquals("1'234,56₽", money('12345600', null, $settings)->toString());
+        $this->assertEquals("1'234,56₽", money('12345600', Currency::code('RUB'), $settings)->toString());
     }
 }
