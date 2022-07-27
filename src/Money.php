@@ -18,12 +18,13 @@ class Money implements MoneyInterface
     public const FREQUENT_DECIMAL_SEPARATORS = ['.', ','];
 
     private string $amount;
+    private Currency $currency;
     private ?MoneySettings $settings;
 
     public function __construct(string $amount, $currency = null, $settings = null)
     {
         $this->amount = $amount;
-        $this->settings = null;
+        $this->setCurrency(self::getDefaultCurrency());
 
         if (is_null($settings) && !($currency instanceof MoneySettings)) {
             $settings = new MoneySettings();
@@ -37,7 +38,7 @@ class Money implements MoneyInterface
 
         // Is $currency a Currency or Settings?
         if ($currency instanceof Currency) {
-            $settings->setCurrency($currency);
+            $this->setCurrency($currency);
         } elseif ($currency instanceof MoneySettings) {
             $settings = $currency;
         }
@@ -55,6 +56,18 @@ class Money implements MoneyInterface
     public function settings(): MoneySettings
     {
         return $this->settings;
+    }
+
+    public function getCurrency(): Currency
+    {
+        return $this->currency;
+    }
+
+    public function setCurrency(Currency $currency): self
+    {
+        $this->currency = $currency;
+
+        return $this;
     }
 
     public function clone(): self
@@ -87,11 +100,6 @@ class Money implements MoneyInterface
         }
 
         return $money;
-    }
-
-    public function getCurrency(): Currency
-    {
-        return $this->settings()->getCurrency();
     }
 
     public function add(self $money): self
@@ -148,7 +156,7 @@ class Money implements MoneyInterface
 
     public function isSameCurrency(self $money): bool
     {
-        return $this->settings()->getCurrency()->getCode() === $money->settings()->getCurrency()->getCode();
+        return $this->getCurrency()->getCode() === $money->getCurrency()->getCode();
     }
 
     public function isNegative(): bool
@@ -225,7 +233,7 @@ class Money implements MoneyInterface
 
     public function toString(): string
     {
-        return self::bindMoneyWithCurrency($this, $this->settings()->getCurrency());
+        return self::bindMoneyWithCurrency($this, $this->getCurrency());
     }
 
     public function service()

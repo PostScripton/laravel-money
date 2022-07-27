@@ -24,13 +24,13 @@ use PostScripton\Money\Currency;
 
 $money = money('1234000');
 
-$money->settings()->getCurrency()->getPosition();   // 0 (Currency::POSITION_START)
-$money->toString();                                 // "$ 123.4"
+$money->getCurrency()->getPosition();   // 0 (Currency::POSITION_START)
+$money->toString();                     // "$ 123.4"
 
-$money->settings()->getCurrency()->setPosition(Currency::POSITION_END);
+$money->getCurrency()->setPosition(Currency::POSITION_END);
 
-$money->settings()->getCurrency()->getPosition();   // 1 (Currency::POSITION_END)
-$money->toString();                                 // "123.4 $"
+$money->getCurrency()->getPosition();   // 1 (Currency::POSITION_END)
+$money->toString();                     // "123.4 $"
 ```
 
 ---

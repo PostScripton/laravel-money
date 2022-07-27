@@ -1,5 +1,5 @@
 # `getCurrency()`
-A shortcut for getting the currency.
+Getting a currency.
 
 ## Methods
 
@@ -9,13 +9,6 @@ A shortcut for getting the currency.
 
 ## Usage
 
-The full way:
-```php
-$money = money('1000000');
-$money->settings()->getCurrency();
-```
-
-The shortcut:
 ```php
 $money = money('1000000');
 $money->getCurrency(); // PostScripton\Money\Currency object
