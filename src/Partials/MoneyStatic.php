@@ -24,7 +24,7 @@ trait MoneyStatic
         self::$default_decimal_separator = $settings->getDecimalSeparator();
         self::$default_ends_with_0 = $settings->endsWith0();
         self::$default_space_between = $settings->hasSpaceBetween();
-        self::$default_currency = $settings->getCurrency();
+        self::$default_currency = Currency::code(Currency::getConfigCurrency());
     }
 
     public static function configNotPublished(): bool

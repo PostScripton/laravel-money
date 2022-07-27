@@ -2,7 +2,6 @@
 
 namespace PostScripton\Money\PHPDocs;
 
-use PostScripton\Money\Currency;
 use PostScripton\Money\MoneySettings;
 
 interface MoneySettingsInterface
@@ -50,13 +49,6 @@ interface MoneySettingsInterface
     public function setHasSpaceBetween(bool $space = true): MoneySettings;
 
     /**
-     * Sets a currency
-     * @param Currency $currency
-     * @return MoneySettings
-     */
-    public function setCurrency(Currency $currency): MoneySettings;
-
-    /**
      * Returns the decimals
      * @return int
      */
@@ -84,10 +76,4 @@ interface MoneySettingsInterface
      * @return bool
      */
     public function hasSpaceBetween(): bool;
-
-    /**
-     * Returns the currency
-     * @return Currency
-     */
-    public function getCurrency(): Currency;
 }
