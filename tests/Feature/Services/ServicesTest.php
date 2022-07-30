@@ -93,25 +93,12 @@ class ServicesTest extends TestCase
     public function theGivenCurrencyIsNotSupportedForConvertingByAService()
     {
         $this->mockService();
-
-        Config::set('money.custom_currencies', [
-            [
-                'full_name' => 'QWERTY currency',
-                'name' => 'qwerty',
-                'iso_code' => 'QWERTY',
-                'num_code' => '1234',
-                'symbol' => 'Q-Y',
-                'position' => Currency::POSITION_START,
-            ],
-        ]);
-        Currency::setCurrencyList(Currency::currentList());
-
         $this->expectException(ServiceDoesNotSupportCurrencyException::class);
         $this->expectExceptionMessage('The service class "SomeServiceClass" doesn\'t support ' .
-            'one of the currencies [QWERTY]');
+            'one of the currencies [EUR]');
 
         $money = money('1000000');
-        $money->convertInto(currency('1234'));
+        $money->convertInto(currency('EUR'));
     }
 
     /** @test */

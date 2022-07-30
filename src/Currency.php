@@ -3,13 +3,9 @@
 namespace PostScripton\Money;
 
 use Illuminate\Support\Collection;
-use PostScripton\Money\Exceptions\BaseException;
 use PostScripton\Money\Exceptions\CurrencyDoesNotExistException;
 use PostScripton\Money\Exceptions\CurrencyHasWrongConstructorException;
 use PostScripton\Money\Exceptions\CurrencyListConfigException;
-use PostScripton\Money\Exceptions\CustomCurrencyDoesNotHaveFieldException;
-use PostScripton\Money\Exceptions\CustomCurrencyTakenCodesException;
-use PostScripton\Money\Exceptions\CustomCurrencyWrongFieldTypeException;
 use PostScripton\Money\Exceptions\NoSuchCurrencySymbolException;
 use PostScripton\Money\Exceptions\ShouldPublishConfigFileException;
 
@@ -51,11 +47,11 @@ class Currency
     public function __construct(array $currency)
     {
         if (
-            is_null($currency['full_name']) ||
-            is_null($currency['name']) ||
-            is_null($currency['iso_code']) ||
-            is_null($currency['num_code']) ||
-            is_null($currency['symbol'])
+            (! isset($currency['full_name'])) ||
+            (! isset($currency['name'])) ||
+            (! isset($currency['iso_code'])) ||
+            (! isset($currency['num_code'])) ||
+            (! isset($currency['symbol']))
         ) {
             throw new CurrencyHasWrongConstructorException();
         }
@@ -209,8 +205,6 @@ class Currency
         }
         self::$list = $list;
 
-        self::checkCustomCurrencies();
-
         if ($list !== self::LIST_CONFIG) {
             self::$currencies = self::getList($list);
             self::$currencies = self::createCurrencies(self::$currencies);
@@ -301,63 +295,17 @@ class Currency
     {
         $list = require __DIR__ . "/Lists/" . $list . "_currencies.php";
 
-        return $custom
-            ? array_merge($list, config(self::CONFIG_CUSTOM))
-            : $list;
-    }
-
-    private static function checkCustomCurrencies()
-    {
-        $custom_currencies = config(self::CONFIG_CUSTOM);
-        $all = self::getList(self::LIST_ALL, false);
-
-        if (!is_array($custom_currencies)) {
-            throw new BaseException('The config property "custom_currencies" must be an array.');
+        if ($custom) {
+            $customCurrencies = collect(config(self::CONFIG_CUSTOM));
+            $list = array_map(function (array $currency) use ($customCurrencies) {
+                $customCurrency = $customCurrencies->first(function (array $customCurrency) use ($currency) {
+                    return strtoupper($customCurrency['iso_code']) === strtoupper($currency['iso_code']) ||
+                        $customCurrency['num_code'] === $currency['num_code'];
+                });
+                return $customCurrency ?: $currency;
+            }, $list);
         }
 
-        // Validation
-        $validator = [
-            'full_name' => ['string'],
-            'name' => ['string'],
-            'iso_code' => ['string'],
-            'num_code' => ['string'],
-            'symbol' => ['string', 'array'],
-            'position' => ['integer'],
-        ];
-        foreach ($custom_currencies as $custom) {
-            foreach ($validator as $field => $rules) {
-                if (!array_key_exists($field, $custom)) {
-                    throw new CustomCurrencyDoesNotHaveFieldException($field);
-                }
-
-                $valid = false;
-                for ($i = 0, $rule = $rules[$i]; $i < count($rules) && !$valid; $i++) {
-                    $function = 'is_' . $rule;
-                    $valid = $function($custom[$field]);
-                }
-                if (!$valid) {
-                    throw new CustomCurrencyWrongFieldTypeException(implode(':', [$field, implode('|', $rules)]));
-                }
-            }
-        }
-
-        foreach ($custom_currencies as $key => $custom) {
-            $except_current_custom = array_filter(
-                $custom_currencies,
-                fn($index) => $index !== $key,
-                ARRAY_FILTER_USE_KEY
-            );
-
-            foreach (array_merge($all, $except_current_custom) as $currency) {
-                if (
-                    strtoupper($currency['iso_code']) === strtoupper($custom['iso_code']) ||
-                    strtoupper($currency['num_code']) === strtoupper($custom['num_code'])
-                ) {
-                    throw new CustomCurrencyTakenCodesException(
-                        implode(',', [$currency['full_name'], $currency['iso_code'], $currency['num_code']])
-                    );
-                }
-            }
-        }
+        return $list;
     }
 }
