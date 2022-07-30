@@ -3,6 +3,10 @@
 namespace PostScripton\Money;
 
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
+use PostScripton\Money\Exceptions\BaseException;
+use PostScripton\Money\Exceptions\CustomCurrencyTakenCodesException;
+use PostScripton\Money\Exceptions\CustomCurrencyValidationException;
 use PostScripton\Money\Exceptions\ServiceClassDoesNotExistException;
 use PostScripton\Money\Exceptions\ServiceDoesNotExistException;
 use PostScripton\Money\Exceptions\ServiceDoesNotHaveClassException;
@@ -25,6 +29,7 @@ class MoneyServiceProvider extends PackageServiceProvider
     public function packageBooted(): void
     {
         $this->registerService();
+        $this->registerCustomCurrencies();
 
         $settings = (new MoneySettings())
             ->setDecimals(config('money.decimals', 1))
@@ -62,6 +67,63 @@ class MoneyServiceProvider extends PackageServiceProvider
             }
 
             return new $class($config);
+        });
+    }
+
+    protected function registerCustomCurrencies(): void
+    {
+        $customCurrencies = config('money.custom_currencies');
+
+        if (!is_array($customCurrencies)) {
+            throw new BaseException('The config property "custom_currencies" must be an array.');
+        }
+        if (empty($customCurrencies)) {
+            return;
+        }
+
+        $validator = Validator::make($customCurrencies, [
+            '*.full_name' => ['required', 'string'],
+            '*.name' => ['required', 'string'],
+            '*.iso_code' => ['required', 'string'],
+            '*.num_code' => ['required', 'string'],
+            '*.symbol' => ['required'],
+            '*.symbol.*' => ['required', 'string'],
+            '*.position' => [
+                'required',
+                Rule::in([Currency::POSITION_START, Currency::POSITION_END]),
+            ],
+        ], [], [
+            '*.full_name' => 'full name',
+            '*.name' => 'name',
+            '*.iso_code' => 'ISO code',
+            '*.num_code' => 'numeric code',
+            '*.symbol' => 'symbol',
+            '*.position' => 'position',
+        ]);
+
+        if ($validator->fails()) {
+            throw new CustomCurrencyValidationException($validator->errors()->first());
+        }
+
+        $this->customCurrenciesShouldNotDuplicate();
+    }
+
+    private function customCurrenciesShouldNotDuplicate(): void
+    {
+        $customCurrencies = collect(config('money.custom_currencies'));
+        $customCurrencies->each(function (array $currency, int $key) use ($customCurrencies) {
+            $withoutCurrent = $customCurrencies->filter(fn($v, $k) => $k !== $key);
+            $sameIsoCode = $withoutCurrent->some(function (array $custom) use ($currency) {
+                return strtoupper($custom['iso_code']) === strtoupper($currency['iso_code']);
+            });
+            $sameNumCode = $withoutCurrent->some(function (array $custom) use ($currency) {
+                return strtoupper($custom['num_code']) === strtoupper($currency['num_code']);
+            });
+            if ($sameIsoCode || $sameNumCode) {
+                throw new CustomCurrencyTakenCodesException(
+                    implode(',', [$currency['full_name'], $currency['iso_code'], $currency['num_code']]),
+                );
+            }
         });
     }
 }
