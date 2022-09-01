@@ -8,38 +8,21 @@ class Parser
 {
     public static function parse(string $money): Money
     {
-        // Get list of currencies
-        $list = Currency::currentList();
-        if ($list !== Currency::LIST_ALL) {
-            Currency::setCurrencyList(Currency::LIST_ALL);
-        }
-        $most_popular_currencies = [
-            currency('USD'),
-            currency('EUR'),
-            currency('JPY'),
-            currency('GBP'),
-            currency('AUD'),
-            currency('CAD'),
-            currency('CHF'),
-            currency('RUB'),
-            currency('UAH'),
-            currency('BYN'),
-        ];
-        foreach ($most_popular_currencies as $most_popular_currency) {
-            foreach ($most_popular_currency->getSymbols() as $symbol) {
+        $currencies = Currency::getCurrencies();
+        foreach ($currencies as $foundCurrency) {
+            foreach ($foundCurrency->getSymbols() as $symbol) {
                 $symbols[] = $symbol;
             }
-            $symbols[] = $most_popular_currency->getCode();
+            $symbols[] = $foundCurrency->getCode();
         }
         $symbols = array_unique(array_map(fn($symbol) => self::quote($symbol), $symbols), SORT_STRING);
-        $currencies = implode('|', $symbols) . '|\w{1,3}';
-        Currency::setCurrencyList($list);
+        $quotedCurrencies = implode('|', $symbols) . '|\w{1,3}';
 
         // Parse
         $quoted_thousands = array_map(fn($separator) => self::quote($separator), Money::FREQUENT_THOUSAND_SEPARATORS);
         $quoted_decimals = array_map(fn($separator) => self::quote($separator), Money::FREQUENT_DECIMAL_SEPARATORS);
         $separators = implode('', array_unique([...$quoted_thousands, ...$quoted_decimals]));
-        $pattern = '/(' . $currencies . ')?\s?(-?\d[\d' . $separators . ']+\d)\s?(' . $currencies . ')?/';
+        $pattern = '/(' . $quotedCurrencies . ')?\s?(-?\d[\d' . $separators . ']+\d)\s?(' . $quotedCurrencies . ')?/';
         preg_match($pattern, $money, $result);
 
         // If nothing is found
@@ -55,27 +38,27 @@ class Parser
         // Find out the currency
         $parsed_currency = $result[3] ?? $result[1];
         if (!empty($parsed_currency)) {
-            foreach ($most_popular_currencies as $popular_currency) {
-                foreach ($popular_currency->getSymbols() as $symbol) {
+            foreach ($currencies as $currency) {
+                foreach ($currency->getSymbols() as $symbol) {
                     if ($symbol === $parsed_currency) {
-                        $currency = $popular_currency;
+                        $foundCurrency = $currency;
                         break;
                     }
                 }
-                if (isset($currency)) {
+                if (isset($foundCurrency)) {
                     break;
                 }
-                if ($popular_currency->getCode() === strtoupper($parsed_currency)) {
-                    $currency = $popular_currency;
+                if ($currency->getCode() === strtoupper($parsed_currency)) {
+                    $foundCurrency = $currency;
                     break;
                 }
             }
         }
-        if (!isset($currency)) {
-            $currency = Money::getDefaultCurrency();
+        if (!isset($foundCurrency)) {
+            $foundCurrency = Money::getDefaultCurrency();
         }
 
-        return money((float)($amount * Money::getDefaultDivisor()), $currency);
+        return money((float)($amount * Money::getDefaultDivisor()), $foundCurrency);
     }
 
     public static function quote(string $str): string

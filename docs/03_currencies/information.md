@@ -46,8 +46,6 @@ $usd->getDisplay();     // 10 (Currency::DISPLAY_SYMBOL)
 ```php
 use PostScripton\Money\Currency;
 
-Currency::setCurrencyList(Currency::LIST_ALL);
-
 $currency = currency("EGP");
 
 // ["£", "ج.م"]

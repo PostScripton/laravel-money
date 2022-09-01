@@ -3,7 +3,6 @@
 namespace PostScripton\Money\Tests\Unit;
 
 use Illuminate\Support\Facades\Config;
-use PostScripton\Money\Currency;
 use PostScripton\Money\Tests\TestCase;
 
 class ConvertCurrenciesTest extends TestCase
@@ -32,7 +31,6 @@ class ConvertCurrenciesTest extends TestCase
     {
         parent::setUp();
         $this->backup_config = Config::get('money');
-        Currency::setCurrencyList(Currency::currentList());
     }
 
     protected function tearDown(): void

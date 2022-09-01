@@ -5,33 +5,25 @@ namespace PostScripton\Money;
 use Illuminate\Support\Collection;
 use PostScripton\Money\Exceptions\CurrencyDoesNotExistException;
 use PostScripton\Money\Exceptions\CurrencyHasWrongConstructorException;
-use PostScripton\Money\Exceptions\CurrencyListConfigException;
 use PostScripton\Money\Exceptions\NoSuchCurrencySymbolException;
 use PostScripton\Money\Exceptions\ShouldPublishConfigFileException;
 
 class Currency
 {
+    // todo use enum instead
     public const POSITION_START = 0;
     public const POSITION_END = 1;
 
+    // todo use enum instead
     public const DISPLAY_SYMBOL = 10;
     public const DISPLAY_CODE = 11;
 
+    // todo use enum instead
     public const LIST_ALL = 'all';
     public const LIST_POPULAR = 'popular';
     public const LIST_CUSTOM = 'custom';
-    public const LIST_CONFIG = 'config';
 
-    public const LISTS = [
-        self::LIST_ALL,
-        self::LIST_POPULAR,
-        self::LIST_CUSTOM,
-        self::LIST_CONFIG,
-    ];
-
-    private const CONFIG_LIST = 'money.currency_list';
-    private const CONFIG_CUSTOM = 'money.custom_currencies';
-
+    // todo use collection instead of array
     protected static array $currencies = [];
     private string $full_name;
     private string $name;
@@ -41,8 +33,6 @@ class Currency
     private int $position;
     private int $display;
     private ?int $preferred_symbol = null;
-
-    private static ?string $list;
 
     public function __construct(array $currency)
     {
@@ -68,12 +58,20 @@ class Currency
 
     public static function code(string $code): ?Currency
     {
-        $currency = is_numeric($code)
-            ? self::currencies()->filter(fn(Currency $currency) => $currency->getNumCode() === $code)->first()
-            : self::currencies()->filter(fn(Currency $currency) => $currency->getCode() === strtoupper($code))->first();
+        if (is_numeric($code)) {
+            $currency = self::getCurrencies()
+                ->filter(fn(Currency $currency) => $currency->getNumCode() === $code)
+                ->first();
+        } else {
+            $currency = self::getCurrencies()
+                ->filter(fn(Currency $currency) => $currency->getCode() === strtoupper($code))
+                ->first();
+        }
 
         if (is_null($currency)) {
-            throw new CurrencyDoesNotExistException(__METHOD__, 1, '$code', implode(',', [$code, self::$list]));
+            $list = config('money.currency_list');
+            $list = is_array($list) ? 'config' : $list;
+            throw new CurrencyDoesNotExistException(__METHOD__, 1, '$code', implode(',', [$code, $list]));
         }
 
         return $currency;
@@ -186,70 +184,25 @@ class Currency
         return $this;
     }
 
-    public static function getCurrencies(): array
+    public static function getCurrencies(): Collection
     {
-        return self::currencies()
+        if (!self::$currencies) {
+            self::$currencies = self::createCurrencies(self::loadCurrencies());
+        }
+
+        return collect(self::$currencies);
+    }
+
+    public static function getCurrencyCodesArray(): array
+    {
+        return self::getCurrencies()
             ->map(fn(self $currency) => $currency->getCode())
             ->toArray();
     }
 
-    public static function isIncorrectList(string $list): bool
-    {
-        return !in_array($list, self::LISTS);
-    }
-
-    public static function setCurrencyList(string $list = self::LIST_POPULAR): void
-    {
-        if (self::isIncorrectList($list)) {
-            throw new CurrencyListConfigException($list);
-        }
-        self::$list = $list;
-
-        if ($list !== self::LIST_CONFIG) {
-            self::$currencies = self::getList($list);
-            self::$currencies = self::createCurrencies(self::$currencies);
-            return;
-        }
-
-        // Config list below...
-
-        if (!is_array(config(self::CONFIG_LIST))) {
-            self::$currencies = self::getList(config(self::CONFIG_LIST));
-            self::$currencies = self::createCurrencies(self::$currencies);
-            return;
-        }
-
-        // Custom currency list
-        $custom_list = config(self::CONFIG_LIST);
-        self::$currencies = self::getList(self::LIST_ALL);
-
-        self::$currencies = array_filter(
-            self::$currencies,
-            // Filtering currencies from custom list: ['840', 'EUR', 'RUB']
-            function ($currency) use (&$custom_list) {
-                if (empty($custom_list)) {
-                    return false;
-                }
-
-                foreach ($custom_list as $item) {
-                    if ($currency['iso_code'] === $item || $currency['num_code'] === $item) {
-                        $custom_list = array_diff($custom_list, [$item]);
-                        return true;
-                    }
-                }
-
-                return false;
-            }
-        );
-
-        self::$currencies = self::createCurrencies(self::$currencies);
-    }
-
-    public static function currentList(): string
-    {
-        return self::$list ?? self::LIST_CONFIG;
-    }
-
+    /**
+     * @deprecated Will be removed due to no usage of it
+     */
     public static function count(): int
     {
         return count(self::$currencies);
@@ -267,21 +220,29 @@ class Currency
         return config('money.default_currency', 'USD');
     }
 
-    protected static function currencies(): Collection
+    private static function loadCurrencies(): array
     {
-        $list = is_array(config(self::CONFIG_LIST))
-            ? self::LIST_CONFIG
-            : config(self::CONFIG_LIST);
+        $list = config('money.currency_list');
 
-        if (self::isIncorrectList($list)) {
-            throw new CurrencyListConfigException($list);
+        if (!is_array($list)) {
+            return self::getList($list);
         }
 
-        if (!self::$currencies) {
-            self::setCurrencyList($list);
-        }
+        // Custom currency list
+        return array_filter(self::getList(self::LIST_ALL), function ($currency) use (&$list) {
+            if (empty($list)) {
+                return false;
+            }
 
-        return collect(self::$currencies);
+            foreach ($list as $item) {
+                if ($currency['iso_code'] === $item || $currency['num_code'] === $item) {
+                    $list = array_diff($list, [$item]);
+                    return true;
+                }
+            }
+
+            return false;
+        });
     }
 
     private static function createCurrencies(array $currencies): array
@@ -291,12 +252,12 @@ class Currency
         }, $currencies);
     }
 
-    private static function getList(string $list, bool $custom = true)
+    private static function getList(string $list): array
     {
         $list = require __DIR__ . "/Lists/" . $list . "_currencies.php";
 
-        if ($custom) {
-            $customCurrencies = collect(config(self::CONFIG_CUSTOM));
+        if ($list !== self::LIST_CUSTOM) {
+            $customCurrencies = collect(config('money.custom_currencies'));
             $list = array_map(function (array $currency) use ($customCurrencies) {
                 $customCurrency = $customCurrencies->first(function (array $customCurrency) use ($currency) {
                     return strtoupper($customCurrency['iso_code']) === strtoupper($currency['iso_code']) ||
