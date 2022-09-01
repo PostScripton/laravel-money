@@ -31,6 +31,8 @@ return [
     | Segregation of currencies is assumed for performance purposes so that
     | unnecessary ones won't be used.
     |
+    | Any list contains currencies from "custom_currencies" setting.
+    |
     */
     'currency_list' => 'popular',
 
@@ -61,6 +63,10 @@ return [
     |   'symbol' => '$',
     |   'position' => Currency::POSITION_START,
     | ]
+    |
+    | A custom currency may override a currency from the "currency_list"
+    | by specifying either the same iso or num code.
+    |
     */
     'custom_currencies' => [],
 

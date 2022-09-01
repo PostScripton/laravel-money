@@ -15,8 +15,6 @@ When there is an array of symbols in a currency, and you always want to choose t
 ```php
 use PostScripton\Money\Currency;
 
-Currency::setCurrencyList(Currency::LIST_ALL);
-
 $currency = currency("EGP");
 $currency->setPreferredSymbol(1);
 
