@@ -14,7 +14,7 @@ interface MoneyInterface
      * @param MoneySettings $settings
      * @return Money
      */
-    public function bind(MoneySettings $settings): Money;
+    public function bind(MoneySettings $settings): self;
 
     /**
      * Returns settings object
@@ -35,13 +35,13 @@ interface MoneyInterface
      * @param Currency $currency
      * @return Money
      */
-    public function setCurrency(Currency $currency): Money;
+    public function setCurrency(Currency $currency): self;
 
     /**
      * Creates an absolutely identical instance of the object
      * @return Money
      */
-    public function clone(): Money;
+    public function clone(): self;
 
     /**
      * Returns a formatted number <p>
@@ -238,14 +238,14 @@ interface MoneyInterface
      * @param null $settings
      * @return self
      */
-    public static function of(string $amount, $currency = null, $settings = null): self;
+    public static function of(string $amount, $currency = null, $settings = null): Money;
 
     /**
      * Parses the string and turns it into a money instance
      * @param string $money
      * @return self
      */
-    public static function parse(string $money): self;
+    public static function parse(string $money): Money;
 
     /**
      * Sets default settings for any Money object
@@ -275,7 +275,7 @@ interface MoneyInterface
     public static function getDefaultDecimals(): int;
 
     /**
-     * Returns the default thousand separator
+     * Returns the default a thousand separator
      * @return string
      */
     public static function getDefaultThousandsSeparator(): string;

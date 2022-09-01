@@ -7,6 +7,16 @@ use PostScripton\Money\Tests\TestCase;
 
 class CurrencyDisplayTest extends TestCase
 {
+    public function tearDown(): void
+    {
+        Currency::code('USD')
+            ->setDisplay(Currency::DISPLAY_SYMBOL)
+            ->setPosition(Currency::POSITION_START);
+        Currency::code('RUB')
+            ->setDisplay(Currency::DISPLAY_SYMBOL)
+            ->setPosition(Currency::POSITION_END);
+    }
+
     /** @test */
     public function displayCodeStart()
     {

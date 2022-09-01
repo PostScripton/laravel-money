@@ -29,6 +29,7 @@ class MoneyServiceProvider extends PackageServiceProvider
     public function packageBooted(): void
     {
         $this->registerService();
+        $this->registerCurrencyList();
         $this->registerCustomCurrencies();
 
         $settings = (new MoneySettings())
@@ -68,6 +69,29 @@ class MoneyServiceProvider extends PackageServiceProvider
 
             return new $class($config);
         });
+    }
+
+    protected function registerCurrencyList(): void
+    {
+        $list = config('money.currency_list');
+
+        if (is_array($list)) {
+            foreach ($list as $code) {
+                if (!is_string($code)) {
+                    throw new BaseException('Codes in the config property "currency_list" must be string');
+                }
+            }
+            return;
+        }
+
+        $availableLists = [Currency::LIST_ALL, Currency::LIST_POPULAR, Currency::LIST_CUSTOM];
+        if (!in_array($list, $availableLists)) {
+            throw new BaseException(
+                'The config property "currency_list" must be either ' .
+                implode(' or ', array_map(fn(string $list) => "\"$list\"", $availableLists)) .
+                ". The value \"$list\" is given."
+            );
+        }
     }
 
     protected function registerCustomCurrencies(): void

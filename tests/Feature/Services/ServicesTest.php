@@ -4,7 +4,6 @@ namespace PostScripton\Money\Tests\Feature\Services;
 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Config;
-use PostScripton\Money\Currency;
 use PostScripton\Money\Exceptions\ServiceClassDoesNotExistException;
 use PostScripton\Money\Exceptions\ServiceDoesNotExistException;
 use PostScripton\Money\Exceptions\ServiceDoesNotHaveClassException;
@@ -134,7 +133,6 @@ class ServicesTest extends TestCase
         parent::setUp();
 
         $this->backup_config = Config::get('money');
-        Currency::setCurrencyList(Currency::currentList());
         Config::set('money.service', 'exchangerate');
     }
 
