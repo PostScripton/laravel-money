@@ -3,6 +3,7 @@
 namespace PostScripton\Money;
 
 use Illuminate\Support\Collection;
+use PostScripton\Money\Enums\CurrencyList;
 use PostScripton\Money\Exceptions\CurrencyDoesNotExistException;
 use PostScripton\Money\Exceptions\CurrencyHasWrongConstructorException;
 use PostScripton\Money\Exceptions\NoSuchCurrencySymbolException;
@@ -17,11 +18,6 @@ class Currency
     // todo use enum instead
     public const DISPLAY_SYMBOL = 10;
     public const DISPLAY_CODE = 11;
-
-    // todo use enum instead
-    public const LIST_ALL = 'all';
-    public const LIST_POPULAR = 'popular';
-    public const LIST_CUSTOM = 'custom';
 
     // todo use collection instead of array
     protected static array $currencies = [];
@@ -70,7 +66,7 @@ class Currency
 
         if (is_null($currency)) {
             $list = config('money.currency_list');
-            $list = is_array($list) ? 'config' : $list;
+            $list = is_array($list) ? 'config' : $list->name;
             throw new CurrencyDoesNotExistException(__METHOD__, 1, '$code', implode(',', [$code, $list]));
         }
 
@@ -228,8 +224,8 @@ class Currency
             return self::getList($list);
         }
 
-        // Custom currency list
-        return array_filter(self::getList(self::LIST_ALL), function ($currency) use (&$list) {
+        // Custom currency list (array of strings)
+        return array_filter(self::getList(CurrencyList::All), function ($currency) use (&$list) {
             if (empty($list)) {
                 return false;
             }
@@ -252,11 +248,11 @@ class Currency
         }, $currencies);
     }
 
-    private static function getList(string $list): array
+    private static function getList(CurrencyList $currencyList): array
     {
-        $list = require __DIR__ . "/Lists/" . $list . "_currencies.php";
+        $list = require $currencyList->path();
 
-        if ($list !== self::LIST_CUSTOM) {
+        if ($currencyList !== CurrencyList::Custom) {
             $customCurrencies = collect(config('money.custom_currencies'));
             $list = array_map(function (array $currency) use ($customCurrencies) {
                 $customCurrency = $customCurrencies->first(function (array $customCurrency) use ($currency) {
