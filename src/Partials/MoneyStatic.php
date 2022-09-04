@@ -3,6 +3,7 @@
 namespace PostScripton\Money\Partials;
 
 use PostScripton\Money\Currency;
+use PostScripton\Money\Enums\CurrencyPosition;
 use PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException;
 use PostScripton\Money\Money;
 use PostScripton\Money\MoneySettings;
@@ -182,13 +183,13 @@ trait MoneyStatic
         $space = $money->settings()->hasSpaceBetween() ? ' ' : '';
 
         // Always has a space
-        $has_space = $currency->getPosition() === Currency::POSITION_START && $money->isNegative()
+        $has_space = $currency->getPosition() === CurrencyPosition::Start && $money->isNegative()
             || $currency->getDisplay() === Currency::DISPLAY_CODE;
         if ($has_space) {
             $space = ' ';
         }
 
-        return $currency->getPosition() === Currency::POSITION_START
+        return $currency->getPosition() === CurrencyPosition::Start
             ? $currency->getSymbol() . $space . $money->getAmount()
             : $money->getAmount() . $space . $currency->getSymbol();
     }

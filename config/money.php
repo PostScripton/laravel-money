@@ -1,6 +1,7 @@
 <?php
 
 use PostScripton\Money\Enums\CurrencyList;
+use PostScripton\Money\Enums\CurrencyPosition;
 
 return [
     /*
@@ -53,8 +54,7 @@ return [
     | 5. symbol     - a symbol of a currency.
     |               If there are more than one, array of strings is passed.
     |               "$" or ["$", "$$", "$$$"]
-    | 6. position   - a position of a currency either in the beginning or in the end
-    |               Currency::POSITION_START or Currency::POSITION_END
+    | 6. position   - a position of a currency either in the beginning or in the end (CurrencyPosition enum)
     |
     | Example of the existing currency:
     | [
@@ -63,7 +63,7 @@ return [
     |   'iso_code' => 'USD',
     |   'num_code' => '840',
     |   'symbol' => '$',
-    |   'position' => Currency::POSITION_START,
+    |   'position' => CurrencyPosition::Start,
     | ]
     |
     | A custom currency may override a currency from the "currency_list"

@@ -1,35 +1,30 @@
 # Position
 You may specify the position of the currency on display.
 
-## Constants
-
-1. `Currency::POSITION_START` (moves a currency to the start)
-2. `Currency::POSITION_END` (moves a currency to the end)
-
 ## Methods
 
 ### `getPosition()`
-**Returns**: `int` - one of the constants.
+**Returns**: `CurrencyPosition`.
 
-### `setPosition([int $position = Currency::POSITION_START])`
+### `setPosition([CurrencyPosition $position = CurrencyPosition::Start])`
 **Parameters**:
-1. `[int $position = Currency::POSITION_START]` (*optional*) - one of the constants.
+1. `[CurrencyPosition $position = CurrencyPosition::Start]` (*optional*).
 
-**Returns**: `void`
+**Returns**: `Currency`
 
 ## Usage
 
 ```php
-use PostScripton\Money\Currency;
+use PostScripton\Money\Enums\CurrencyPosition;
 
 $money = money('1234000');
 
-$money->getCurrency()->getPosition();   // 0 (Currency::POSITION_START)
+$money->getCurrency()->getPosition();   // CurrencyPosition::Start
 $money->toString();                     // "$ 123.4"
 
-$money->getCurrency()->setPosition(Currency::POSITION_END);
+$money->getCurrency()->setPosition(CurrencyPosition::End);
 
-$money->getCurrency()->getPosition();   // 1 (Currency::POSITION_END)
+$money->getCurrency()->getPosition();   // CurrencyPosition::End
 $money->toString();                     // "123.4 $"
 ```
 
