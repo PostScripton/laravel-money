@@ -27,10 +27,10 @@ Remember that all the settings, which are applied to a currency will be saved fo
 use PostScripton\Money\Currency;
 
 $usd = currency('usd');
-$usd->setDisplay(Currency::DISPLAY_CODE);
+$usd->setDisplay(CurrencyDisplay::Code);
 
 $usd = currency('usd');
-$usd->getDisplay(); // 11 (Currency::DISPLAY_CODE)
+$usd->getDisplay(); // CurrencyDisplay::Code
 ```
 
 ---
