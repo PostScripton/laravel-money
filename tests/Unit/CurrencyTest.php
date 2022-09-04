@@ -3,6 +3,7 @@
 namespace PostScripton\Money\Tests\Unit;
 
 use PostScripton\Money\Currency;
+use PostScripton\Money\Enums\CurrencyPosition;
 use PostScripton\Money\Exceptions\CurrencyDoesNotExistException;
 use PostScripton\Money\Tests\TestCase;
 
@@ -17,7 +18,7 @@ class CurrencyTest extends TestCase
         $this->assertEquals('RUB', $cur->getCode());
         $this->assertEquals('643', $cur->getNumCode());
         $this->assertEquals('₽', $cur->getSymbol());
-        $this->assertEquals(Currency::POSITION_END, $cur->getPosition());
+        $this->assertEquals(CurrencyPosition::End, $cur->getPosition());
     }
 
     /** @test */

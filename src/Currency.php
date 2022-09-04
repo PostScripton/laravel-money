@@ -4,6 +4,7 @@ namespace PostScripton\Money;
 
 use Illuminate\Support\Collection;
 use PostScripton\Money\Enums\CurrencyList;
+use PostScripton\Money\Enums\CurrencyPosition;
 use PostScripton\Money\Exceptions\CurrencyDoesNotExistException;
 use PostScripton\Money\Exceptions\CurrencyHasWrongConstructorException;
 use PostScripton\Money\Exceptions\NoSuchCurrencySymbolException;
@@ -11,10 +12,6 @@ use PostScripton\Money\Exceptions\ShouldPublishConfigFileException;
 
 class Currency
 {
-    // todo use enum instead
-    public const POSITION_START = 0;
-    public const POSITION_END = 1;
-
     // todo use enum instead
     public const DISPLAY_SYMBOL = 10;
     public const DISPLAY_CODE = 11;
@@ -26,7 +23,7 @@ class Currency
     private string $iso_code;
     private string $num_code;
     private $symbol; // array or string
-    private int $position;
+    private CurrencyPosition $position;
     private int $display;
     private ?int $preferred_symbol = null;
 
@@ -47,7 +44,7 @@ class Currency
         $this->iso_code = strtoupper($currency['iso_code']);
         $this->num_code = $currency['num_code'];
         $this->symbol = $currency['symbol'];
-        $this->position = $currency['position'] ?? self::POSITION_END;
+        $this->position = $currency['position'] ?? CurrencyPosition::End;
         $this->display = self::DISPLAY_SYMBOL;
         $preferred_symbol = null;
     }
@@ -132,7 +129,7 @@ class Currency
         return [$this->symbol];
     }
 
-    public function getPosition(): int
+    public function getPosition(): CurrencyPosition
     {
         return $this->position;
     }
@@ -142,13 +139,10 @@ class Currency
         return $this->display;
     }
 
-    public function setPosition(int $position = self::POSITION_START): self
+    public function setPosition(CurrencyPosition $position = CurrencyPosition::Start): self
     {
-        if ($position !== self::POSITION_START && $position !== self::POSITION_END) {
-            $position = self::POSITION_START;
-        }
-
         $this->position = $position;
+
         return $this;
     }
 

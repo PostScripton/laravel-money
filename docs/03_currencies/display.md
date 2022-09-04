@@ -21,6 +21,7 @@ You may specify the way to display the currency whether it will be as a symbol o
 
 ```php
 use PostScripton\Money\Currency;
+use PostScripton\Money\Enums\CurrencyPosition;
 
 $money = money('1234000');
 
@@ -33,7 +34,7 @@ $money->getCurrency()->getDisplay();    // 11 (Currency::DISPLAY_CODE)
 $money->toString();                     // "USD 123.4"
 
 // If you don't like the look of the iso-code at the beginning
-$money->getCurrency()->setPosition(Currency::POSITION_END);
+$money->getCurrency()->setPosition(CurrencyPosition::End);
 $money->toString();                     // "123.4 USD"
 ```
 
