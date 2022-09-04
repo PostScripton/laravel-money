@@ -3,6 +3,7 @@
 namespace PostScripton\Money\Tests\Feature;
 
 use PostScripton\Money\Currency;
+use PostScripton\Money\Enums\CurrencyPosition;
 use PostScripton\Money\Tests\TestCase;
 
 class CurrencyDisplayTest extends TestCase
@@ -11,10 +12,10 @@ class CurrencyDisplayTest extends TestCase
     {
         Currency::code('USD')
             ->setDisplay(Currency::DISPLAY_SYMBOL)
-            ->setPosition(Currency::POSITION_START);
+            ->setPosition(CurrencyPosition::Start);
         Currency::code('RUB')
             ->setDisplay(Currency::DISPLAY_SYMBOL)
-            ->setPosition(Currency::POSITION_END);
+            ->setPosition(CurrencyPosition::End);
     }
 
     /** @test */
@@ -32,7 +33,7 @@ class CurrencyDisplayTest extends TestCase
     {
         $currency = Currency::code('USD')
             ->setDisplay(Currency::DISPLAY_CODE)
-            ->setPosition(Currency::POSITION_END);
+            ->setPosition(CurrencyPosition::End);
         $usd = money('1234000', $currency);
 
         $this->assertEquals('123.4 USD', $usd->toString());
@@ -53,7 +54,7 @@ class CurrencyDisplayTest extends TestCase
     {
         $currency = Currency::code('RUB')
             ->setDisplay(Currency::DISPLAY_CODE)
-            ->setPosition(Currency::POSITION_START);
+            ->setPosition(CurrencyPosition::Start);
         $rub = money('1234000', $currency);
 
         $this->assertEquals('RUB 123.4', $rub->toString());

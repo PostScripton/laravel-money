@@ -4,7 +4,9 @@ namespace PostScripton\Money;
 
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Enum;
 use PostScripton\Money\Enums\CurrencyList;
+use PostScripton\Money\Enums\CurrencyPosition;
 use PostScripton\Money\Exceptions\BaseException;
 use PostScripton\Money\Exceptions\CustomCurrencyTakenCodesException;
 use PostScripton\Money\Exceptions\CustomCurrencyValidationException;
@@ -112,7 +114,7 @@ class MoneyServiceProvider extends PackageServiceProvider
             '*.symbol.*' => ['required', 'string'],
             '*.position' => [
                 'required',
-                Rule::in([Currency::POSITION_START, Currency::POSITION_END]),
+                new Enum(CurrencyPosition::class),
             ],
         ], [], [
             '*.full_name' => 'full name',
