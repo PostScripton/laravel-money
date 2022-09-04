@@ -3,6 +3,7 @@
 namespace PostScripton\Money;
 
 use Illuminate\Support\Collection;
+use PostScripton\Money\Enums\CurrencyDisplay;
 use PostScripton\Money\Enums\CurrencyList;
 use PostScripton\Money\Enums\CurrencyPosition;
 use PostScripton\Money\Exceptions\CurrencyDoesNotExistException;
@@ -12,10 +13,6 @@ use PostScripton\Money\Exceptions\ShouldPublishConfigFileException;
 
 class Currency
 {
-    // todo use enum instead
-    public const DISPLAY_SYMBOL = 10;
-    public const DISPLAY_CODE = 11;
-
     // todo use collection instead of array
     protected static array $currencies = [];
     private string $full_name;
@@ -24,7 +21,7 @@ class Currency
     private string $num_code;
     private $symbol; // array or string
     private CurrencyPosition $position;
-    private int $display;
+    private CurrencyDisplay $display;
     private ?int $preferred_symbol = null;
 
     public function __construct(array $currency)
@@ -45,7 +42,7 @@ class Currency
         $this->num_code = $currency['num_code'];
         $this->symbol = $currency['symbol'];
         $this->position = $currency['position'] ?? CurrencyPosition::End;
-        $this->display = self::DISPLAY_SYMBOL;
+        $this->display = CurrencyDisplay::Symbol;
         $preferred_symbol = null;
     }
 
@@ -92,7 +89,7 @@ class Currency
 
     public function getSymbol(?int $index = null): string
     {
-        if ($this->display === self::DISPLAY_CODE) {
+        if ($this->display === CurrencyDisplay::Code) {
             return $this->iso_code;
         }
 
@@ -134,7 +131,7 @@ class Currency
         return $this->position;
     }
 
-    public function getDisplay(): int
+    public function getDisplay(): CurrencyDisplay
     {
         return $this->display;
     }
@@ -146,13 +143,10 @@ class Currency
         return $this;
     }
 
-    public function setDisplay(int $display = self::DISPLAY_SYMBOL): self
+    public function setDisplay(CurrencyDisplay $display = CurrencyDisplay::Symbol): self
     {
-        if ($display !== self::DISPLAY_SYMBOL && $display !== self::DISPLAY_CODE) {
-            $display = self::DISPLAY_SYMBOL;
-        }
-
         $this->display = $display;
+
         return $this;
     }
 
