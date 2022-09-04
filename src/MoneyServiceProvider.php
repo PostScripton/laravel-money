@@ -4,6 +4,7 @@ namespace PostScripton\Money;
 
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use PostScripton\Money\Enums\CurrencyList;
 use PostScripton\Money\Exceptions\BaseException;
 use PostScripton\Money\Exceptions\CustomCurrencyTakenCodesException;
 use PostScripton\Money\Exceptions\CustomCurrencyValidationException;
@@ -84,12 +85,9 @@ class MoneyServiceProvider extends PackageServiceProvider
             return;
         }
 
-        $availableLists = [Currency::LIST_ALL, Currency::LIST_POPULAR, Currency::LIST_CUSTOM];
-        if (!in_array($list, $availableLists)) {
+        if (! $list instanceof CurrencyList) {
             throw new BaseException(
-                'The config property "currency_list" must be either ' .
-                implode(' or ', array_map(fn(string $list) => "\"$list\"", $availableLists)) .
-                ". The value \"$list\" is given."
+                'The config property "currency_list" must be type of ' . CurrencyList::class . '.'
             );
         }
     }
