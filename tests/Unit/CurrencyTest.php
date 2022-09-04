@@ -2,6 +2,7 @@
 
 namespace PostScripton\Money\Tests\Unit;
 
+use PostScripton\Money\Currencies;
 use PostScripton\Money\Currency;
 use PostScripton\Money\Enums\CurrencyPosition;
 use PostScripton\Money\Exceptions\CurrencyDoesNotExistException;
@@ -46,7 +47,7 @@ class CurrencyTest extends TestCase
     public function getAllTheCurrenciesAsArray()
     {
         $actual = require __DIR__ . '/../../src/Lists/popular_currencies.php';
-        $allCurrencies = Currency::getCurrencyCodesArray();
+        $allCurrencies = Currencies::getCodesArray();
 
         $this->assertCount(count($actual), $allCurrencies);
         $this->assertEquals(

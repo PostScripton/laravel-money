@@ -4,19 +4,19 @@ Get all the chosen (current) currencies.
 
 ## Methods
 
-### `Currency::getCurrencies()`
+### `Currencies::get()`
 **Returns**: `Illuminate\Support\Collection`
 
-### `Currency::getCurrencyCodesArray()`
+### `Currencies::getCodesArray()`
 **Returns**: `array` as `["USD", "EUR", ...]`
 
 ## Usage
 
 ```php
-use PostScripton\Money\Currency;
+use PostScripton\Money\Currencies;
 
-Currency::getCurrencies();          // Collection of currencies
-Currency::getCurrencyCodesArray();  // ["USD", "EUR", ...]
+Currencies::get();              // Collection of currencies
+Currencies::getCodesArray();    // ["USD", "EUR", ...]
 ```
 
 ---
