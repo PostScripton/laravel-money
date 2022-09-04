@@ -3,6 +3,7 @@
 namespace PostScripton\Money\Tests\Feature;
 
 use PostScripton\Money\Currency;
+use PostScripton\Money\Enums\CurrencyDisplay;
 use PostScripton\Money\Enums\CurrencyPosition;
 use PostScripton\Money\Tests\TestCase;
 
@@ -11,10 +12,10 @@ class CurrencyDisplayTest extends TestCase
     public function tearDown(): void
     {
         Currency::code('USD')
-            ->setDisplay(Currency::DISPLAY_SYMBOL)
+            ->setDisplay(CurrencyDisplay::Symbol)
             ->setPosition(CurrencyPosition::Start);
         Currency::code('RUB')
-            ->setDisplay(Currency::DISPLAY_SYMBOL)
+            ->setDisplay(CurrencyDisplay::Symbol)
             ->setPosition(CurrencyPosition::End);
     }
 
@@ -22,7 +23,7 @@ class CurrencyDisplayTest extends TestCase
     public function displayCodeStart()
     {
         $currency = Currency::code('USD')
-            ->setDisplay(Currency::DISPLAY_CODE);
+            ->setDisplay(CurrencyDisplay::Code);
         $usd = money('1234000', $currency);
 
         $this->assertEquals('USD 123.4', $usd->toString());
@@ -32,7 +33,7 @@ class CurrencyDisplayTest extends TestCase
     public function displayCodeStartInEnd()
     {
         $currency = Currency::code('USD')
-            ->setDisplay(Currency::DISPLAY_CODE)
+            ->setDisplay(CurrencyDisplay::Code)
             ->setPosition(CurrencyPosition::End);
         $usd = money('1234000', $currency);
 
@@ -43,7 +44,7 @@ class CurrencyDisplayTest extends TestCase
     public function displayCodeEnd()
     {
         $currency = Currency::code('RUB')
-            ->setDisplay(Currency::DISPLAY_CODE);
+            ->setDisplay(CurrencyDisplay::Code);
         $usd = money('1234000', $currency);
 
         $this->assertEquals('123.4 RUB', $usd->toString());
@@ -53,7 +54,7 @@ class CurrencyDisplayTest extends TestCase
     public function displayCodeEndInStart()
     {
         $currency = Currency::code('RUB')
-            ->setDisplay(Currency::DISPLAY_CODE)
+            ->setDisplay(CurrencyDisplay::Code)
             ->setPosition(CurrencyPosition::Start);
         $rub = money('1234000', $currency);
 
