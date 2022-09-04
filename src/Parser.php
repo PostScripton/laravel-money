@@ -8,7 +8,7 @@ class Parser
 {
     public static function parse(string $money): Money
     {
-        $currencies = Currency::getCurrencies();
+        $currencies = Currencies::get();
         foreach ($currencies as $foundCurrency) {
             foreach ($foundCurrency->getSymbols() as $symbol) {
                 $symbols[] = $symbol;
