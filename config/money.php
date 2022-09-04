@@ -1,5 +1,7 @@
 <?php
 
+use PostScripton\Money\Enums\CurrencyList;
+
 return [
     /*
     |--------------------------------------------------------------------------
@@ -22,9 +24,9 @@ return [
     | This option controls which list of currencies will be used.
     |
     | For now following lists are provided:
-    | 1. all - all the currencies in the world.
-    | 2. popular - only the most popular ones (35) are used. (default)
-    | 3. custom - only custom currencies
+    | 1. CurrencyList::All - all the currencies in the world.
+    | 2. CurrencyList::Popular - only the most popular ones (35) are used. (default)
+    | 3. CurrencyList::Custom - only custom currencies
     | 4. ['840', 'EUR', 'RUB'] - array of currency codes you need. Selects from
     |                            lists both "all" and "custom_currencies" below
     |
@@ -34,7 +36,7 @@ return [
     | Any list contains currencies from "custom_currencies" setting.
     |
     */
-    'currency_list' => 'popular',
+    'currency_list' => CurrencyList::Popular,
 
     /*
     |--------------------------------------------------------------------------
