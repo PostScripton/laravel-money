@@ -8,7 +8,7 @@ class Money implements Rule
 {
     public const RULE_NAME = 'money';
 
-    private const MONEY_REGEX = '/^(([1-9]\d{0,2})(\d*|(\s\d{3})*)|0)(\.\d{1,4})?$/';
+    private const MONEY_REGEX = '/^-?(([1-9]\d{0,2})(\d*|(\s\d{3})*)|0)(\.\d{1,4})?$/';
 
     public function passes($attribute, $value): bool
     {
