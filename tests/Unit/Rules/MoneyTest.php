@@ -39,6 +39,38 @@ class MoneyTest extends TestCase
                 'result' => true,
             ],
             [
+                'input' => '-1500',
+                'result' => true,
+            ],
+            [
+                'input' => '-1 500',
+                'result' => true,
+            ],
+            [
+                'input' => '-1500.0',
+                'result' => true,
+            ],
+            [
+                'input' => '-1 500.0',
+                'result' => true,
+            ],
+            [
+                'input' => '-0',
+                'result' => true,
+            ],
+            [
+                'input' => '-0.0',
+                'result' => true,
+            ],
+            [
+                'input' => '-0.2500',
+                'result' => true,
+            ],
+            [
+                'input' => '- 500.0',
+                'result' => false,
+            ],
+            [
                 'input' => '0.25001',
                 'result' => false,
             ],
