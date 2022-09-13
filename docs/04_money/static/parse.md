@@ -4,67 +4,47 @@ parses the string and turns it into a money instance.
 
 ## Methods
 
-### `Money::parse(string $money)`
+### `Money::parse(string $money, [?string $currencyCode = null])`
 **Parameters**:
 1. `string $money` - a money string to be parsed.
+2. `[?string $currencyCode = null]` (*optional*) - you help the parser to recognize a currency by providing a code (`USD`/`840`).
+    If null is provided then `default_currency` from the config file is used.
+    Currencies will be chosen from your currency list from the config file.
 
 **Returns**: `Money`
 
 ## Exceptions
 
 1. `WrongParserStringException` - is thrown when the given string can not be parsed at all.
+2. `CurrencyDoesNotExistException` - is thrown when a currency you provide is not included in a currency list.
 
 ## Usage
 
-Parses popular separators
 ```php
 use PostScripton\Money\Money;
 
-// thousands: [ " ", ".", ",", "'" ]
-// decimals: [ ".", "," ]
+// Simply parse an amount with the default currency.
 
-Money::parse("$ 1 234")
-Money::parse("$ 1.234")
-Money::parse("$ 1,234")
-Money::parse("$ 1'234")
+Money::parse('1 234.5678');
 
-Money::parse("$ 123.4")
-Money::parse("$ 123,4")
+// Or parse an amount with a currency
+
+Money::parse('$100');
+Money::parse('€ 100', 'EUR');
+Money::parse('£-100', 'GBP');
+Money::parse('GBP -100', 'GBP');
+Money::parse('-100 ₽', 'RUB');
+Money::parse('-100 RUB', '643');
 ```
 
-Knows the most popular currencies
+Unknown currency throws the exception because this currency is not expected.
 ```php
 use PostScripton\Money\Money;
 
-// [ USD, EUR, JPY, GBP, AUD, CAD, CHF, RUB, UAH, BYN ]
-
-Money::parse('100 $');
-Money::parse('100€');
-Money::parse('-100¥');
-Money::parse('-100 £');
-Money::parse('Fr.100');
-Money::parse('₽ -100');
-Money::parse('₴ 100');
-Money::parse('100 AUD');
-Money::parse('CAD 100');
-Money::parse('RUB -100');
-Money::parse('-100 BYN');
-
-
-// If you want Australian, Canadian or any other dollar, you should specify ISO-code,
-// otherwise it would be parsed as USD.
-Money::parse('AUD 100');
-Money::parse('100 CAD');
+Money::parse('# 100'); // WrongParserStringException
 ```
 
-Unknown currency interprets as the default one
-```php
-use PostScripton\Money\Money;
-
-// will be USD because it is default currency
-Money::parse('# 100');
-Money::parse('100 #');
-```
+👀 See [here](/tests/Unit/ParserTest.php) for all the cases in tests.
 
 ---
 

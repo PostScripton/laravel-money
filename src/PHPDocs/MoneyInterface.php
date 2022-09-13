@@ -241,11 +241,12 @@ interface MoneyInterface
     public static function of(string $amount, $currency = null, $settings = null): Money;
 
     /**
-     * Parses the string and turns it into a money instance
+     * Parses the string and turns it into a monetary instance
      * @param string $money
+     * @param string|null $currencyCode
      * @return self
      */
-    public static function parse(string $money): Money;
+    public static function parse(string $money, ?string $currencyCode = null): Money;
 
     /**
      * Sets default settings for any Money object

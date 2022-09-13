@@ -1,7 +1,6 @@
 <?php
 
 use PostScripton\Money\Enums\CurrencyList;
-use PostScripton\Money\Enums\CurrencyPosition;
 
 return [
     /*
