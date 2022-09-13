@@ -34,9 +34,9 @@ trait MoneyStatic
         return is_null(config('money'));
     }
 
-    public static function parse(string $money): Money
+    public static function parse(string $money, ?string $currencyCode = null): Money
     {
-        return Parser::parse($money);
+        return Parser::parse($money, $currencyCode);
     }
 
     // ========== GETTERS ==========
