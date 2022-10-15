@@ -33,6 +33,7 @@ class MoneyServiceProvider extends PackageServiceProvider
         $this->registerService();
         $this->registerCurrencyList();
         $this->registerCustomCurrencies();
+        $this->checkDefaultCurrencyForExistence();
 
         $settings = (new MoneySettings())
             ->setDecimals(config('money.decimals', 1))
@@ -46,7 +47,7 @@ class MoneyServiceProvider extends PackageServiceProvider
         Validator::extend(MoneyRule::RULE_NAME, (MoneyRule::class . '@passes'), app(MoneyRule::class)->message());
     }
 
-    protected function registerService()
+    protected function registerService(): void
     {
         $this->app->bind(ServiceInterface::class, function () {
             $config = config('money.services.' . config('money.service'));
@@ -129,6 +130,11 @@ class MoneyServiceProvider extends PackageServiceProvider
         }
 
         $this->customCurrenciesShouldNotDuplicate();
+    }
+
+    protected function checkDefaultCurrencyForExistence(): void
+    {
+        currency(config('money.default_currency'));
     }
 
     private function customCurrenciesShouldNotDuplicate(): void
