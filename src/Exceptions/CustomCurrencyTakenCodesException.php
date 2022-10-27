@@ -2,16 +2,15 @@
 
 namespace PostScripton\Money\Exceptions;
 
-class CustomCurrencyTakenCodesException extends BaseException
-{
-    public function __construct(string $value, $code = 0, BaseException $previous = null)
-    {
-        list($name, $iso, $num) = explode(',', $value);
+use Exception;
 
+class CustomCurrencyTakenCodesException extends Exception
+{
+    public function __construct(string $name, string $iso, string $num)
+    {
         parent::__construct(
-            "Some custom currency uses the taken codes of the already existing currency: \"{$name}\" ({$iso}|{$num})",
-            $code,
-            $previous
+            'Some custom currency uses the taken codes of ' .
+            "the already existing currency: [{$name}] ({$iso}|{$num})"
         );
     }
 }

@@ -2,10 +2,12 @@
 
 namespace PostScripton\Money\Exceptions;
 
-class CustomCurrencyValidationException extends BaseException
+use Exception;
+
+class CustomCurrencyValidationException extends Exception
 {
-    public function __construct(string $value, $code = 422, BaseException $previous = null)
+    public function __construct(string $value)
     {
-        parent::__construct($value, $code, $previous);
+        parent::__construct($value, 422);
     }
 }
