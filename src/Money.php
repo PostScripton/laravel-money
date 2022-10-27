@@ -3,8 +3,8 @@
 namespace PostScripton\Money;
 
 use Carbon\Carbon;
-use PostScripton\Money\Exceptions\ServiceDoesNotSupportCurrencyException;
-use PostScripton\Money\Partials\MoneyHelpers;
+use PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException;
+use PostScripton\Money\Exceptions\ServiceException;
 use PostScripton\Money\Partials\MoneyStatic;
 use PostScripton\Money\PHPDocs\MoneyInterface;
 use PostScripton\Money\Services\ServiceInterface;
@@ -12,7 +12,6 @@ use PostScripton\Money\Services\ServiceInterface;
 class Money implements MoneyInterface
 {
     use MoneyStatic;
-    use MoneyHelpers;
 
     private string $amount;
     private Currency $currency;
@@ -101,7 +100,10 @@ class Money implements MoneyInterface
 
     public function add(self $money): self
     {
-        $this->validateMoney($money, __METHOD__);
+        if (!$this->isSameCurrency($money)) {
+            throw new MoneyHasDifferentCurrenciesException();
+        }
+
         $this->amount += $money->amount;
 
         return $this;
@@ -109,7 +111,10 @@ class Money implements MoneyInterface
 
     public function subtract(self $money): self
     {
-        $this->validateMoney($money, __METHOD__);
+        if (!$this->isSameCurrency($money)) {
+            throw new MoneyHasDifferentCurrenciesException();
+        }
+
         $this->amount -= $money->amount;
 
         return $this;
@@ -131,7 +136,10 @@ class Money implements MoneyInterface
 
     public function rebase(self $money): self
     {
-        $this->validateMoney($money, __METHOD__);
+        if (!$this->isSameCurrency($money)) {
+            throw new MoneyHasDifferentCurrenciesException();
+        }
+
         $this->amount = $money->amount;
 
         return $this;
@@ -208,7 +216,11 @@ class Money implements MoneyInterface
         if (is_null($rate)) {
             $not_supported = $this->service()->supports([$currency->getCode(), $this->getCurrency()->getCode()]);
             if (!empty($not_supported)) {
-                throw new ServiceDoesNotSupportCurrencyException($not_supported, $this->service()->getClassName());
+                throw new ServiceException(sprintf(
+                    'The service class [%s] doesn\'t support one of the currencies [%s]',
+                    $this->service()->getClassName(),
+                    implode(', ', $not_supported),
+                ));
             }
 
             $rate = $this->service()->rate($this->getCurrency()->getCode(), $currency->getCode(), $date);
@@ -221,7 +233,10 @@ class Money implements MoneyInterface
 
     public function difference(self $money, ?MoneySettings $settings = null): string
     {
-        $this->validateMoney($money, __METHOD__);
+        if (!$this->isSameCurrency($money)) {
+            throw new MoneyHasDifferentCurrenciesException();
+        }
+
         $amount = $this->amount - $money->amount;
         $settings = is_null($settings) ? clone $this->settings() : $settings;
 

@@ -24,7 +24,7 @@ RUB -> USD = 1 / 75.79
 
 ## Exceptions
 
-1. `ServiceDoesNotSupportCurrencyException` - is thrown when `$currency` argument is not supported by an API service.
+1. `ServiceException` - is thrown when `$currency` argument is not supported by an API service.
 
 ## Usage
 

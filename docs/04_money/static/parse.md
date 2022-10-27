@@ -15,7 +15,7 @@ parses the string and turns it into a money instance.
 
 ## Exceptions
 
-1. `WrongParserStringException` - is thrown when the given string can not be parsed at all.
+1. `Exception` - is thrown when the given string can not be parsed at all.
 2. `CurrencyDoesNotExistException` - is thrown when a currency you provide is not included in a currency list.
 
 ## Usage
@@ -41,7 +41,7 @@ Unknown currency throws the exception because this currency is not expected.
 ```php
 use PostScripton\Money\Money;
 
-Money::parse('# 100'); // WrongParserStringException
+Money::parse('# 100'); // Exception
 ```
 
 👀 See [here](/tests/Unit/ParserTest.php) for all the cases in tests.

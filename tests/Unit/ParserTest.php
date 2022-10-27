@@ -2,7 +2,7 @@
 
 namespace PostScripton\Money\Tests\Unit;
 
-use PostScripton\Money\Exceptions\WrongParserStringException;
+use Exception;
 use PostScripton\Money\Parser;
 use PostScripton\Money\Tests\TestCase;
 
@@ -217,9 +217,10 @@ class ParserTest extends TestCase
     /** @dataProvider wrongMoneyStringsDataProvider */
     public function testParserThrowsAnExceptionWhenWrongStringIsPassed(
         string $money,
-        ?string $currencyCode = null
+        ?string $currencyCode = null,
     ): void {
-        $this->expectException(WrongParserStringException::class);
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage("Unable to parse [{$money}] into a monetary object");
 
         Parser::parse($money, $currencyCode);
     }

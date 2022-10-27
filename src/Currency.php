@@ -2,12 +2,12 @@
 
 namespace PostScripton\Money;
 
+use Exception;
 use PostScripton\Money\Enums\CurrencyDisplay;
 use PostScripton\Money\Enums\CurrencyPosition;
 use PostScripton\Money\Exceptions\CurrencyDoesNotExistException;
 use PostScripton\Money\Exceptions\CurrencyHasWrongConstructorException;
 use PostScripton\Money\Exceptions\NoSuchCurrencySymbolException;
-use PostScripton\Money\Exceptions\ShouldPublishConfigFileException;
 
 class Currency
 {
@@ -55,8 +55,9 @@ class Currency
 
         if (is_null($currency)) {
             $list = config('money.currency_list');
-            $list = is_array($list) ? 'config' : $list->name;
-            throw new CurrencyDoesNotExistException(__METHOD__, 1, '$code', implode(',', [$code, $list]));
+            $list = is_array($list) ? 'Config' : $list->name;
+
+            throw new CurrencyDoesNotExistException($code, $list);
         }
 
         return $currency;
@@ -90,12 +91,7 @@ class Currency
 
         if (is_array($this->symbol)) {
             if (!array_key_exists($index ?? 0, $this->symbol)) {
-                throw new NoSuchCurrencySymbolException(
-                    __METHOD__,
-                    1,
-                    '$index',
-                    implode(',', [$index ?? 0, count($this->symbol) - 1])
-                );
+                throw new NoSuchCurrencySymbolException();
             }
 
             if (is_null($index)) {
@@ -149,12 +145,7 @@ class Currency
     {
         if (is_array($this->symbol)) {
             if (!array_key_exists($index, $this->symbol)) {
-                throw new NoSuchCurrencySymbolException(
-                    __METHOD__,
-                    1,
-                    '$index',
-                    implode(',', [$index, count($this->symbol) - 1])
-                );
+                throw new NoSuchCurrencySymbolException();
             }
 
             $this->preferred_symbol = $index;
@@ -163,13 +154,11 @@ class Currency
         return $this;
     }
 
-    /**
-     * @throws ShouldPublishConfigFileException
-     */
+    /** @throws Exception */
     public static function getConfigCurrency(): string
     {
         if (Money::configNotPublished()) {
-            throw new ShouldPublishConfigFileException();
+            throw new Exception('Please publish the config file by running "php artisan vendor:publish --tag=money"');
         }
 
         return config('money.default_currency', 'USD');

@@ -2,7 +2,7 @@
 
 namespace PostScripton\Money;
 
-use PostScripton\Money\Exceptions\WrongParserStringException;
+use Exception;
 use PostScripton\Money\Rules\Money as MoneyRule;
 
 class Parser
@@ -23,7 +23,7 @@ class Parser
             $joinedCurrencies
         );
         if (! preg_match($pattern, $money, $result)) {
-            throw new WrongParserStringException(Money::class . '::' . __FUNCTION__, 1, '$money');
+            throw new Exception("Unable to parse [{$money}] into a monetary object");
         }
 
         $amount = str_replace(' ', '', $result['amount']);

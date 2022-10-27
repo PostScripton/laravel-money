@@ -93,7 +93,7 @@ trait MoneyStatic
             return null;
         }
 
-        self::currenciesAreNotSame($monies, Money::class . '::' . __FUNCTION__, 1, '$monies');
+        self::currenciesAreNotSame($monies);
 
         $min = $monies[0];
 
@@ -112,7 +112,7 @@ trait MoneyStatic
             return null;
         }
 
-        self::currenciesAreNotSame($monies, Money::class . '::' . __FUNCTION__, 1, '$monies');
+        self::currenciesAreNotSame($monies);
 
         $max = $monies[0];
 
@@ -131,7 +131,7 @@ trait MoneyStatic
             return null;
         }
 
-        self::currenciesAreNotSame($monies, Money::class . '::' . __FUNCTION__, 1, '$monies');
+        self::currenciesAreNotSame($monies);
 
         $sum = array_reduce($monies, function (string $acc, Money $money) {
             return $acc + $money->getPureAmount();
@@ -150,7 +150,7 @@ trait MoneyStatic
             return null;
         }
 
-        self::currenciesAreNotSame($monies, Money::class . '::' . __FUNCTION__, 1, '$monies');
+        self::currenciesAreNotSame($monies);
 
         $sum = array_reduce($monies, function (string $acc, Money $money) {
             return $acc + $money->getPureAmount();
@@ -168,13 +168,13 @@ trait MoneyStatic
         return 10 ** 4;
     }
 
-    private static function currenciesAreNotSame(array $monies, string $method, int $arg_num, string $arg_name): void
+    private static function currenciesAreNotSame(array $monies): void
     {
         $main = $monies[0];
 
         foreach ($monies as $money) {
             if (!$main->isSameCurrency($money)) {
-                throw new MoneyHasDifferentCurrenciesException($method, $arg_num, $arg_name);
+                throw new MoneyHasDifferentCurrenciesException();
             }
         }
     }

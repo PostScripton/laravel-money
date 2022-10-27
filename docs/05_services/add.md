@@ -186,10 +186,11 @@ $this->config['your_additional_property_here'];
 
 ## Exceptions
 
-1. `ServiceClassDoesNotExistException` - is thrown when a `services.*.class` property in the config has a class name that doesn't exist.
-2. `ServiceDoesNotExistException` - is thrown when a `service` property doesn't exist.
-3. `ServiceDoesNotHaveClassException` - is thrown when a `service.*.class` property doesn't exist.
-4. `ServiceDoesNotInheritServiceException` - is thrown when a `service.*.class` property class doesn't inherit the `PostScripton\Money\Services\ServiceInterface`.
+1. `ServiceException` - is thrown when:
+   - `services.*.class` property in the config has a class name that doesn't exist.
+   - `service` property doesn't exist.
+   - `service.*.class` property doesn't exist.
+   - `service.*.class` property class doesn't inherit the `PostScripton\Money\Services\ServiceInterface`.
 
 ---
 

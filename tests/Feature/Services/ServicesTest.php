@@ -4,11 +4,8 @@ namespace PostScripton\Money\Tests\Feature\Services;
 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Config;
-use PostScripton\Money\Exceptions\ServiceClassDoesNotExistException;
-use PostScripton\Money\Exceptions\ServiceDoesNotExistException;
-use PostScripton\Money\Exceptions\ServiceDoesNotHaveClassException;
-use PostScripton\Money\Exceptions\ServiceDoesNotInheritServiceException;
-use PostScripton\Money\Exceptions\ServiceDoesNotSupportCurrencyException;
+use PostScripton\Money\Exceptions\ServiceException;
+use PostScripton\Money\Services\AbstractService;
 use PostScripton\Money\Services\ExchangeRatesAPIService;
 use PostScripton\Money\Services\ExchangeRateService;
 use PostScripton\Money\Tests\TestCase;
@@ -35,9 +32,14 @@ class ServicesTest extends TestCase
     /** @test */
     public function aServiceDoesNotExist()
     {
-        Config::set('money.service', 'qwerty');
+        $service = 'qwerty';
+        Config::set('money.service', $service);
 
-        $this->expectException(ServiceDoesNotExistException::class);
+        $this->expectException(ServiceException::class);
+        $this->expectExceptionMessage(sprintf(
+            'The service [%s] doesn\'t exist in the "services" property.',
+            $service,
+        ));
 
         $money = money('1000000');
         $money->convertInto(currency('rub'));
@@ -55,10 +57,15 @@ class ServicesTest extends TestCase
     /** @test */
     public function aServiceDoesNotHaveClass()
     {
-        $service = 'money.services.' . config('money.service');
-        Config::set($service, array_diff_key(config($service), ['class' => '']));
+        $service = config('money.service');
+        $serviceConfig = "money.services.{$service}";
+        Config::set($serviceConfig, array_diff_key(config($serviceConfig), ['class' => '']));
 
-        $this->expectException(ServiceDoesNotHaveClassException::class);
+        $this->expectException(ServiceException::class);
+        $this->expectExceptionMessage(sprintf(
+            'The service [%s] doesn\'t have the "class" property.',
+            $service,
+        ));
 
         $money = money('1000000');
         $money->convertInto(currency('rub'));
@@ -67,10 +74,12 @@ class ServicesTest extends TestCase
     /** @test */
     public function aServiceClassDoesNotExist()
     {
-        $service = 'money.services.' . config('money.service');
-        Config::set($service, array_merge(config($service), ['class' => 'incorrect_class']));
+        $serviceConfig = 'money.services.' . config('money.service');
+        $class = 'incorrect_class';
+        Config::set($serviceConfig, array_merge(config($serviceConfig), ['class' => $class]));
 
-        $this->expectException(ServiceClassDoesNotExistException::class);
+        $this->expectException(ServiceException::class);
+        $this->expectExceptionMessage("The service class [{$class}] doesn't exist.");
 
         $money = money('1000000');
         $money->convertInto(currency('rub'));
@@ -79,10 +88,16 @@ class ServicesTest extends TestCase
     /** @test */
     public function aServiceClassDoesNotInheritTheMainOne()
     {
-        $service = 'money.services.' . config('money.service');
-        Config::set($service, array_merge(config($service), ['class' => stdClass::class]));
+        $serviceConfig = 'money.services.' . config('money.service');
+        $class = stdClass::class;
+        Config::set($serviceConfig, array_merge(config($serviceConfig), ['class' => $class]));
 
-        $this->expectException(ServiceDoesNotInheritServiceException::class);
+        $this->expectException(ServiceException::class);
+        $this->expectExceptionMessage(sprintf(
+            'The given service class [%s] doesn\'t inherit the [%s].',
+            $class,
+            AbstractService::class,
+        ));
 
         $money = money('1000000');
         $money->convertInto(currency('rub'));
@@ -92,8 +107,8 @@ class ServicesTest extends TestCase
     public function theGivenCurrencyIsNotSupportedForConvertingByAService()
     {
         $this->mockService();
-        $this->expectException(ServiceDoesNotSupportCurrencyException::class);
-        $this->expectExceptionMessage('The service class "SomeServiceClass" doesn\'t support ' .
+        $this->expectException(ServiceException::class);
+        $this->expectExceptionMessage('The service class [SomeServiceClass] doesn\'t support ' .
             'one of the currencies [EUR]');
 
         $money = money('1000000');

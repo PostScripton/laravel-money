@@ -2,18 +2,16 @@
 
 namespace PostScripton\Money;
 
+use Exception;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Enum;
 use PostScripton\Money\Enums\CurrencyList;
 use PostScripton\Money\Enums\CurrencyPosition;
-use PostScripton\Money\Exceptions\BaseException;
 use PostScripton\Money\Exceptions\CustomCurrencyTakenCodesException;
 use PostScripton\Money\Exceptions\CustomCurrencyValidationException;
-use PostScripton\Money\Exceptions\ServiceClassDoesNotExistException;
-use PostScripton\Money\Exceptions\ServiceDoesNotExistException;
-use PostScripton\Money\Exceptions\ServiceDoesNotHaveClassException;
-use PostScripton\Money\Exceptions\ServiceDoesNotInheritServiceException;
+use PostScripton\Money\Exceptions\ServiceException;
 use PostScripton\Money\Rules\Money as MoneyRule;
+use PostScripton\Money\Services\AbstractService;
 use PostScripton\Money\Services\ServiceInterface;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
@@ -53,21 +51,29 @@ class MoneyServiceProvider extends PackageServiceProvider
             $config = config('money.services.' . config('money.service'));
 
             if (is_null($config)) {
-                throw new ServiceDoesNotExistException(config('money.service'));
+                throw new ServiceException(sprintf(
+                    'The service [%s] doesn\'t exist in the "services" property.',
+                    config('money.service'),
+                ));
             }
 
             if (!array_key_exists('class', $config = $config ?? [])) {
-                throw new ServiceDoesNotHaveClassException(config('money.service'));
+                throw new ServiceException(sprintf(
+                    'The service [%s] doesn\'t have the "class" property.',
+                    config('money.service'),
+                ));
             }
 
             $class = $config['class'];
-
             if (!class_exists($class)) {
-                throw new ServiceClassDoesNotExistException($class);
+                throw new ServiceException("The service class [{$class}] doesn't exist.");
             }
-
             if (!is_subclass_of($class, ServiceInterface::class)) {
-                throw new ServiceDoesNotInheritServiceException($class);
+                throw new ServiceException(sprintf(
+                    'The given service class [%s] doesn\'t inherit the [%s].',
+                    $class,
+                    AbstractService::class,
+                ));
             }
 
             return new $class($config);
@@ -81,16 +87,14 @@ class MoneyServiceProvider extends PackageServiceProvider
         if (is_array($list)) {
             foreach ($list as $code) {
                 if (!is_string($code)) {
-                    throw new BaseException('Codes in the config property "currency_list" must be string');
+                    throw new Exception('Codes in the config property "currency_list" must be string');
                 }
             }
             return;
         }
 
         if (! $list instanceof CurrencyList) {
-            throw new BaseException(
-                'The config property "currency_list" must be type of ' . CurrencyList::class . '.'
-            );
+            throw new Exception('The config property "currency_list" must be type of ' . CurrencyList::class . '.');
         }
     }
 
@@ -99,7 +103,7 @@ class MoneyServiceProvider extends PackageServiceProvider
         $customCurrencies = config('money.custom_currencies');
 
         if (!is_array($customCurrencies)) {
-            throw new BaseException('The config property "custom_currencies" must be an array.');
+            throw new Exception('The config property "custom_currencies" must be an array.');
         }
         if (empty($customCurrencies)) {
             return;
@@ -150,7 +154,9 @@ class MoneyServiceProvider extends PackageServiceProvider
             });
             if ($sameIsoCode || $sameNumCode) {
                 throw new CustomCurrencyTakenCodesException(
-                    implode(',', [$currency['full_name'], $currency['iso_code'], $currency['num_code']]),
+                    $currency['full_name'],
+                    $currency['iso_code'],
+                    $currency['num_code'],
                 );
             }
         });
