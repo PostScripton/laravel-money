@@ -32,7 +32,6 @@ With all being said, you can calculate money, output it as a string, convert it 
 
 ## Installation
 
-### via composer
 ```bash
 composer require postscripton/laravel-money 
 ```
