@@ -87,18 +87,19 @@ trait MoneyStatic
         return substr($input, 0, strpos($input, '.') + self::$defaultDecimals + 1);
     }
 
-    public static function min(Money ...$monies): ?Money
+    public static function min(Money ...$list): ?Money
     {
-        if (empty($monies)) {
+        if (empty($list)) {
             return null;
         }
 
-        self::currenciesAreNotSame($monies);
+        self::checkAllCurrenciesAreTheSame($list);
 
-        $min = $monies[0];
+        $min = $list[0];
 
-        for ($i = 1; $i < count($monies); $i++) {
-            if (($money = $monies[$i])->getPureAmount() < $min->getPureAmount()) {
+        for ($i = 1; $i < count($list); $i++) {
+            $money = $list[$i];
+            if ($money->lessThan($min)) {
                 $min = $money;
             }
         }
@@ -106,18 +107,19 @@ trait MoneyStatic
         return $min;
     }
 
-    public static function max(Money ...$monies): ?Money
+    public static function max(Money ...$list): ?Money
     {
-        if (empty($monies)) {
+        if (empty($list)) {
             return null;
         }
 
-        self::currenciesAreNotSame($monies);
+        self::checkAllCurrenciesAreTheSame($list);
 
-        $max = $monies[0];
+        $max = $list[0];
 
-        for ($i = 1; $i < count($monies); $i++) {
-            if (($money = $monies[$i])->getPureAmount() > $max->getPureAmount()) {
+        for ($i = 1; $i < count($list); $i++) {
+            $money = $list[$i];
+            if ($money->greaterThan($max)) {
                 $max = $money;
             }
         }
@@ -125,42 +127,41 @@ trait MoneyStatic
         return $max;
     }
 
-    public static function avg(Money ...$monies): ?Money
+    public static function avg(Money ...$list): ?Money
     {
-        if (empty($monies)) {
+        if (empty($list)) {
             return null;
         }
 
-        self::currenciesAreNotSame($monies);
+        self::checkAllCurrenciesAreTheSame($list);
 
-        $sum = array_reduce($monies, function (string $acc, Money $money) {
-            return $acc + $money->getPureAmount();
-        }, '0');
-
-        return new Money(
-            $sum / count($monies),
-            Currency::code($monies[0]->getCurrency()->getCode()),
-            clone $monies[0]->settings()
+        $first = $list[0];
+        $sum = array_reduce(
+            array: $list,
+            callback: fn(Money $acc, Money $money) => $acc->add($money),
+            initial: money('0', $first->getCurrency()),
         );
+        $sum->divide(count($list));
+
+        return money($sum->getPureAmount(), $first->getCurrency());
     }
 
-    public static function sum(Money ...$monies): ?Money
+    public static function sum(Money ...$list): ?Money
     {
-        if (empty($monies)) {
+        if (empty($list)) {
             return null;
         }
 
-        self::currenciesAreNotSame($monies);
+        self::checkAllCurrenciesAreTheSame($list);
 
-        $sum = array_reduce($monies, function (string $acc, Money $money) {
-            return $acc + $money->getPureAmount();
-        }, '0');
-
-        return new Money(
-            $sum,
-            Currency::code($monies[0]->getCurrency()->getCode()),
-            clone $monies[0]->settings()
+        $first = $list[0];
+        $sum = array_reduce(
+            array: $list,
+            callback: fn(Money $acc, Money $money) => $acc->add($money),
+            initial: money('0', $first->getCurrency()),
         );
+
+        return money($sum->getPureAmount(), $first->getCurrency());
     }
 
     public static function getDefaultDivisor(): int
@@ -168,11 +169,11 @@ trait MoneyStatic
         return 10 ** 4;
     }
 
-    private static function currenciesAreNotSame(array $monies): void
+    private static function checkAllCurrenciesAreTheSame(array $list): void
     {
-        $main = $monies[0];
+        $main = $list[0];
 
-        foreach ($monies as $money) {
+        foreach ($list as $money) {
             if (! $main->isSameCurrency($money)) {
                 throw new MoneyHasDifferentCurrenciesException();
             }
