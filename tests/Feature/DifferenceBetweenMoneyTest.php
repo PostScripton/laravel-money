@@ -8,10 +8,10 @@ use PostScripton\Money\Tests\TestCase;
 
 class DifferenceBetweenMoneyTest extends TestCase
 {
-    private $backup_config;
+    private $backupConfig;
 
     /** @test */
-    public function differenceReturnsAString()
+    public function differenceReturnsAString(): void
     {
         $m1 = money('500000');
         $m2 = money('1000000');
@@ -20,7 +20,7 @@ class DifferenceBetweenMoneyTest extends TestCase
     }
 
     /** @test */
-    public function differenceWithTwoSameCurrencies()
+    public function differenceWithTwoSameCurrencies(): void
     {
         $m1 = money('500000');
         $m2 = money('1000000');
@@ -29,17 +29,17 @@ class DifferenceBetweenMoneyTest extends TestCase
     }
 
     /** @test */
-    public function differenceWithTwoDifferentCurrencies()
+    public function differenceWithTwoDifferentCurrencies(): void
     {
         $usd = money('500000');
         $rub = money('1000000', currency('rub'));
-        $rub_into_usd = $rub->convertInto($usd->getCurrency());
+        $rubIntoUsd = $rub->convertInto($usd->getCurrency());
 
-        $this->assertEquals(money('500000')->subtract($rub_into_usd)->toString(), $usd->difference($rub_into_usd));
+        $this->assertEquals(money('500000')->subtract($rubIntoUsd)->toString(), $usd->difference($rubIntoUsd));
     }
 
     /** @test */
-    public function anExceptionIsThrownWhenThereAreTwoDifferentCurrencies()
+    public function anExceptionIsThrownWhenThereAreTwoDifferentCurrencies(): void
     {
         $m1 = money('500000');
         $m2 = money('1000000', currency('rub'));
@@ -50,7 +50,7 @@ class DifferenceBetweenMoneyTest extends TestCase
     }
 
     /** @test */
-    public function newSettingsCanBeAppliedToTheDifference()
+    public function newSettingsCanBeAppliedToTheDifference(): void
     {
         $m1 = money('500000');
         $m2 = money('1000000');
@@ -64,13 +64,13 @@ class DifferenceBetweenMoneyTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->backup_config = Config::get('money');
+        $this->backupConfig = Config::get('money');
         Config::set('money.service', 'exchangerate');
     }
 
     protected function tearDown(): void
     {
         parent::tearDown();
-        Config::set('money', $this->backup_config);
+        Config::set('money', $this->backupConfig);
     }
 }

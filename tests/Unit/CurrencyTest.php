@@ -11,7 +11,7 @@ use PostScripton\Money\Tests\TestCase;
 class CurrencyTest extends TestCase
 {
     /** @test */
-    public function checkingCurrencyPropsByCodeTest()
+    public function checkingCurrencyPropsByCodeTest(): void
     {
         $cur = Currency::code('RUB');
         $this->assertEquals('Russian ruble', $cur->getFullName());
@@ -23,28 +23,28 @@ class CurrencyTest extends TestCase
     }
 
     /** @test */
-    public function noCurrencyByISOCodeTest()
+    public function noCurrencyByISOCodeTest(): void
     {
         $this->expectException(CurrencyDoesNotExistException::class);
         Currency::code('NO_SUCH_CODE');
     }
 
     /** @test */
-    public function noCurrencyByNumCodeTest()
+    public function noCurrencyByNumCodeTest(): void
     {
         $this->expectException(CurrencyDoesNotExistException::class);
         Currency::code('000');
     }
 
     /** @test */
-    public function currencyNoSymbolException()
+    public function currencyNoSymbolException(): void
     {
         // No exception because it has only 1 symbol
         $this->assertEquals('$', Currency::code('USD')->getSymbol(1234));
     }
 
     /** @test */
-    public function getAllTheCurrenciesAsArray()
+    public function getAllTheCurrenciesAsArray(): void
     {
         $actual = require __DIR__ . '/../../src/Lists/popular_currencies.php';
         $allCurrencies = Currencies::getCodesArray();

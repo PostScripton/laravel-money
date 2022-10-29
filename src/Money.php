@@ -22,7 +22,7 @@ class Money implements MoneyInterface
         $this->amount = $amount;
         $this->setCurrency(self::getDefaultCurrency());
 
-        if (is_null($settings) && !($currency instanceof MoneySettings)) {
+        if (is_null($settings) && ! ($currency instanceof MoneySettings)) {
             $settings = new MoneySettings();
         }
 
@@ -85,7 +85,7 @@ class Money implements MoneyInterface
             $this->settings()->getThousandsSeparator()
         );
 
-        if (!$this->settings()->endsWith0()) {
+        if (! $this->settings()->endsWith0()) {
             $thousands = preg_quote($this->settings()->getThousandsSeparator());
             $decimals = preg_quote($this->settings()->getDecimalSeparator());
 
@@ -100,7 +100,7 @@ class Money implements MoneyInterface
 
     public function add(self $money): self
     {
-        if (!$this->isSameCurrency($money)) {
+        if (! $this->isSameCurrency($money)) {
             throw new MoneyHasDifferentCurrenciesException();
         }
 
@@ -111,7 +111,7 @@ class Money implements MoneyInterface
 
     public function subtract(self $money): self
     {
-        if (!$this->isSameCurrency($money)) {
+        if (! $this->isSameCurrency($money)) {
             throw new MoneyHasDifferentCurrenciesException();
         }
 
@@ -136,7 +136,7 @@ class Money implements MoneyInterface
 
     public function rebase(self $money): self
     {
-        if (!$this->isSameCurrency($money)) {
+        if (! $this->isSameCurrency($money)) {
             throw new MoneyHasDifferentCurrenciesException();
         }
 
@@ -214,26 +214,26 @@ class Money implements MoneyInterface
     {
         // Convert online
         if (is_null($rate)) {
-            $not_supported = $this->service()->supports([$currency->getCode(), $this->getCurrency()->getCode()]);
-            if (!empty($not_supported)) {
+            $notSupported = $this->service()->supports([$currency->getCode(), $this->getCurrency()->getCode()]);
+            if (! empty($notSupported)) {
                 throw new ServiceException(sprintf(
                     'The service class [%s] doesn\'t support one of the currencies [%s]',
                     $this->service()->getClassName(),
-                    implode(', ', $not_supported),
+                    implode(', ', $notSupported),
                 ));
             }
 
             $rate = $this->service()->rate($this->getCurrency()->getCode(), $currency->getCode(), $date);
         }
 
-        $new_amount = $this->amount * $rate;
+        $newAmount = $this->amount * $rate;
 
-        return money($new_amount, $currency, clone $this->settings());
+        return money($newAmount, $currency, clone $this->settings());
     }
 
     public function difference(self $money, ?MoneySettings $settings = null): string
     {
-        if (!$this->isSameCurrency($money)) {
+        if (! $this->isSameCurrency($money)) {
             throw new MoneyHasDifferentCurrenciesException();
         }
 
@@ -248,7 +248,7 @@ class Money implements MoneyInterface
         return self::bindMoneyWithCurrency($this, $this->getCurrency());
     }
 
-    public function service()
+    public function service(): ServiceInterface
     {
         return app(ServiceInterface::class);
     }

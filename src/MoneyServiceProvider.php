@@ -57,7 +57,7 @@ class MoneyServiceProvider extends PackageServiceProvider
                 ));
             }
 
-            if (!array_key_exists('class', $config = $config ?? [])) {
+            if (! array_key_exists('class', $config ??= [])) {
                 throw new ServiceException(sprintf(
                     'The service [%s] doesn\'t have the "class" property.',
                     config('money.service'),
@@ -65,10 +65,10 @@ class MoneyServiceProvider extends PackageServiceProvider
             }
 
             $class = $config['class'];
-            if (!class_exists($class)) {
+            if (! class_exists($class)) {
                 throw new ServiceException("The service class [{$class}] doesn't exist.");
             }
-            if (!is_subclass_of($class, ServiceInterface::class)) {
+            if (! is_subclass_of($class, ServiceInterface::class)) {
                 throw new ServiceException(sprintf(
                     'The given service class [%s] doesn\'t inherit the [%s].',
                     $class,
@@ -86,7 +86,7 @@ class MoneyServiceProvider extends PackageServiceProvider
 
         if (is_array($list)) {
             foreach ($list as $code) {
-                if (!is_string($code)) {
+                if (! is_string($code)) {
                     throw new Exception('Codes in the config property "currency_list" must be string');
                 }
             }
@@ -102,7 +102,7 @@ class MoneyServiceProvider extends PackageServiceProvider
     {
         $customCurrencies = config('money.custom_currencies');
 
-        if (!is_array($customCurrencies)) {
+        if (! is_array($customCurrencies)) {
             throw new Exception('The config property "custom_currencies" must be an array.');
         }
         if (empty($customCurrencies)) {
@@ -146,12 +146,14 @@ class MoneyServiceProvider extends PackageServiceProvider
         $customCurrencies = collect(config('money.custom_currencies'));
         $customCurrencies->each(function (array $currency, int $key) use ($customCurrencies) {
             $withoutCurrent = $customCurrencies->filter(fn($v, $k) => $k !== $key);
+
             $sameIsoCode = $withoutCurrent->some(function (array $custom) use ($currency) {
                 return strtoupper($custom['iso_code']) === strtoupper($currency['iso_code']);
             });
             $sameNumCode = $withoutCurrent->some(function (array $custom) use ($currency) {
                 return strtoupper($custom['num_code']) === strtoupper($currency['num_code']);
             });
+
             if ($sameIsoCode || $sameNumCode) {
                 throw new CustomCurrencyTakenCodesException(
                     $currency['full_name'],

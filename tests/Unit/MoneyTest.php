@@ -9,7 +9,7 @@ use PostScripton\Money\Tests\TestCase;
 class MoneyTest extends TestCase
 {
     /** @test */
-    public function allTheWaysToCreateMoney()
+    public function allTheWaysToCreateMoney(): void
     {
         $money1 = Money::of('12345000');
         $money2 = money('12345000');
@@ -18,7 +18,7 @@ class MoneyTest extends TestCase
     }
 
     /** @test */
-    public function baseWaysOfFormattingMoney()
+    public function baseWaysOfFormattingMoney(): void
     {
         $usd = Currency::code('USD');
         $rub = Currency::code('RUB');
@@ -35,7 +35,7 @@ class MoneyTest extends TestCase
     }
 
     /** @test */
-    public function numbersCanBeFetchedOutOfTheMoney()
+    public function numbersCanBeFetchedOutOfTheMoney(): void
     {
         $money = Money::of('12345000');
 
@@ -44,7 +44,7 @@ class MoneyTest extends TestCase
     }
 
     /** @test */
-    public function allCastsToString()
+    public function allCastsToString(): void
     {
         $money = Money::of('1234000');
 
@@ -55,7 +55,7 @@ class MoneyTest extends TestCase
     }
 
     /** @test */
-    public function moneyGetsRidOfDecimalsWithFloorMethod()
+    public function moneyGetsRidOfDecimalsWithFloorMethod(): void
     {
         $money = new Money('102500');
 
@@ -69,7 +69,7 @@ class MoneyTest extends TestCase
     }
 
     /** @test */
-    public function moneyGetsRidOfDecimalsWithCeilMethod()
+    public function moneyGetsRidOfDecimalsWithCeilMethod(): void
     {
         $money = new Money('102500');
 
@@ -83,7 +83,7 @@ class MoneyTest extends TestCase
     }
 
     /** @test */
-    public function correctWayToHandleImmutableMoneyObjects()
+    public function correctWayToHandleImmutableMoneyObjects(): void
     {
         $m1 = money('1000000');
 

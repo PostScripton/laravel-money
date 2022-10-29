@@ -7,7 +7,7 @@ use PostScripton\Money\Services\ServiceInterface;
 
 trait FakeService
 {
-    protected function mockService()
+    protected function mockService(): void
     {
         $this->mock(ServiceInterface::class, function (MockInterface $mock) {
             return $mock

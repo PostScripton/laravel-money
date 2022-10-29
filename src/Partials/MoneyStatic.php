@@ -12,21 +12,21 @@ use PostScripton\Money\Parser;
 
 trait MoneyStatic
 {
-    private static int $default_decimals = 1;
-    private static string $default_thousands_separator = ' ';
-    private static string $default_decimal_separator = '.';
-    private static bool $default_ends_with_0 = false;
-    private static bool $default_space_between = true;
-    private static Currency $default_currency;
+    private static int $defaultDecimals = 1;
+    private static string $defaultThousandsSeparator = ' ';
+    private static string $defaultDecimalSeparator = '.';
+    private static bool $defaultEndsWith0 = false;
+    private static bool $defaultSpaceBetween = true;
+    private static Currency $defaultCurrency;
 
     public static function set(MoneySettings $settings): void
     {
-        self::$default_decimals = $settings->getDecimals();
-        self::$default_thousands_separator = $settings->getThousandsSeparator();
-        self::$default_decimal_separator = $settings->getDecimalSeparator();
-        self::$default_ends_with_0 = $settings->endsWith0();
-        self::$default_space_between = $settings->hasSpaceBetween();
-        self::$default_currency = Currency::code(Currency::getConfigCurrency());
+        self::$defaultDecimals = $settings->getDecimals();
+        self::$defaultThousandsSeparator = $settings->getThousandsSeparator();
+        self::$defaultDecimalSeparator = $settings->getDecimalSeparator();
+        self::$defaultEndsWith0 = $settings->endsWith0();
+        self::$defaultSpaceBetween = $settings->hasSpaceBetween();
+        self::$defaultCurrency = Currency::code(Currency::getConfigCurrency());
     }
 
     public static function configNotPublished(): bool
@@ -43,32 +43,32 @@ trait MoneyStatic
 
     public static function getDefaultDecimals(): int
     {
-        return self::$default_decimals;
+        return self::$defaultDecimals;
     }
 
     public static function getDefaultThousandsSeparator(): string
     {
-        return self::$default_thousands_separator;
+        return self::$defaultThousandsSeparator;
     }
 
     public static function getDefaultDecimalSeparator(): string
     {
-        return self::$default_decimal_separator;
+        return self::$defaultDecimalSeparator;
     }
 
     public static function getDefaultEndsWith0(): bool
     {
-        return self::$default_ends_with_0;
+        return self::$defaultEndsWith0;
     }
 
     public static function getDefaultSpaceBetween(): bool
     {
-        return self::$default_space_between;
+        return self::$defaultSpaceBetween;
     }
 
     public static function getDefaultCurrency(): Currency
     {
-        return self::$default_currency;
+        return self::$defaultCurrency;
     }
 
     // ========== METHODS ==========
@@ -80,11 +80,11 @@ trait MoneyStatic
 
     public static function correctInput(string $input): string
     {
-        if (!str_contains($input, '.')) {
+        if (! str_contains($input, '.')) {
             return $input;
         }
 
-        return substr($input, 0, strpos($input, '.') + self::$default_decimals + 1);
+        return substr($input, 0, strpos($input, '.') + self::$defaultDecimals + 1);
     }
 
     public static function min(Money ...$monies): ?Money
@@ -173,7 +173,7 @@ trait MoneyStatic
         $main = $monies[0];
 
         foreach ($monies as $money) {
-            if (!$main->isSameCurrency($money)) {
+            if (! $main->isSameCurrency($money)) {
                 throw new MoneyHasDifferentCurrenciesException();
             }
         }
@@ -184,9 +184,9 @@ trait MoneyStatic
         $space = $money->settings()->hasSpaceBetween() ? ' ' : '';
 
         // Always has a space
-        $has_space = $currency->getPosition() === CurrencyPosition::Start && $money->isNegative()
+        $hasSpace = $currency->getPosition() === CurrencyPosition::Start && $money->isNegative()
             || $currency->getDisplay() === CurrencyDisplay::Code;
-        if ($has_space) {
+        if ($hasSpace) {
             $space = ' ';
         }
 

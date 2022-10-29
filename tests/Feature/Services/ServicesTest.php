@@ -15,10 +15,10 @@ class ServicesTest extends TestCase
 {
     use FakeService;
 
-    private $backup_config;
+    private $backupConfig;
 
     /** @test */
-    public function aServiceChangesDependingOnTheConfigValueWhenItCalls()
+    public function aServiceChangesDependingOnTheConfigValueWhenItCalls(): void
     {
         $money = money('1000000');
 
@@ -30,7 +30,7 @@ class ServicesTest extends TestCase
     }
 
     /** @test */
-    public function aServiceDoesNotExist()
+    public function aServiceDoesNotExist(): void
     {
         $service = 'qwerty';
         Config::set('money.service', $service);
@@ -46,7 +46,7 @@ class ServicesTest extends TestCase
     }
 
     /** @test */
-    public function gettingInfoAboutTheDefaultService()
+    public function gettingInfoAboutTheDefaultService(): void
     {
         $money = money('1000000');
 
@@ -55,7 +55,7 @@ class ServicesTest extends TestCase
     }
 
     /** @test */
-    public function aServiceDoesNotHaveClass()
+    public function aServiceDoesNotHaveClass(): void
     {
         $service = config('money.service');
         $serviceConfig = "money.services.{$service}";
@@ -72,7 +72,7 @@ class ServicesTest extends TestCase
     }
 
     /** @test */
-    public function aServiceClassDoesNotExist()
+    public function aServiceClassDoesNotExist(): void
     {
         $serviceConfig = 'money.services.' . config('money.service');
         $class = 'incorrect_class';
@@ -86,7 +86,7 @@ class ServicesTest extends TestCase
     }
 
     /** @test */
-    public function aServiceClassDoesNotInheritTheMainOne()
+    public function aServiceClassDoesNotInheritTheMainOne(): void
     {
         $serviceConfig = 'money.services.' . config('money.service');
         $class = stdClass::class;
@@ -104,7 +104,7 @@ class ServicesTest extends TestCase
     }
 
     /** @test */
-    public function theGivenCurrencyIsNotSupportedForConvertingByAService()
+    public function theGivenCurrencyIsNotSupportedForConvertingByAService(): void
     {
         $this->mockService();
         $this->expectException(ServiceException::class);
@@ -116,44 +116,44 @@ class ServicesTest extends TestCase
     }
 
     /** @test */
-    public function convertingBackAndForthMustHaveNoFailsInNumber()
+    public function convertingBackAndForthMustHaveNoFailsInNumber(): void
     {
         $this->mockService();
 
         $rub = money('10000000', currency('rub'));
         $usd = $rub->convertInto(currency('usd'));
 
-        $back_rub = $usd->convertInto(currency('rub'));
+        $backRub = $usd->convertInto(currency('rub'));
 
-        $this->assertTrue($rub->equals($back_rub));
-        $this->assertEquals('1 000 ₽', $back_rub->toString());
-        $this->assertTrue($rub->isSameCurrency($back_rub));
-        $this->assertEquals($rub->toString(), $back_rub->toString());
+        $this->assertTrue($rub->equals($backRub));
+        $this->assertEquals('1 000 ₽', $backRub->toString());
+        $this->assertTrue($rub->isSameCurrency($backRub));
+        $this->assertEquals($rub->toString(), $backRub->toString());
     }
 
     /** @test */
-    public function historicalConverting()
+    public function historicalConverting(): void
     {
         $this->mockService();
 
         $rub = money('10000000', currency('rub'));
-        $usd_now = $rub->convertInto(currency('usd'));
-        $usd_historical = $rub->convertInto(currency('usd'), null, Carbon::createFromDate(2000, 12, 31));
+        $usdNow = $rub->convertInto(currency('usd'));
+        $usdHistorical = $rub->convertInto(currency('usd'), null, Carbon::createFromDate(2000, 12, 31));
 
-        $this->assertNotEquals($usd_now->getPureAmount(), $usd_historical->getPureAmount());
+        $this->assertNotEquals($usdNow->getPureAmount(), $usdHistorical->getPureAmount());
     }
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->backup_config = Config::get('money');
+        $this->backupConfig = Config::get('money');
         Config::set('money.service', 'exchangerate');
     }
 
     protected function tearDown(): void
     {
         parent::tearDown();
-        Config::set('money', $this->backup_config);
+        Config::set('money', $this->backupConfig);
     }
 }

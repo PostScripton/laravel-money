@@ -11,14 +11,14 @@ use PostScripton\Money\Exceptions\NoSuchCurrencySymbolException;
 
 class Currency
 {
-    private string $full_name;
+    private string $fullName;
     private string $name;
-    private string $iso_code;
-    private string $num_code;
+    private string $isoCode;
+    private string $numCode;
     private array|string $symbol;
     private CurrencyPosition $position;
     private CurrencyDisplay $display;
-    private ?int $preferred_symbol = null;
+    private ?int $preferredSymbol = null;
 
     public function __construct(array $currency)
     {
@@ -32,10 +32,10 @@ class Currency
             throw new CurrencyHasWrongConstructorException();
         }
 
-        $this->full_name = $currency['full_name'];
+        $this->fullName = $currency['full_name'];
         $this->name = $currency['name'];
-        $this->iso_code = strtoupper($currency['iso_code']);
-        $this->num_code = $currency['num_code'];
+        $this->isoCode = strtoupper($currency['iso_code']);
+        $this->numCode = $currency['num_code'];
         $this->symbol = $currency['symbol'];
         $this->position = $currency['position'] ?? CurrencyPosition::End;
         $this->display = CurrencyDisplay::Symbol;
@@ -65,7 +65,7 @@ class Currency
 
     public function getFullName(): string
     {
-        return $this->full_name;
+        return $this->fullName;
     }
 
     public function getName(): string
@@ -75,28 +75,28 @@ class Currency
 
     public function getCode(): string
     {
-        return $this->iso_code;
+        return $this->isoCode;
     }
 
     public function getNumCode(): string
     {
-        return $this->num_code;
+        return $this->numCode;
     }
 
     public function getSymbol(?int $index = null): string
     {
         if ($this->display === CurrencyDisplay::Code) {
-            return $this->iso_code;
+            return $this->isoCode;
         }
 
         if (is_array($this->symbol)) {
-            if (!array_key_exists($index ?? 0, $this->symbol)) {
+            if (! array_key_exists($index ?? 0, $this->symbol)) {
                 throw new NoSuchCurrencySymbolException();
             }
 
             if (is_null($index)) {
-                if (!is_null($this->preferred_symbol)) {
-                    return $this->symbol[$this->preferred_symbol];
+                if (! is_null($this->preferredSymbol)) {
+                    return $this->symbol[$this->preferredSymbol];
                 }
 
                 $index = 0;
@@ -144,11 +144,11 @@ class Currency
     public function setPreferredSymbol(int $index = 0): self
     {
         if (is_array($this->symbol)) {
-            if (!array_key_exists($index, $this->symbol)) {
+            if (! array_key_exists($index, $this->symbol)) {
                 throw new NoSuchCurrencySymbolException();
             }
 
-            $this->preferred_symbol = $index;
+            $this->preferredSymbol = $index;
         }
 
         return $this;
