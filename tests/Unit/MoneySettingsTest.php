@@ -9,7 +9,7 @@ use PostScripton\Money\Tests\TestCase;
 class MoneySettingsTest extends TestCase
 {
     /** @test */
-    public function noParams()
+    public function noParams(): void
     {
         $settings = new MoneySettings();
 
@@ -23,7 +23,7 @@ class MoneySettingsTest extends TestCase
     }
 
     /** @test */
-    public function paramsThroughMethods()
+    public function paramsThroughMethods(): void
     {
         $settings = (new MoneySettings())
             ->setDecimals(2)

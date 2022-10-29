@@ -29,7 +29,7 @@ class Currencies
     {
         $list = config('money.currency_list');
 
-        if (!is_array($list)) {
+        if (! is_array($list)) {
             return self::getList($list);
         }
 

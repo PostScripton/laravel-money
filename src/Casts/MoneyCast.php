@@ -7,7 +7,7 @@ use PostScripton\Money\Money;
 
 class MoneyCast implements CastsAttributes
 {
-    public function get($model, string $key, $value, array $attributes)
+    public function get($model, string $key, $value, array $attributes): ?Money
     {
         if (is_null($value)) {
             return null;
@@ -16,7 +16,7 @@ class MoneyCast implements CastsAttributes
         return money($value);
     }
 
-    public function set($model, string $key, $value, array $attributes)
+    public function set($model, string $key, $value, array $attributes): ?string
     {
         if (is_null($value)) {
             return null;

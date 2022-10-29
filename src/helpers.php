@@ -4,7 +4,7 @@ use PostScripton\Money\Currency;
 use PostScripton\Money\Money;
 use PostScripton\Money\MoneySettings;
 
-if (!function_exists('money')) {
+if (! function_exists('money')) {
     /**
      * Creates Money object
      * @param string $amount
@@ -18,7 +18,7 @@ if (!function_exists('money')) {
     }
 }
 
-if (!function_exists('currency')) {
+if (! function_exists('currency')) {
     /**
      * Returns currency
      * @param string $code
@@ -31,7 +31,7 @@ if (!function_exists('currency')) {
     }
 }
 
-if (!function_exists('settings')) {
+if (! function_exists('settings')) {
     /** Creates settings for Money object */
     function settings(): MoneySettings
     {

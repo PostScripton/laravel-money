@@ -8,7 +8,7 @@ use PostScripton\Money\Tests\TestCase;
 class MoneyLogicalOperationsTest extends TestCase
 {
     /** @test */
-    public function moneyIsZero()
+    public function moneyIsZero(): void
     {
         $money = money('0');
 
@@ -16,7 +16,7 @@ class MoneyLogicalOperationsTest extends TestCase
     }
 
     /** @test */
-    public function moneyIsLessThanAnotherMoney()
+    public function moneyIsLessThanAnotherMoney(): void
     {
         $m1 = money('500000');
         $m2 = money('1000000');
@@ -25,7 +25,7 @@ class MoneyLogicalOperationsTest extends TestCase
     }
 
     /** @test */
-    public function moneyIsLessThanOrEqualToAnotherMoney()
+    public function moneyIsLessThanOrEqualToAnotherMoney(): void
     {
         $m1 = money('500000');
         $m2 = money('500000');
@@ -36,7 +36,7 @@ class MoneyLogicalOperationsTest extends TestCase
     }
 
     /** @test */
-    public function moneyIsGreaterThanAnotherMoney()
+    public function moneyIsGreaterThanAnotherMoney(): void
     {
         $m1 = money('1000000');
         $m2 = money('500000');
@@ -45,7 +45,7 @@ class MoneyLogicalOperationsTest extends TestCase
     }
 
     /** @test */
-    public function moneyIsGreaterThanOrEqualToAnotherMoney()
+    public function moneyIsGreaterThanOrEqualToAnotherMoney(): void
     {
         $m1 = money('1000000');
         $m2 = money('1000000');
@@ -56,7 +56,7 @@ class MoneyLogicalOperationsTest extends TestCase
     }
 
     /** @test */
-    public function moneyHasTheSameCurrencyWithAnotherMoney()
+    public function moneyHasTheSameCurrencyWithAnotherMoney(): void
     {
         $usd1 = money('1000000');
         $usd2 = money('1000000');
@@ -67,7 +67,7 @@ class MoneyLogicalOperationsTest extends TestCase
     }
 
     /** @test */
-    public function moneyIsPositive()
+    public function moneyIsPositive(): void
     {
         $money = money('1000000');
 
@@ -75,7 +75,7 @@ class MoneyLogicalOperationsTest extends TestCase
     }
 
     /** @test */
-    public function moneyIsNegative()
+    public function moneyIsNegative(): void
     {
         $money = money('-1000000');
 
@@ -83,7 +83,7 @@ class MoneyLogicalOperationsTest extends TestCase
     }
 
     /** @test */
-    public function zeroMoneyIsNotBothPositiveAndNegative()
+    public function zeroMoneyIsNotBothPositiveAndNegative(): void
     {
         $money = money('0');
 
@@ -92,7 +92,7 @@ class MoneyLogicalOperationsTest extends TestCase
     }
 
     /** @test */
-    public function checkIfMoneyObjectsAreTheSame()
+    public function checkIfMoneyObjectsAreTheSame(): void
     {
         $m1 = money('12345000');
         $m2 = money('12345000');

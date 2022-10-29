@@ -20,7 +20,7 @@ class CurrencyDisplayTest extends TestCase
     }
 
     /** @test */
-    public function displayCodeStart()
+    public function displayCodeStart(): void
     {
         $currency = Currency::code('USD')
             ->setDisplay(CurrencyDisplay::Code);
@@ -30,7 +30,7 @@ class CurrencyDisplayTest extends TestCase
     }
 
     /** @test */
-    public function displayCodeStartInEnd()
+    public function displayCodeStartInEnd(): void
     {
         $currency = Currency::code('USD')
             ->setDisplay(CurrencyDisplay::Code)
@@ -41,7 +41,7 @@ class CurrencyDisplayTest extends TestCase
     }
 
     /** @test */
-    public function displayCodeEnd()
+    public function displayCodeEnd(): void
     {
         $currency = Currency::code('RUB')
             ->setDisplay(CurrencyDisplay::Code);
@@ -51,7 +51,7 @@ class CurrencyDisplayTest extends TestCase
     }
 
     /** @test */
-    public function displayCodeEndInStart()
+    public function displayCodeEndInStart(): void
     {
         $currency = Currency::code('RUB')
             ->setDisplay(CurrencyDisplay::Code)

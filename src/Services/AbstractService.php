@@ -10,6 +10,7 @@ abstract class AbstractService implements ServiceInterface
     protected const USER_AGENT = 'PostScripton/laravel-money';
 
     protected const FROM_TO_FORMAT = 1;
+
     protected const TO_FORMAT = 2;
 
     protected const DATE_FORMAT = 'Y-m-d';
@@ -75,13 +76,13 @@ abstract class AbstractService implements ServiceInterface
 
         $this->validateResponse($data);
 
-        $not_supported = [];
+        $notSupported = [];
         foreach ((array)$isos as $iso) {
-            if (!in_array($iso, array_keys($this->supportedData($data, $this->currencies)))) {
-                $not_supported[] = $iso;
+            if (! in_array($iso, array_keys($this->supportedData($data, $this->currencies)))) {
+                $notSupported[] = $iso;
             }
         }
-        return $not_supported;
+        return $notSupported;
     }
 
     public function boot(): void
@@ -112,7 +113,7 @@ abstract class AbstractService implements ServiceInterface
 
     protected function protocol(): string
     {
-        if (!array_key_exists('secure', $this->config)) {
+        if (! array_key_exists('secure', $this->config)) {
             return 'https';
         }
 
@@ -146,7 +147,7 @@ abstract class AbstractService implements ServiceInterface
 
     private function hasBaseRestriction(): bool
     {
-        if (!array_key_exists('base_restriction', $this->config)) {
+        if (! array_key_exists('base_restriction', $this->config)) {
             return false;
         }
 
@@ -155,7 +156,7 @@ abstract class AbstractService implements ServiceInterface
 
     private function doesNotHaveBaseRestriction(): bool
     {
-        return !$this->hasBaseRestriction();
+        return ! $this->hasBaseRestriction();
     }
 
     private function result(string $from, string $to): string

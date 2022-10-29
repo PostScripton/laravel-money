@@ -7,10 +7,10 @@ use PostScripton\Money\Tests\TestCase;
 
 class ConvertCurrenciesTest extends TestCase
 {
-    private $backup_config;
+    private $backupConfig;
 
     /** @test */
-    public function moneyCanBeOfflineConvertedBetweenTwoCurrenciesWithoutFailsInNumber()
+    public function moneyCanBeOfflineConvertedBetweenTwoCurrenciesWithoutFailsInNumber(): void
     {
         $rate = 75.32;
         $rub = money('10000000', currency('RUB'));
@@ -19,23 +19,23 @@ class ConvertCurrenciesTest extends TestCase
         $usd = $rub->convertInto(currency('USD'), 1 / $rate);
         $this->assertEquals('$ 13.3', $usd->toString());
 
-        $back_rub = $usd->convertInto(currency('RUB'), $rate / 1);
-        $this->assertEquals('1 000 ₽', $back_rub->toString());
+        $backRub = $usd->convertInto(currency('RUB'), $rate / 1);
+        $this->assertEquals('1 000 ₽', $backRub->toString());
 
-        $this->assertTrue($rub->equals($back_rub));
-        $this->assertTrue($rub->isSameCurrency($back_rub));
-        $this->assertEquals($rub->getPureAmount(), $back_rub->getPureAmount());
+        $this->assertTrue($rub->equals($backRub));
+        $this->assertTrue($rub->isSameCurrency($backRub));
+        $this->assertEquals($rub->getPureAmount(), $backRub->getPureAmount());
     }
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->backup_config = Config::get('money');
+        $this->backupConfig = Config::get('money');
     }
 
     protected function tearDown(): void
     {
         parent::tearDown();
-        Config::set('money', $this->backup_config);
+        Config::set('money', $this->backupConfig);
     }
 }

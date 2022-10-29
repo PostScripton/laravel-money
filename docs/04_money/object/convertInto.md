@@ -36,9 +36,9 @@ In order to convert currencies with real-time rate.
 $rub = money('10000000', currency('RUB'));
 
 $usd = $rub->convertInto(currency('USD'));
-$back_rub = $usd->convertInto(currency('RUB'));
+$backRub = $usd->convertInto(currency('RUB'));
 
-$rub->toString() === $back_rub->toString(); // true
+$rub->toString() === $backRub->toString(); // true
 ```
 
 #### Historical mode
@@ -51,9 +51,9 @@ use Carbon\Carbon;
 $rub = money('10000000', currency('RUB'));
 
 $usd = $rub->convertInto(currency('USD'));
-$historical_usd = $rub->convertInto(currency('USD'), null, Carbon::createFromDate(2010, 4, 27)))
+$historicalUsd = $rub->convertInto(currency('USD'), null, Carbon::createFromDate(2010, 4, 27)))
 
-$usd->getPureAmount() === $historical_usd->getPureAmount(); // false
+$usd->getPureAmount() === $historicalUsd->getPureAmount(); // false
 ```
 
 ### Offline converting
@@ -65,11 +65,11 @@ $rate = 75.32;
 $rub = money('10000000', currency('RUB'));                  // "1 000 ₽"
 
 $usd = $rub->convertInto(currency('USD'), 1 / $rate);       // "$ 13.3"
-$back_rub = $usd->convertInto(currency('RUB'), $rate / 1);  // "1 000 ₽"
+$backRub = $usd->convertInto(currency('RUB'), $rate / 1);   // "1 000 ₽"
 
 $rub->isSameCurrency($usd);                                 // false
-$rub->isSameCurrency($back_rub);                            // true
-$rub->getPureAmount() === $back_rub->getPureAmount();       // true
+$rub->isSameCurrency($backRub);                             // true
+$rub->getPureAmount() === $backRub->getPureAmount();        // true
 ```
 
 ---
