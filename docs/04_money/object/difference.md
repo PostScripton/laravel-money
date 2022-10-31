@@ -1,15 +1,16 @@
 # `difference()`
 
-shows the difference between two money objects.
+shows the difference between two monetary objects.
+
+In fact, this method is an alias to `->clone()->subtract()->absolute()`
 
 ## Methods
 
-### `difference(Money $money, [?MoneySettings $settings = null])`
+### `difference(Money $money)`
 **Parameters**:
 1. `Money $money` - the given money must be the same currency as the first one.
-2. `[?MoneySettings $settings = null]` (*optional*) - settings for displaying the difference.
 
-**Returns**: `string` - formatted amount.
+**Returns**: `Money`
 
 ## Exceptions
 
@@ -21,14 +22,17 @@ shows the difference between two money objects.
 $m1 = money('500000');
 $m2 = money('1000000');
 
-$m1->difference($m2); // "$ -50"
+$m3 = $m1->difference($m2); // $ 50
+
+// the above is an alias to this
+$m3 = $m1->clone()->subtract($m2)->absolute(); // $ 50
 ```
 
 ```php
 $m1 = money('500000');
 $m2 = money('1000000', currency('RUB'));
 
-$m1->difference($m2); // MoneyHasDifferentCurrenciesException
+$m3 = $m1->difference($m2); // MoneyHasDifferentCurrenciesException
 ```
 
 ---

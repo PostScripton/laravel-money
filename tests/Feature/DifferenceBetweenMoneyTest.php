@@ -5,6 +5,7 @@ namespace PostScripton\Money\Tests\Feature;
 use Illuminate\Support\Facades\Config;
 use Mockery;
 use PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException;
+use PostScripton\Money\Money;
 use PostScripton\Money\Services\ExchangeRateService;
 use PostScripton\Money\Services\ServiceInterface;
 use PostScripton\Money\Tests\TestCase;
@@ -13,22 +14,19 @@ class DifferenceBetweenMoneyTest extends TestCase
 {
     private $backupConfig;
 
-    /** @test */
-    public function differenceReturnsAString(): void
+    /**
+     * @test
+     * @dataProvider differenceDataProvider
+     */
+    public function difference(string $first, string $second, string $result): void
     {
-        $m1 = money('500000');
-        $m2 = money('1000000');
+        $m1 = Money::parse($first);
+        $m2 = Money::parse($second);
 
-        $this->assertIsString($m1->difference($m2));
-    }
+        $diff = $m1->difference($m2);
 
-    /** @test */
-    public function differenceWithTwoSameCurrencies(): void
-    {
-        $m1 = money('500000');
-        $m2 = money('1000000');
-
-        $this->assertEquals(money('500000')->subtract($m2)->toString(), $m1->difference($m2));
+        $this->assertInstanceOf(Money::class, $diff);
+        $this->assertEquals($result, $diff->toString());
     }
 
     /** @test */
@@ -50,7 +48,7 @@ class DifferenceBetweenMoneyTest extends TestCase
         $rubIntoUsd = $rub->convertInto($usd->getCurrency());
 
         $this->assertEquals(
-            $usd->clone()->subtract($rubIntoUsd)->toString(),
+            $usd->clone()->subtract($rubIntoUsd),
             $usd->difference($rubIntoUsd),
         );
     }
@@ -66,16 +64,50 @@ class DifferenceBetweenMoneyTest extends TestCase
         $m1->difference($m2);
     }
 
-    /** @test */
-    public function newSettingsCanBeAppliedToTheDifference(): void
+    protected function differenceDataProvider(): array
     {
-        $m1 = money('500000');
-        $m2 = money('1000000');
-
-        $this->assertEquals(
-            money('500000')->subtract($m2)->toString() . '.0',
-            $m1->difference($m2, settings()->setEndsWith0(true))
-        );
+        return [
+            [
+                'first' => '$ 25',
+                'second' => '$ 100',
+                'result' => '$ 75',
+            ],
+            [
+                'first' => '$ 100',
+                'second' => '$ 25',
+                'result' => '$ 75',
+            ],
+            [
+                'first' => '$ 0',
+                'second' => '$ 25',
+                'result' => '$ 25',
+            ],
+            [
+                'first' => '$ 25',
+                'second' => '$ 0',
+                'result' => '$ 25',
+            ],
+            [
+                'first' => '$ 0',
+                'second' => '$ 0',
+                'result' => '$ 0',
+            ],
+            [
+                'first' => '$ 100',
+                'second' => '$ -25',
+                'result' => '$ 125',
+            ],
+            [
+                'first' => '$ -100',
+                'second' => '$ -115',
+                'result' => '$ 15',
+            ],
+            [
+                'first' => '$ -500',
+                'second' => '$ 100',
+                'result' => '$ 600',
+            ],
+        ];
     }
 
     protected function setUp(): void
