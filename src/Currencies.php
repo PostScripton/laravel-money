@@ -57,10 +57,10 @@ class Currencies
 
     private static function getList(CurrencyList $currencyList): Collection
     {
-        $list = collect(require $currencyList->path());
+        $list = $currencyList->collection();
 
         if ($currencyList !== CurrencyList::Custom) {
-            $customCurrencies = collect(config('money.custom_currencies'));
+            $customCurrencies = CurrencyList::Custom->collection();
             return $list->map(function (array $currency) use ($customCurrencies) {
                 $customCurrency = $customCurrencies->first(function (array $customCurrency) use ($currency) {
                     return strtoupper($customCurrency['iso_code']) === strtoupper($currency['iso_code']) ||
