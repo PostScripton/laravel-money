@@ -3,7 +3,10 @@
 namespace PostScripton\Money\Tests\Feature;
 
 use Illuminate\Support\Facades\Config;
+use Mockery;
 use PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException;
+use PostScripton\Money\Services\ExchangeRateService;
+use PostScripton\Money\Services\ServiceInterface;
 use PostScripton\Money\Tests\TestCase;
 
 class DifferenceBetweenMoneyTest extends TestCase
@@ -31,11 +34,25 @@ class DifferenceBetweenMoneyTest extends TestCase
     /** @test */
     public function differenceWithTwoDifferentCurrencies(): void
     {
+        $this->app->bind(ServiceInterface::class, function () {
+            return Mockery::mock(ExchangeRateService::class)
+                ->makePartial()
+                ->shouldReceive('supports')
+                ->with(['USD', 'RUB'])
+                ->andReturn([])
+                ->shouldReceive('rate')
+                ->with('RUB', 'USD', null)
+                ->andReturn(1 / 65)
+                ->getMock();
+        });
         $usd = money('500000');
         $rub = money('1000000', currency('rub'));
         $rubIntoUsd = $rub->convertInto($usd->getCurrency());
 
-        $this->assertEquals(money('500000')->subtract($rubIntoUsd)->toString(), $usd->difference($rubIntoUsd));
+        $this->assertEquals(
+            $usd->clone()->subtract($rubIntoUsd)->toString(),
+            $usd->difference($rubIntoUsd),
+        );
     }
 
     /** @test */
