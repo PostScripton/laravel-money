@@ -23,6 +23,7 @@ There are *static* methods as well as *object* ones.
     - Object manipulations
         - [`floor()`](/docs/04_money/object/floor.md)
         - [`ceil()`](/docs/04_money/object/ceil.md)
+        - [`absolute()`](/docs/04_money/object/absolute.md)
         - [`clone()`](/docs/04_money/object/clone.md)
     - Logical operations
         - [`isSameCurrency()`](/docs/04_money/object/isSameCurrency.md)

@@ -82,6 +82,19 @@ class MoneyTest extends TestCase
         $this->assertEquals('$ 11', $money->toString());
     }
 
+    /**
+     * @test
+     * @dataProvider absoluteDataProvider
+     */
+    public function moneyAbsoluteAmount(string $negative, string $absolute): void
+    {
+        $money = money($negative);
+
+        $money->absolute();
+
+        $this->assertEquals($absolute, $money->getPureAmount());
+    }
+
     /** @test */
     public function correctWayToHandleImmutableMoneyObjects(): void
     {
@@ -98,5 +111,23 @@ class MoneyTest extends TestCase
         $this->assertEquals('1500000', $m1->getPureAmount());
         $this->assertEquals('3000000', $m2->getPureAmount());
         $this->assertFalse($m1->equals($m2));
+    }
+
+    protected function absoluteDataProvider(): array
+    {
+        return [
+            [
+                'negative' => '-12345',
+                'absolute' => '12345',
+            ],
+            [
+                'negative' => '12345',
+                'absolute' => '12345',
+            ],
+            [
+                'negative' => '-0',
+                'absolute' => '0',
+            ],
+        ];
     }
 }
