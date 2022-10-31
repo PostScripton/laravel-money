@@ -213,15 +213,16 @@ interface MoneyInterface
     public function convertInto(Currency $currency, ?float $rate = null, ?Carbon $date = null): Money;
 
     /**
-     * Shows the difference between two money objects <p>
-     * $50 - $100 = "$ -50" </p>
+     * Shows the difference between two monetary objects <p>
+     * $50 - $100 = "$ -50" </p> <p>
+     * In fact, this method is an alias to `->clone()->subtract()->absolute()` </p>
      * @param Money $money <p>
      * The given money must be the same currency as the first one </p>
-     * @param MoneySettings|null $settings <p>
-     * Settings for displaying the difference </p>
-     * @return string
+     * @throws \PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException
+     * @return Money
+     *
      */
-    public function difference(Money $money, ?MoneySettings $settings = null): string;
+    public function difference(Money $money): Money;
 
     /**
      * Allows you to get access to the selected service from the config file

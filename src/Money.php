@@ -238,16 +238,13 @@ class Money implements MoneyInterface
         return money($newAmount, $currency, clone $this->settings());
     }
 
-    public function difference(Money $money, ?MoneySettings $settings = null): string
+    public function difference(Money $money): Money
     {
         if (! $this->isSameCurrency($money)) {
             throw new MoneyHasDifferentCurrenciesException();
         }
 
-        $amount = $this->amount - $money->amount;
-        $settings = is_null($settings) ? clone $this->settings() : $settings;
-
-        return money($amount, $this->getCurrency(), $settings)->toString();
+        return $this->clone()->subtract($money)->absolute();
     }
 
     public function toString(): string
