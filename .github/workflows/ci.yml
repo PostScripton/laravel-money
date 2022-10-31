@@ -47,6 +47,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.version }}
+          coverage: pcov
 
       - name: Get Composer Cache Directory
         id: composer-cache
@@ -63,3 +64,8 @@ jobs:
 
       - name: PHPUnit
         run: composer app:test
+
+      - name: Upload coverage on Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}

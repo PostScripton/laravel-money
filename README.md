@@ -2,7 +2,7 @@
     <img src="./.github/banner-logo.png" alt="Banner Logo"/>
 </div>
 
-<div align="center">
+<div align="center" style="margin-top: 1rem">
 <a href="https://packagist.org/packages/postscripton/laravel-money" target="_blank">
     <img src="https://img.shields.io/github/v/release/PostScripton/laravel-money?style=for-the-badge" alt="Release version"/>
 </a>
@@ -14,6 +14,15 @@
 </a>
 <a href="./LICENSE.txt" target="_blank">
     <img src="https://img.shields.io/github/license/PostScripton/laravel-money?style=for-the-badge" alt="License"/>
+</a>
+</div>
+
+<div align="center" style="margin-top: 1rem">
+<a href="https://codecov.io/gh/PostScripton/laravel-money" target="_blank"> 
+    <img src="https://img.shields.io/github/workflow/status/PostScripton/laravel-money/Continuous%20Integration/4.x?logo=github&style=for-the-badge" alt="GitHub Workflow Status (branch)"> 
+</a>
+<a href="https://codecov.io/gh/PostScripton/laravel-money" target="_blank"> 
+    <img src="https://img.shields.io/codecov/c/gh/PostScripton/laravel-money/4.x?token=V1ACJR1NM5&logo=codecov&style=for-the-badge" alt="Coverage percent"/> 
 </a>
 </div>
 

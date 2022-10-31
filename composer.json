@@ -43,7 +43,7 @@
     "scripts": {
         "app:check-build": [
             "@app:cs",
-            "@app:test"
+            "@app:test-fast"
         ],
         "app:cs": [
             "@app:cs-slevomat-coding-standard-rules",
@@ -56,7 +56,7 @@
             "phpcs --standard=PSR12 --encoding=utf-8 -p src -p tests -p config"
         ],
         "app:test": [
-            "phpunit"
+            "phpunit --coverage-clover=coverage.xml"
         ],
         "app:test-fast": [
             "phpunit --no-coverage"

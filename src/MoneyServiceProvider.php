@@ -143,7 +143,7 @@ class MoneyServiceProvider extends PackageServiceProvider
 
     private function customCurrenciesShouldNotDuplicate(): void
     {
-        $customCurrencies = collect(config('money.custom_currencies'));
+        $customCurrencies = CurrencyList::Custom->collection();
         $customCurrencies->each(function (array $currency, int $key) use ($customCurrencies) {
             $withoutCurrent = $customCurrencies->filter(fn($v, $k) => $k !== $key);
 
