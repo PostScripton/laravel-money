@@ -92,6 +92,7 @@ After all, the config file at `config/money.php` should be modified for your own
         - Object manipulations
             - [`floor()`](/docs/04_money/object/floor.md)
             - [`ceil()`](/docs/04_money/object/ceil.md)
+            - [`absolute()`](/docs/04_money/object/absolute.md)
             - [`clone()`](/docs/04_money/object/clone.md)
         - Logical operations
             - [`isSameCurrency()`](/docs/04_money/object/isSameCurrency.md)
@@ -108,14 +109,14 @@ After all, the config file at `config/money.php` should be modified for your own
             - [`service()`](/docs/04_money/object/service.md)
             - [`convertInto()`](/docs/04_money/object/convertInto.md)
             - [`toString()`](/docs/04_money/object/toString.md)
-7. [API services](/docs/05_services/README.md)
+6. [API services](/docs/05_services/README.md)
     - [Add your own](/docs/05_services/add.md)
 
 ## Contributing
 
 Contributions are **welcome** and will be fully **credited**.
 
-We accept contributions via Pull Requests on [Github](https://github.com/PostScripton/laravel-money/).
+We accept contributions via Pull Requests on [GitHub](https://github.com/PostScripton/laravel-money/).
 
 ### Pull Requests
 

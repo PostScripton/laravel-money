@@ -159,6 +159,13 @@ class Money implements MoneyInterface
         return $this;
     }
 
+    public function absolute(): self
+    {
+        $this->amount = ltrim($this->amount, '-');
+
+        return $this;
+    }
+
     public function isSameCurrency(Money $money): bool
     {
         return $this->getCurrency()->getCode() === $money->getCurrency()->getCode();

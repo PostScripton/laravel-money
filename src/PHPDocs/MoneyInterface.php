@@ -119,6 +119,13 @@ interface MoneyInterface
     public function ceil(): self;
 
     /**
+     * Turns the amount of the monetary object into an absolute value <p>
+     * `$ -10.25 -> $ 10.25` </p>
+     * @return self
+     */
+    public function absolute(): self;
+
+    /**
      * Checks whether two money objects have the same currency
      * @param Money $money
      * @return bool
