@@ -12,7 +12,7 @@ interface MoneyInterface
     /**
      * Binds the money object with settings
      * @param MoneySettings $settings
-     * @return Money
+     * @return self
      */
     public function bind(MoneySettings $settings): self;
 
@@ -33,7 +33,7 @@ interface MoneyInterface
      * Note that changes only currency itself without converting </p>
      * For converting between currencies use `convertInto()` method
      * @param Currency $currency
-     * @return Money
+     * @return self
      */
     public function setCurrency(Currency $currency): self;
 
@@ -41,7 +41,7 @@ interface MoneyInterface
      * Creates an absolutely identical instance of the object
      * @return Money
      */
-    public function clone(): self;
+    public function clone(): Money;
 
     /**
      * Returns a formatted number <p>
@@ -63,7 +63,7 @@ interface MoneyInterface
      * @param Money $money <p>
      * Money that will be added </p>
      * @throws \PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException
-     * @return Money
+     * @return self
      */
     public function add(Money $money): self;
 
@@ -73,7 +73,7 @@ interface MoneyInterface
      * @param Money $money <p>
      * Money that will be subtracted </p>
      * @throws \PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException
-     * @return Money
+     * @return self
      */
     public function subtract(Money $money): self;
 
@@ -82,7 +82,7 @@ interface MoneyInterface
      * `$100 * 2 = $200` </p>
      * @param float $number <p>
      * A number on which the money will be multiplied </p>
-     * @return Money
+     * @return self
      */
     public function multiply(float $number): self;
 
@@ -91,7 +91,7 @@ interface MoneyInterface
      * `$100 / 2 = $50` </p>
      * @param float $number <p>
      * A number on which the money will be divided </p>
-     * @return Money
+     * @return self
      */
     public function divide(float $number): self;
 
@@ -116,7 +116,7 @@ interface MoneyInterface
      * `$10.25 -> $11.00` </p>
      * @return self
      */
-    public function ceil(): Money;
+    public function ceil(): self;
 
     /**
      * Checks whether two money objects have the same currency

@@ -66,7 +66,7 @@ class Money implements MoneyInterface
         return $this;
     }
 
-    public function clone(): self
+    public function clone(): Money
     {
         return money($this->amount, $this->getCurrency(), clone $this->settings());
     }
@@ -98,7 +98,7 @@ class Money implements MoneyInterface
         return $money;
     }
 
-    public function add(self $money): self
+    public function add(Money $money): self
     {
         if (! $this->isSameCurrency($money)) {
             throw new MoneyHasDifferentCurrenciesException();
@@ -159,7 +159,7 @@ class Money implements MoneyInterface
         return $this;
     }
 
-    public function isSameCurrency(self $money): bool
+    public function isSameCurrency(Money $money): bool
     {
         return $this->getCurrency()->getCode() === $money->getCurrency()->getCode();
     }
@@ -179,27 +179,27 @@ class Money implements MoneyInterface
         return empty($this->amount);
     }
 
-    public function lessThan(self $money): bool
+    public function lessThan(Money $money): bool
     {
         return $this->amount < $money->amount;
     }
 
-    public function lessThanOrEqual(self $money): bool
+    public function lessThanOrEqual(Money $money): bool
     {
         return $this->amount <= $money->amount;
     }
 
-    public function greaterThan(self $money): bool
+    public function greaterThan(Money $money): bool
     {
         return $this->amount > $money->amount;
     }
 
-    public function greaterThanOrEqual(self $money): bool
+    public function greaterThanOrEqual(Money $money): bool
     {
         return $this->amount >= $money->amount;
     }
 
-    public function equals(self $money, bool $strict = true): bool
+    public function equals(Money $money, bool $strict = true): bool
     {
         if ($strict) {
             if ($this->getCurrency()->getCode() !== $money->getCurrency()->getCode()) {
@@ -210,7 +210,7 @@ class Money implements MoneyInterface
         return $this->amount === $money->amount;
     }
 
-    public function convertInto(Currency $currency, ?float $rate = null, ?Carbon $date = null): self
+    public function convertInto(Currency $currency, ?float $rate = null, ?Carbon $date = null): Money
     {
         // Convert online
         if (is_null($rate)) {
@@ -231,7 +231,7 @@ class Money implements MoneyInterface
         return money($newAmount, $currency, clone $this->settings());
     }
 
-    public function difference(self $money, ?MoneySettings $settings = null): string
+    public function difference(Money $money, ?MoneySettings $settings = null): string
     {
         if (! $this->isSameCurrency($money)) {
             throw new MoneyHasDifferentCurrenciesException();
