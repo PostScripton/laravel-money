@@ -18,7 +18,7 @@
 </div>
 
 <div align="center" style="margin-top: 1rem">
-<a href="https://codecov.io/gh/PostScripton/laravel-money" target="_blank"> 
+<a href="https://github.com/PostScripton/laravel-money/actions/workflows/ci.yml?query=branch%3A4.x" target="_blank"> 
     <img src="https://img.shields.io/github/workflow/status/PostScripton/laravel-money/Continuous%20Integration/4.x?logo=github&style=for-the-badge" alt="GitHub Workflow Status (branch)"> 
 </a>
 <a href="https://codecov.io/gh/PostScripton/laravel-money" target="_blank"> 
