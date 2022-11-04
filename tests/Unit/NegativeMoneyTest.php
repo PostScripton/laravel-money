@@ -4,6 +4,7 @@ namespace PostScripton\Money\Tests\Unit;
 
 use PostScripton\Money\Currency;
 use PostScripton\Money\Enums\CurrencyDisplay;
+use PostScripton\Money\Enums\CurrencyPosition;
 use PostScripton\Money\Tests\TestCase;
 
 class NegativeMoneyTest extends TestCase
@@ -76,5 +77,17 @@ class NegativeMoneyTest extends TestCase
         $this->assertEquals('-1234000', $usd->getPureAmount());
         $this->assertTrue($usd->isNegative());
         $this->assertNotTrue($usd->isPositive());
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        Currency::code('USD')
+            ->setDisplay(CurrencyDisplay::Symbol)
+            ->setPosition(CurrencyPosition::Start);
+        Currency::code('RUB')
+            ->setDisplay(CurrencyDisplay::Symbol)
+            ->setPosition(CurrencyPosition::End);
     }
 }

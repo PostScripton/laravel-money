@@ -3,6 +3,7 @@
 namespace PostScripton\Money\Tests\Unit;
 
 use PostScripton\Money\Currency;
+use PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException;
 use PostScripton\Money\Money;
 use PostScripton\Money\Tests\TestCase;
 
@@ -11,10 +12,17 @@ class MoneyTest extends TestCase
     /** @test */
     public function allTheWaysToCreateMoney(): void
     {
-        $money1 = Money::of('12345000');
-        $money2 = money('12345000');
+        $money1 = new Money('12345000');
+        $money2 = Money::of('12345000');
+        $money3 = money('12345000');
+        $money4 = money_parse('$ 1234.5');
+        $money5 = money('12345000', settings()->setThousandsSeparator('#'));
 
-        $this->assertEquals($money1, $money2);
+        $this->assertTrue($money1->equals($money2));
+        $this->assertTrue($money1->equals($money3));
+        $this->assertTrue($money1->equals($money4));
+        $this->assertTrue($money1->equals($money5));
+        $this->assertEquals('$ 1#234.5', $money5->toString());
     }
 
     /** @test */
@@ -82,6 +90,52 @@ class MoneyTest extends TestCase
         $this->assertEquals('$ 11', $money->toString());
     }
 
+    /** @test */
+    public function rebaseMoney(): void
+    {
+        $m1 = money_parse('100');
+        $m2 = money_parse('250');
+
+        $m1->rebase($m2);
+
+        $this->assertTrue($m1->equals(money_parse('250')));
+        $this->assertEquals('2500000', $m1->getPureAmount());
+        $this->assertEquals('$ 250', $m1->toString());
+    }
+
+    /** @test */
+    public function addingMoneyWithDifferentCurrencyThrowsException(): void
+    {
+        $this->expectException(MoneyHasDifferentCurrenciesException::class);
+
+        $m1 = money_parse('100');
+        $m2 = money_parse('250', 'RUB');
+
+        $m1->add($m2);
+    }
+
+    /** @test */
+    public function subtractingMoneyWithDifferentCurrencyThrowsException(): void
+    {
+        $this->expectException(MoneyHasDifferentCurrenciesException::class);
+
+        $m1 = money_parse('100');
+        $m2 = money_parse('250', 'RUB');
+
+        $m1->subtract($m2);
+    }
+
+    /** @test */
+    public function rebasingMoneyWithDifferentCurrencyThrowsException(): void
+    {
+        $this->expectException(MoneyHasDifferentCurrenciesException::class);
+
+        $m1 = money_parse('100');
+        $m2 = money_parse('250', 'RUB');
+
+        $m1->rebase($m2);
+    }
+
     /**
      * @test
      * @dataProvider absoluteDataProvider
@@ -98,11 +152,11 @@ class MoneyTest extends TestCase
     /** @test */
     public function correctWayToHandleImmutableMoneyObjects(): void
     {
-        $m1 = money('1000000');
+        $m1 = money_parse('100');
 
         $m2 = $m1
             // adds to the both
-            ->add(money('500000'))
+            ->add(money_parse('50'))
             // $m2 is $150 as long as $m1 but $m2 is independent now
             ->clone()
             // $m2 is $300 whereas $m1 is still $150
