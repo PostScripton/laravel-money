@@ -85,27 +85,23 @@ class Currency
 
     public function getSymbol(?int $index = null): string
     {
-        if ($this->display === CurrencyDisplay::Code) {
-            return $this->isoCode;
+        if (is_string($this->symbol)) {
+            return $this->symbol;
         }
 
-        if (is_array($this->symbol)) {
-            if (! array_key_exists($index ?? 0, $this->symbol)) {
-                throw new NoSuchCurrencySymbolException();
+        if (is_null($index)) {
+            if (! is_null($this->preferredSymbol)) {
+                return $this->symbol[$this->preferredSymbol];
             }
 
-            if (is_null($index)) {
-                if (! is_null($this->preferredSymbol)) {
-                    return $this->symbol[$this->preferredSymbol];
-                }
-
-                $index = 0;
-            }
-
-            return $this->symbol[$index];
+            $index = 0;
         }
 
-        return $this->symbol;
+        if (! array_key_exists($index, $this->symbol)) {
+            throw new NoSuchCurrencySymbolException();
+        }
+
+        return $this->symbol[$index];
     }
 
     public function getSymbols(): array
@@ -141,15 +137,17 @@ class Currency
         return $this;
     }
 
-    public function setPreferredSymbol(int $index = 0): self
+    public function setPreferredSymbol(?int $index = null): self
     {
-        if (is_array($this->symbol)) {
-            if (! array_key_exists($index, $this->symbol)) {
-                throw new NoSuchCurrencySymbolException();
-            }
-
-            $this->preferredSymbol = $index;
+        if (is_string($this->symbol)) {
+            return $this;
         }
+
+        if (! is_null($index) && ! array_key_exists($index, $this->symbol)) {
+            throw new NoSuchCurrencySymbolException();
+        }
+
+        $this->preferredSymbol = $index;
 
         return $this;
     }

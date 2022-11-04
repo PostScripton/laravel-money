@@ -2,18 +2,36 @@
 
 namespace PostScripton\Money\Tests\Unit;
 
+use Exception;
+use Illuminate\Support\Facades\Config;
 use PostScripton\Money\Currencies;
 use PostScripton\Money\Currency;
 use PostScripton\Money\Enums\CurrencyPosition;
 use PostScripton\Money\Exceptions\CurrencyDoesNotExistException;
+use PostScripton\Money\Exceptions\CurrencyHasWrongConstructorException;
+use PostScripton\Money\Exceptions\NoSuchCurrencySymbolException;
 use PostScripton\Money\Tests\TestCase;
 
 class CurrencyTest extends TestCase
 {
+    private mixed $backupConfig;
+
+    /**
+     * @test
+     * @dataProvider invalidConstructorsDataProvider
+     */
+    public function invalidConstructorThrowsAnExceptions(array $currencyData): void
+    {
+        $this->expectException(CurrencyHasWrongConstructorException::class);
+
+        new Currency($currencyData);
+    }
+
     /** @test */
     public function checkingCurrencyPropsByCodeTest(): void
     {
         $cur = Currency::code('RUB');
+
         $this->assertEquals('Russian ruble', $cur->getFullName());
         $this->assertEquals('ruble', $cur->getName());
         $this->assertEquals('RUB', $cur->getCode());
@@ -26,6 +44,7 @@ class CurrencyTest extends TestCase
     public function noCurrencyByISOCodeTest(): void
     {
         $this->expectException(CurrencyDoesNotExistException::class);
+
         Currency::code('NO_SUCH_CODE');
     }
 
@@ -33,16 +52,132 @@ class CurrencyTest extends TestCase
     public function noCurrencyByNumCodeTest(): void
     {
         $this->expectException(CurrencyDoesNotExistException::class);
+
         Currency::code('000');
     }
 
     /** @test */
-    public function currencyNoSymbolException(): void
+    public function gettingSpecificCurrencySymbolDoesNotMatterBecauseThereIsOnlyOne(): void
     {
-        // No exception because it has only 1 symbol
-        $this->assertEquals('$', Currency::code('USD')->getSymbol(1234));
+        $randomIndex = 1234;
+        $currencyWithOneSymbol = currency('USD');
+
+        $this->assertEquals('$', $currencyWithOneSymbol->getSymbol($randomIndex));
     }
 
+    /** @test */
+    public function gettingFirstCurrencySymbolOutOfSeveralOnesByNotSpecifyingIndex(): void
+    {
+        $currencyWithSeveralSymbols = currency('JPY');
+
+        $this->assertEquals('¥', $currencyWithSeveralSymbols->getSymbol());
+    }
+
+    /** @test */
+    public function gettingSpecificCurrencySymbolOutOfSeveralOnes(): void
+    {
+        $currencyWithSeveralSymbols = currency('JPY');
+        $lastIndex = count($currencyWithSeveralSymbols->getSymbols()) - 1;
+
+        $this->assertEquals('円', $currencyWithSeveralSymbols->getSymbol($lastIndex));
+    }
+
+    /** @test */
+    public function gettingRandomCurrencySymbolOutOfSeveralOnesThrowsAnException(): void
+    {
+        $this->expectException(NoSuchCurrencySymbolException::class);
+
+        $currencyWithSeveralSymbols = currency('JPY');
+        $outOfBoundsIndex = count($currencyWithSeveralSymbols->getSymbols());
+
+        $currencyWithSeveralSymbols->getSymbol($outOfBoundsIndex);
+    }
+
+    /** @test */
+    public function nothingHappensOnSettingPreferredCurrencySymbolWhenThereIsOnlyOne(): void
+    {
+        $currencyWithOneSymbol = currency('USD');
+        $randomIndex = 1234;
+
+        $currencyWithOneSymbol->setPreferredSymbol($randomIndex);
+
+        $this->assertEquals('$', $currencyWithOneSymbol->getSymbol());
+    }
+
+    /** @test */
+    public function gettingPreferredCurrencySymbolOutOfSeveralOnes(): void
+    {
+        $currencyWithSeveralSymbols = currency('JPY');
+
+        $currencyWithSeveralSymbols->setPreferredSymbol(1);
+
+        $this->assertEquals('円', $currencyWithSeveralSymbols->getSymbol());
+    }
+
+    /** @test */
+    public function gettingRandomPreferredCurrencySymbolOutOfSeveralOnesThrowsAnException(): void
+    {
+        $this->expectException(NoSuchCurrencySymbolException::class);
+
+        $currencyWithSeveralSymbols = currency('JPY');
+        $outOfBoundsIndex = count($currencyWithSeveralSymbols->getSymbols());
+
+        $currencyWithSeveralSymbols->setPreferredSymbol($outOfBoundsIndex);
+    }
+
+    /** @test */
+    public function resettingPreferredSymbol()
+    {
+        $currencyWithSeveralSymbols = currency('JPY');
+        $this->assertEquals('¥', $currencyWithSeveralSymbols->getSymbol());
+
+        $currencyWithSeveralSymbols->setPreferredSymbol(1);
+        $this->assertEquals('円', $currencyWithSeveralSymbols->getSymbol());
+
+        $currencyWithSeveralSymbols->setPreferredSymbol(null);
+        $this->assertEquals('¥', $currencyWithSeveralSymbols->getSymbol());
+    }
+
+    /** @test */
+    public function gettingAnArrayOfSymbols(): void
+    {
+        $currencyWithOneSymbol = currency('USD');
+        $currencyWithSeveralSymbols = currency('JPY');
+
+        $this->assertIsArray($currencyWithOneSymbol->getSymbols());
+        $this->assertCount(1, $currencyWithOneSymbol->getSymbols());
+        $this->assertEquals('$', $currencyWithOneSymbol->getSymbols()[0]);
+
+        $this->assertIsArray($currencyWithSeveralSymbols->getSymbols());
+        $this->assertCount(2, $currencyWithSeveralSymbols->getSymbols());
+        $this->assertEquals('¥', $currencyWithSeveralSymbols->getSymbols()[0]);
+        $this->assertEquals('円', $currencyWithSeveralSymbols->getSymbols()[1]);
+    }
+
+    /** @test */
+    public function getConfigCurrency(): void
+    {
+        Config::set(['money.default_currency' => 'RUB']);
+
+        $defaultCurrency = Currency::getConfigCurrency();
+
+        $this->assertEquals('RUB', $defaultCurrency);
+    }
+
+    /** @test */
+    public function getConfigCurrencyButConfigIsNotPublished(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage(
+            'Please publish the config file by running "php artisan vendor:publish --tag=money"',
+        );
+
+        Config::set(['money' => null]);
+
+        Currency::getConfigCurrency();
+    }
+
+    // todo extract into another CurrenciesTest class
     /** @test */
     public function getAllTheCurrenciesAsArray(): void
     {
@@ -54,5 +189,71 @@ class CurrencyTest extends TestCase
             collect($actual)->map(fn(array $currency) => $currency['iso_code'])->toArray(),
             $allCurrencies
         );
+    }
+
+    protected function invalidConstructorsDataProvider(): array
+    {
+        return [
+            [
+                'currencyData' => [],
+            ],
+            [
+                'currencyData' => [
+                    'name' => 'test',
+                    'iso_code' => 'test',
+                    'num_code' => 'test',
+                    'symbol' => 'test',
+                ],
+            ],
+            [
+                'currencyData' => [
+                    'full_name' => 'test',
+                    'iso_code' => 'test',
+                    'num_code' => 'test',
+                    'symbol' => 'test',
+                ],
+            ],
+            [
+                'currencyData' => [
+                    'full_name' => 'test',
+                    'name' => 'test',
+                    'num_code' => 'test',
+                    'symbol' => 'test',
+                ],
+            ],
+            [
+                'currencyData' => [
+                    'full_name' => 'test',
+                    'name' => 'test',
+                    'iso_code' => 'test',
+                    'symbol' => 'test',
+                ],
+            ],
+            [
+                'currencyData' => [
+                    'full_name' => 'test',
+                    'name' => 'test',
+                    'iso_code' => 'test',
+                    'num_code' => 'test',
+                ],
+            ],
+        ];
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->backupConfig = Config::get('money');
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        Config::set(['money' => $this->backupConfig]);
+
+        currency('USD')->setPreferredSymbol(null);
+        currency('JPY')->setPreferredSymbol(null);
     }
 }

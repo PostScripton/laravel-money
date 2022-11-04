@@ -185,14 +185,19 @@ trait MoneyStatic
         $space = $money->settings()->hasSpaceBetween() ? ' ' : '';
 
         // Always has a space
-        $hasSpace = $currency->getPosition() === CurrencyPosition::Start && $money->isNegative()
+        $hasSpace = ($currency->getPosition() === CurrencyPosition::Start && $money->isNegative())
             || $currency->getDisplay() === CurrencyDisplay::Code;
         if ($hasSpace) {
             $space = ' ';
         }
 
+        $symbol = match ($currency->getDisplay()) {
+            CurrencyDisplay::Symbol => $currency->getSymbol(),
+            CurrencyDisplay::Code => $currency->getCode(),
+        };
+
         return $currency->getPosition() === CurrencyPosition::Start
-            ? $currency->getSymbol() . $space . $money->getAmount()
-            : $money->getAmount() . $space . $currency->getSymbol();
+            ? $symbol . $space . $money->getAmount()
+            : $money->getAmount() . $space . $symbol;
     }
 }
