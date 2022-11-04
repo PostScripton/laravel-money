@@ -9,16 +9,6 @@ use PostScripton\Money\Tests\TestCase;
 
 class CurrencyDisplayTest extends TestCase
 {
-    public function tearDown(): void
-    {
-        Currency::code('USD')
-            ->setDisplay(CurrencyDisplay::Symbol)
-            ->setPosition(CurrencyPosition::Start);
-        Currency::code('RUB')
-            ->setDisplay(CurrencyDisplay::Symbol)
-            ->setPosition(CurrencyPosition::End);
-    }
-
     /** @test */
     public function displayCodeStart(): void
     {
@@ -59,5 +49,17 @@ class CurrencyDisplayTest extends TestCase
         $rub = money('1234000', $currency);
 
         $this->assertEquals('RUB 123.4', $rub->toString());
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        Currency::code('USD')
+            ->setDisplay(CurrencyDisplay::Symbol)
+            ->setPosition(CurrencyPosition::Start);
+        Currency::code('RUB')
+            ->setDisplay(CurrencyDisplay::Symbol)
+            ->setPosition(CurrencyPosition::End);
     }
 }
