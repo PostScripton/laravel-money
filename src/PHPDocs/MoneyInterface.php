@@ -187,10 +187,10 @@ interface MoneyInterface
     public function greaterThanOrEqual(Money $money): bool;
 
     /**
-     * Checks whether two money objects are equal or not
+     * Checks whether two monetary objects are equal or not
      * @param Money $money
      * @param bool $strict <p>
-     * Whether it is === or ==
+     * Whether to check currencies or not
      * @return bool
      */
     public function equals(Money $money, bool $strict = true): bool;
