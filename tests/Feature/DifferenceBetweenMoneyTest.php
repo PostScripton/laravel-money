@@ -20,8 +20,8 @@ class DifferenceBetweenMoneyTest extends TestCase
      */
     public function difference(string $first, string $second, string $result): void
     {
-        $m1 = Money::parse($first);
-        $m2 = Money::parse($second);
+        $m1 = money_parse($first);
+        $m2 = money_parse($second);
 
         $diff = $m1->difference($m2);
 
