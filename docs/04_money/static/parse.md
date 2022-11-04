@@ -26,15 +26,17 @@ use PostScripton\Money\Money;
 // Simply parse an amount with the default currency.
 
 Money::parse('1 234.5678');
+money_parse('1 234.5678');
 
 // Or parse an amount with a currency
 
-Money::parse('$100');
-Money::parse('€ 100', 'EUR');
-Money::parse('£-100', 'GBP');
-Money::parse('GBP -100', 'GBP');
-Money::parse('-100 ₽', 'RUB');
-Money::parse('-100 RUB', '643');
+money_parse('$100');
+money_parse('$100');
+money_parse('€ 100', 'EUR');
+money_parse('£-100', 'GBP');
+money_parse('GBP -100', 'GBP');
+money_parse('-100 ₽', 'RUB');
+money_parse('-100 RUB', '643');
 ```
 
 Unknown currency throws the exception because this currency is not expected.

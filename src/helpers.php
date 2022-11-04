@@ -6,7 +6,7 @@ use PostScripton\Money\MoneySettings;
 
 if (! function_exists('money')) {
     /**
-     * Creates Money object
+     * Creates a monetary object
      * @param string $amount
      * @param null $currency
      * @param null $settings
@@ -15,6 +15,19 @@ if (! function_exists('money')) {
     function money(string $amount, $currency = null, $settings = null): Money
     {
         return new Money($amount, $currency, $settings);
+    }
+}
+
+if (! function_exists('money_parse')) {
+    /**
+     * Parses the string and turns it into a monetary instance
+     * @param string $money
+     * @param string|null $currencyCode
+     * @return Money
+     */
+    function money_parse(string $money, ?string $currencyCode = null): Money
+    {
+        return Money::parse($money, $currencyCode);
     }
 }
 
