@@ -8,14 +8,14 @@ use PostScripton\Money\Exceptions\ServiceException;
 use PostScripton\Money\Services\AbstractService;
 use PostScripton\Money\Services\ExchangeRatesAPIService;
 use PostScripton\Money\Services\ExchangeRateService;
+use PostScripton\Money\Tests\InteractsWithConfig;
 use PostScripton\Money\Tests\TestCase;
 use stdClass;
 
 class ServicesTest extends TestCase
 {
+    use InteractsWithConfig;
     use FakeService;
-
-    private $backupConfig;
 
     /** @test */
     public function aServiceChangesDependingOnTheConfigValueWhenItCalls(): void
@@ -141,19 +141,5 @@ class ServicesTest extends TestCase
         $usdHistorical = $rub->convertInto(currency('usd'), null, Carbon::createFromDate(2000, 12, 31));
 
         $this->assertNotEquals($usdNow->getPureAmount(), $usdHistorical->getPureAmount());
-    }
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->backupConfig = Config::get('money');
-        Config::set('money.service', 'exchangerate');
-    }
-
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-        Config::set('money', $this->backupConfig);
     }
 }

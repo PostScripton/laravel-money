@@ -2,17 +2,17 @@
 
 namespace PostScripton\Money\Tests\Feature;
 
-use Illuminate\Support\Facades\Config;
 use Mockery;
 use PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException;
 use PostScripton\Money\Money;
 use PostScripton\Money\Services\ExchangeRateService;
 use PostScripton\Money\Services\ServiceInterface;
+use PostScripton\Money\Tests\InteractsWithConfig;
 use PostScripton\Money\Tests\TestCase;
 
 class DifferenceBetweenMoneyTest extends TestCase
 {
-    private $backupConfig;
+    use InteractsWithConfig;
 
     /**
      * @test
@@ -108,18 +108,5 @@ class DifferenceBetweenMoneyTest extends TestCase
                 'result' => '$ 600',
             ],
         ];
-    }
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->backupConfig = Config::get('money');
-        Config::set('money.service', 'exchangerate');
-    }
-
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-        Config::set('money', $this->backupConfig);
     }
 }
