@@ -7,6 +7,8 @@ use PostScripton\Money\MoneyServiceProvider;
 
 class TestCase extends \Orchestra\Testbench\TestCase
 {
+    protected string $configName = 'money';
+
     protected function getEnvironmentSetUp($app): void
     {
         // https://github.com/orchestral/testbench/issues/211#issuecomment-360885812

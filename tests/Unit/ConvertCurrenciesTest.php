@@ -2,12 +2,12 @@
 
 namespace PostScripton\Money\Tests\Unit;
 
-use Illuminate\Support\Facades\Config;
+use PostScripton\Money\Tests\InteractsWithConfig;
 use PostScripton\Money\Tests\TestCase;
 
 class ConvertCurrenciesTest extends TestCase
 {
-    private $backupConfig;
+    use InteractsWithConfig;
 
     /** @test */
     public function moneyCanBeOfflineConvertedBetweenTwoCurrenciesWithoutFailsInNumber(): void
@@ -25,17 +25,5 @@ class ConvertCurrenciesTest extends TestCase
         $this->assertTrue($rub->equals($backRub));
         $this->assertTrue($rub->isSameCurrency($backRub));
         $this->assertEquals($rub->getPureAmount(), $backRub->getPureAmount());
-    }
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->backupConfig = Config::get('money');
-    }
-
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-        Config::set('money', $this->backupConfig);
     }
 }

@@ -10,11 +10,14 @@ use PostScripton\Money\Enums\CurrencyPosition;
 use PostScripton\Money\Exceptions\CurrencyDoesNotExistException;
 use PostScripton\Money\Exceptions\CurrencyHasWrongConstructorException;
 use PostScripton\Money\Exceptions\NoSuchCurrencySymbolException;
+use PostScripton\Money\Tests\InteractsWithConfig;
 use PostScripton\Money\Tests\TestCase;
 
 class CurrencyTest extends TestCase
 {
-    private mixed $backupConfig;
+    use InteractsWithConfig {
+        tearDown as tearDownConfig;
+    }
 
     /**
      * @test
@@ -240,18 +243,10 @@ class CurrencyTest extends TestCase
         ];
     }
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->backupConfig = Config::get('money');
-    }
-
     protected function tearDown(): void
     {
         parent::tearDown();
-
-        Config::set(['money' => $this->backupConfig]);
+        $this->tearDownConfig();
 
         currency('USD')->setPreferredSymbol(null);
         currency('JPY')->setPreferredSymbol(null);
