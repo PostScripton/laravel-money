@@ -153,7 +153,7 @@ class Currency
     }
 
     /** @throws Exception */
-    public static function getConfigCurrency(): string
+    public static function getConfigCurrencyCode(): string
     {
         if (Money::configNotPublished()) {
             throw new Exception('Please publish the config file by running "php artisan vendor:publish --tag=money"');

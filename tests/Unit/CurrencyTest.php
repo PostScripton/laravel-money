@@ -162,7 +162,7 @@ class CurrencyTest extends TestCase
     {
         Config::set(['money.default_currency' => 'RUB']);
 
-        $defaultCurrency = Currency::getConfigCurrency();
+        $defaultCurrency = Currency::getConfigCurrencyCode();
 
         $this->assertEquals('RUB', $defaultCurrency);
     }
@@ -177,7 +177,7 @@ class CurrencyTest extends TestCase
 
         Config::set(['money' => null]);
 
-        Currency::getConfigCurrency();
+        Currency::getConfigCurrencyCode();
     }
 
     // todo extract into another CurrenciesTest class

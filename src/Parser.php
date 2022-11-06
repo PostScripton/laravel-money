@@ -11,7 +11,7 @@ class Parser
 
     public static function parse(string $money, ?string $currencyCode = null): Money
     {
-        $currency = Currency::code($currencyCode ?? Currency::getConfigCurrency());
+        $currency = Currency::code($currencyCode ?? Currency::getConfigCurrencyCode());
         $symbols = array_map(fn(string $symbol) => self::quote($symbol), $currency->getSymbols());
         $currencies = [...$symbols, $currency->getCode()];
 
