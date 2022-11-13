@@ -11,14 +11,22 @@ trait InteractsWithConfig
     protected function setUp(): void
     {
         parent::setUp();
-
-        $this->backupConfig = Config::get($this->configName);
+        $this->setUpConfig();
     }
 
     protected function tearDown(): void
     {
+        $this->tearDownConfig();
         parent::tearDown();
+    }
 
+    protected function setUpConfig(): void
+    {
+        $this->backupConfig = Config::get($this->configName);
+    }
+
+    protected function tearDownConfig(): void
+    {
         Config::set([$this->configName => $this->backupConfig]);
     }
 }

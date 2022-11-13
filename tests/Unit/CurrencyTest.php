@@ -15,9 +15,7 @@ use PostScripton\Money\Tests\TestCase;
 
 class CurrencyTest extends TestCase
 {
-    use InteractsWithConfig {
-        tearDown as tearDownConfig;
-    }
+    use InteractsWithConfig;
 
     /**
      * @test
@@ -245,10 +243,11 @@ class CurrencyTest extends TestCase
 
     protected function tearDown(): void
     {
-        parent::tearDown();
         $this->tearDownConfig();
 
         currency('USD')->setPreferredSymbol(null);
         currency('JPY')->setPreferredSymbol(null);
+
+        parent::tearDown();
     }
 }

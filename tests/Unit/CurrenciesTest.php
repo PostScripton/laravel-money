@@ -13,10 +13,7 @@ use PostScripton\Money\Tests\TestCase;
 
 class CurrenciesTest extends TestCase
 {
-    use InteractsWithConfig {
-        setUp as setUpConfig;
-        tearDown as tearDownConfig;
-    }
+    use InteractsWithConfig;
 
     /** @test */
     public function getAllCurrencies(): void
