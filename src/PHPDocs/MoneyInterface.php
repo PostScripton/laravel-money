@@ -4,24 +4,11 @@ namespace PostScripton\Money\PHPDocs;
 
 use Carbon\Carbon;
 use PostScripton\Money\Currency;
+use PostScripton\Money\Formatters\MoneyFormatter;
 use PostScripton\Money\Money;
-use PostScripton\Money\MoneySettings;
 
 interface MoneyInterface
 {
-    /**
-     * Binds the money object with settings
-     * @param MoneySettings $settings
-     * @return self
-     */
-    public function bind(MoneySettings $settings): self;
-
-    /**
-     * Returns settings object
-     * @return MoneySettings
-     */
-    public function settings(): MoneySettings;
-
     /**
      * Get currency of the monetary object
      * @return Currency
@@ -44,18 +31,11 @@ interface MoneyInterface
     public function clone(): Money;
 
     /**
-     * Returns a formatted number <p>
-     * For example, "$ 1 234.5" -> "1 234.5" </p>
-     * @return string
-     */
-    public function getAmount(): string;
-
-    /**
-     * Returns a pure number that uses for calculations. <p>
+     * Returns a pure amount that is used for calculations. <p>
      * For example, you see "13.3" but within it looks like "132766" </p>
      * @return string
      */
-    public function getPureAmount(): string;
+    public function getAmount(): string;
 
     /**
      * Adds an amount to the money. It's like <p>
@@ -230,23 +210,39 @@ interface MoneyInterface
     public function service();
 
     /**
-     * Returns the money string applying all the settings <p>
+     * Returns a formatted string with the applied formatting settings from the config file <p>
      * You may not use it if you explicitly assign the object to a string </p>
+     * @param MoneyFormatter|null $formatter <p>
+     * You may apply your own formatter in order to represent a monetary object the way you want </p>
      * @return string <p>
      * "$ 1 234.5" </p>
      */
-    public function toString(): string;
+    public function toString(?MoneyFormatter $formatter = null): string;
 
     // ========== STATIC ========== //
 
     /**
+     * Sets a default formatter that will be applied by default to all monetary objects
+     * @param MoneyFormatter $formatter
+     * @return void
+     */
+    public static function setFormatter(MoneyFormatter $formatter): void;
+
+    /**
+     * Sets a default currency that will be used for creating new monetary objects <p>
+     * By default, is set by the value from the config file </p>
+     * @param Currency $currency
+     */
+    public static function setDefaultCurrency(Currency $currency): void;
+
+    /**
      * Creates a monetary object
-     * @param string $amount
-     * @param null $currency
-     * @param null $settings
+     * @param string $amount <p>
+     * Raw amount: 12345 stands for 1.2345 </p>
+     * @param Currency|null $currency
      * @return self
      */
-    public static function of(string $amount, $currency = null, $settings = null): Money;
+    public static function of(string $amount, ?Currency $currency = null): Money;
 
     /**
      * Parses the string and turns it into a monetary instance
@@ -255,12 +251,6 @@ interface MoneyInterface
      * @return self
      */
     public static function parse(string $money, ?string $currencyCode = null): Money;
-
-    /**
-     * Sets default settings for any Money object
-     * @param MoneySettings $setting
-     */
-    public static function set(MoneySettings $setting): void;
 
     /**
      * Corrects input &lt;input type="number" /&gt; using default settings
@@ -272,43 +262,13 @@ interface MoneyInterface
     public static function correctInput(string $input): string;
 
     /**
-     * Returns the default divisor
+     * Returns the default divisor (10^4)
      * @return int
      */
     public static function getDefaultDivisor(): int;
 
     /**
-     * Returns the default number of decimals
-     * @return int
-     */
-    public static function getDefaultDecimals(): int;
-
-    /**
-     * Returns the default a thousand separator
-     * @return string
-     */
-    public static function getDefaultThousandsSeparator(): string;
-
-    /**
-     * Returns the default decimal separator
-     * @return string
-     */
-    public static function getDefaultDecimalSeparator(): string;
-
-    /**
-     * Returns whether money ends with 0 or not
-     * @return bool
-     */
-    public static function getDefaultEndsWith0(): bool;
-
-    /**
-     * Returns whether there is a space between currency sign and number
-     * @return bool
-     */
-    public static function getDefaultSpaceBetween(): bool;
-
-    /**
-     * Returns the default currency
+     * Returns the default currency that is set in the config file
      * @return Currency
      */
     public static function getDefaultCurrency(): Currency;

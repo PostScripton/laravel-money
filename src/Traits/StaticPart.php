@@ -1,32 +1,19 @@
 <?php
 
-namespace PostScripton\Money\Partials;
+namespace PostScripton\Money\Traits;
 
 use PostScripton\Money\Currency;
-use PostScripton\Money\Enums\CurrencyDisplay;
-use PostScripton\Money\Enums\CurrencyPosition;
 use PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException;
 use PostScripton\Money\Money;
-use PostScripton\Money\MoneySettings;
 use PostScripton\Money\Parser;
 
-trait MoneyStatic
+trait StaticPart
 {
-    private static int $defaultDecimals = 1;
-    private static string $defaultThousandsSeparator = ' ';
-    private static string $defaultDecimalSeparator = '.';
-    private static bool $defaultEndsWith0 = false;
-    private static bool $defaultSpaceBetween = true;
     private static Currency $defaultCurrency;
 
-    public static function set(MoneySettings $settings): void
+    public static function setDefaultCurrency(Currency $currency): void
     {
-        self::$defaultDecimals = $settings->getDecimals();
-        self::$defaultThousandsSeparator = $settings->getThousandsSeparator();
-        self::$defaultDecimalSeparator = $settings->getDecimalSeparator();
-        self::$defaultEndsWith0 = $settings->endsWith0();
-        self::$defaultSpaceBetween = $settings->hasSpaceBetween();
-        self::$defaultCurrency = Currency::code(Currency::getConfigCurrencyCode());
+        self::$defaultCurrency = $currency;
     }
 
     public static function configNotPublished(): bool
@@ -39,39 +26,10 @@ trait MoneyStatic
         return Parser::parse($money, $currencyCode);
     }
 
-    // ========== GETTERS ==========
-
-    public static function getDefaultDecimals(): int
-    {
-        return self::$defaultDecimals;
-    }
-
-    public static function getDefaultThousandsSeparator(): string
-    {
-        return self::$defaultThousandsSeparator;
-    }
-
-    public static function getDefaultDecimalSeparator(): string
-    {
-        return self::$defaultDecimalSeparator;
-    }
-
-    public static function getDefaultEndsWith0(): bool
-    {
-        return self::$defaultEndsWith0;
-    }
-
-    public static function getDefaultSpaceBetween(): bool
-    {
-        return self::$defaultSpaceBetween;
-    }
-
     public static function getDefaultCurrency(): Currency
     {
         return self::$defaultCurrency;
     }
-
-    // ========== METHODS ==========
 
     public static function of(string $amount, $currency = null, $settings = null): Money
     {
@@ -84,7 +42,7 @@ trait MoneyStatic
             return $input;
         }
 
-        return substr($input, 0, strpos($input, '.') + self::$defaultDecimals + 1);
+        return substr($input, 0, strpos($input, '.') + config('money.decimals') + 1);
     }
 
     public static function min(Money ...$list): ?Money
@@ -143,7 +101,7 @@ trait MoneyStatic
         );
         $sum->divide(count($list));
 
-        return money($sum->getPureAmount(), $first->getCurrency());
+        return money($sum->getAmount(), $first->getCurrency());
     }
 
     public static function sum(Money ...$list): ?Money
@@ -161,12 +119,12 @@ trait MoneyStatic
             initial: money('0', $first->getCurrency()),
         );
 
-        return money($sum->getPureAmount(), $first->getCurrency());
+        return money($sum->getAmount(), $first->getCurrency());
     }
 
     public static function getDefaultDivisor(): int
     {
-        return 10 ** 4;
+        return 10 ** Money::MAX_DECIMALS;
     }
 
     private static function checkAllCurrenciesAreTheSame(array $list): void
@@ -178,26 +136,5 @@ trait MoneyStatic
                 throw new MoneyHasDifferentCurrenciesException();
             }
         }
-    }
-
-    private static function bindMoneyWithCurrency(Money $money, Currency $currency): string
-    {
-        $space = $money->settings()->hasSpaceBetween() ? ' ' : '';
-
-        // Always has a space
-        $hasSpace = ($currency->getPosition() === CurrencyPosition::Start && $money->isNegative())
-            || $currency->getDisplay() === CurrencyDisplay::Code;
-        if ($hasSpace) {
-            $space = ' ';
-        }
-
-        $symbol = match ($currency->getDisplay()) {
-            CurrencyDisplay::Symbol => $currency->getSymbol(),
-            CurrencyDisplay::Code => $currency->getCode(),
-        };
-
-        return $currency->getPosition() === CurrencyPosition::Start
-            ? $symbol . $space . $money->getAmount()
-            : $money->getAmount() . $space . $symbol;
     }
 }

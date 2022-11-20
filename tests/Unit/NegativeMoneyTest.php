@@ -5,6 +5,7 @@ namespace PostScripton\Money\Tests\Unit;
 use PostScripton\Money\Currency;
 use PostScripton\Money\Enums\CurrencyDisplay;
 use PostScripton\Money\Enums\CurrencyPosition;
+use PostScripton\Money\Formatters\DefaultMoneyFormatter;
 use PostScripton\Money\Tests\TestCase;
 
 class NegativeMoneyTest extends TestCase
@@ -15,7 +16,7 @@ class NegativeMoneyTest extends TestCase
         $usd = money('-1234000', Currency::code('USD'));
 
         $this->assertEquals('$ -123.4', $usd->toString());
-        $this->assertEquals('-1234000', $usd->getPureAmount());
+        $this->assertEquals('-1234000', $usd->getAmount());
         $this->assertTrue($usd->isNegative());
         $this->assertNotTrue($usd->isPositive());
     }
@@ -25,10 +26,11 @@ class NegativeMoneyTest extends TestCase
     {
         $usd = money('-1234000', Currency::code('USD'));
 
-        $usd->settings()->setHasSpaceBetween(false); // for symbol at front this is true anyway
+        $formatter = (new DefaultMoneyFormatter())
+            ->spaceBetweenCurrencyAndAmount(false); // for symbol at front this is true anyway
 
-        $this->assertEquals('$ -123.4', $usd->toString());
-        $this->assertEquals('-1234000', $usd->getPureAmount());
+        $this->assertEquals('$ -123.4', $usd->toString($formatter));
+        $this->assertEquals('-1234000', $usd->getAmount());
         $this->assertTrue($usd->isNegative());
         $this->assertNotTrue($usd->isPositive());
     }
@@ -39,7 +41,7 @@ class NegativeMoneyTest extends TestCase
         $usd = money('-1234000', Currency::code('USD')->setDisplay(CurrencyDisplay::Code));
 
         $this->assertEquals('USD -123.4', $usd->toString());
-        $this->assertEquals('-1234000', $usd->getPureAmount());
+        $this->assertEquals('-1234000', $usd->getAmount());
         $this->assertTrue($usd->isNegative());
         $this->assertNotTrue($usd->isPositive());
     }
@@ -49,10 +51,11 @@ class NegativeMoneyTest extends TestCase
     {
         $usd = money('-1234000', Currency::code('USD')->setDisplay(CurrencyDisplay::Code));
 
-        $usd->settings()->setHasSpaceBetween(false); // for DISPLAY_CODE this is true anyway
+        $formatter = (new DefaultMoneyFormatter())
+            ->spaceBetweenCurrencyAndAmount(false); // for code display this is true anyway
 
-        $this->assertEquals('USD -123.4', $usd->toString());
-        $this->assertEquals('-1234000', $usd->getPureAmount());
+        $this->assertEquals('USD -123.4', $usd->toString($formatter));
+        $this->assertEquals('-1234000', $usd->getAmount());
         $this->assertTrue($usd->isNegative());
         $this->assertNotTrue($usd->isPositive());
     }
@@ -63,7 +66,7 @@ class NegativeMoneyTest extends TestCase
         $usd = money('-1234000', Currency::code('RUB'));
 
         $this->assertEquals('-123.4 ₽', $usd->toString());
-        $this->assertEquals('-1234000', $usd->getPureAmount());
+        $this->assertEquals('-1234000', $usd->getAmount());
         $this->assertTrue($usd->isNegative());
         $this->assertNotTrue($usd->isPositive());
     }
@@ -74,7 +77,7 @@ class NegativeMoneyTest extends TestCase
         $usd = money('-1234000', Currency::code('RUB')->setDisplay(CurrencyDisplay::Code));
 
         $this->assertEquals('-123.4 RUB', $usd->toString());
-        $this->assertEquals('-1234000', $usd->getPureAmount());
+        $this->assertEquals('-1234000', $usd->getAmount());
         $this->assertTrue($usd->isNegative());
         $this->assertNotTrue($usd->isPositive());
     }

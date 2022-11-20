@@ -10,6 +10,7 @@ use PostScripton\Money\Enums\CurrencyPosition;
 use PostScripton\Money\Exceptions\CustomCurrencyTakenCodesException;
 use PostScripton\Money\Exceptions\CustomCurrencyValidationException;
 use PostScripton\Money\Exceptions\ServiceException;
+use PostScripton\Money\Formatters\DefaultMoneyFormatter;
 use PostScripton\Money\Rules\Money as MoneyRule;
 use PostScripton\Money\Services\AbstractService;
 use PostScripton\Money\Services\ServiceInterface;
@@ -31,16 +32,9 @@ class MoneyServiceProvider extends PackageServiceProvider
         $this->registerService();
         $this->registerCurrencyList();
         $this->registerCustomCurrencies();
-        $this->checkDefaultCurrencyForExistence();
 
-        $settings = (new MoneySettings())
-            ->setDecimals(config('money.decimals', 1))
-            ->setThousandsSeparator(config('money.thousands_separator', ' '))
-            ->setDecimalSeparator(config('money.decimal_separator', '.'))
-            ->setEndsWith0(config('money.ends_with_0', false))
-            ->setHasSpaceBetween(config('money.space_between', true));
-
-        Money::set($settings);
+        Money::setFormatter(new DefaultMoneyFormatter());
+        Money::setDefaultCurrency(currency(config('money.default_currency')));
 
         Validator::extend(MoneyRule::RULE_NAME, (MoneyRule::class . '@passes'), app(MoneyRule::class)->message());
     }
@@ -134,11 +128,6 @@ class MoneyServiceProvider extends PackageServiceProvider
         }
 
         $this->customCurrenciesShouldNotDuplicate();
-    }
-
-    protected function checkDefaultCurrencyForExistence(): void
-    {
-        currency(config('money.default_currency'));
     }
 
     private function customCurrenciesShouldNotDuplicate(): void

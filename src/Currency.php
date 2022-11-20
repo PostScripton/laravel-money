@@ -152,6 +152,14 @@ class Currency
         return $this;
     }
 
+    public function getDisplayValue(?CurrencyDisplay $currencyDisplay = null): string
+    {
+        return match ($currencyDisplay ?? $this->getDisplay()) {
+            CurrencyDisplay::Symbol => $this->getSymbol(),
+            CurrencyDisplay::Code => $this->getCode(),
+        };
+    }
+
     /** @throws Exception */
     public static function getConfigCurrencyCode(): string
     {

@@ -24,6 +24,6 @@ class ConvertCurrenciesTest extends TestCase
 
         $this->assertTrue($rub->equals($backRub));
         $this->assertTrue($rub->isSameCurrency($backRub));
-        $this->assertEquals($rub->getPureAmount(), $backRub->getPureAmount());
+        $this->assertEquals($rub->getAmount(), $backRub->getAmount());
     }
 }

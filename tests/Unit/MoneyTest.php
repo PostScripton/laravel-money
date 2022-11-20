@@ -16,13 +16,13 @@ class MoneyTest extends TestCase
         $money2 = Money::of('12345000');
         $money3 = money('12345000');
         $money4 = money_parse('$ 1234.5');
-        $money5 = money('12345000', settings()->setThousandsSeparator('#'));
+        $money5 = money('12345000', currency('USD'));
 
         $this->assertTrue($money1->equals($money2));
         $this->assertTrue($money1->equals($money3));
         $this->assertTrue($money1->equals($money4));
         $this->assertTrue($money1->equals($money5));
-        $this->assertEquals('$ 1#234.5', $money5->toString());
+        $this->assertEquals('$ 1 234.5', $money5->toString());
     }
 
     /** @test */
@@ -47,8 +47,8 @@ class MoneyTest extends TestCase
     {
         $money = Money::of('12345000');
 
-        $this->assertEquals('1 234.5', $money->getAmount());
-        $this->assertEquals('12345000', $money->getPureAmount());
+        $this->assertEquals('1 234.5', $money->toAmountOnlyString());
+        $this->assertEquals('12345000', $money->getAmount());
     }
 
     /** @test */
@@ -67,12 +67,12 @@ class MoneyTest extends TestCase
     {
         $money = new Money('102500');
 
-        $this->assertEquals('102500', $money->getPureAmount());
+        $this->assertEquals('102500', $money->getAmount());
         $this->assertEquals('$ 10.3', $money->toString());
 
         $money->floor();
 
-        $this->assertEquals('100000', $money->getPureAmount());
+        $this->assertEquals('100000', $money->getAmount());
         $this->assertEquals('$ 10', $money->toString());
     }
 
@@ -81,12 +81,12 @@ class MoneyTest extends TestCase
     {
         $money = new Money('102500');
 
-        $this->assertEquals('102500', $money->getPureAmount());
+        $this->assertEquals('102500', $money->getAmount());
         $this->assertEquals('$ 10.3', $money->toString());
 
         $money->ceil();
 
-        $this->assertEquals('110000', $money->getPureAmount());
+        $this->assertEquals('110000', $money->getAmount());
         $this->assertEquals('$ 11', $money->toString());
     }
 
@@ -99,7 +99,7 @@ class MoneyTest extends TestCase
         $m1->rebase($m2);
 
         $this->assertTrue($m1->equals(money_parse('250')));
-        $this->assertEquals('2500000', $m1->getPureAmount());
+        $this->assertEquals('2500000', $m1->getAmount());
         $this->assertEquals('$ 250', $m1->toString());
     }
 
@@ -146,7 +146,7 @@ class MoneyTest extends TestCase
 
         $money->absolute();
 
-        $this->assertEquals($absolute, $money->getPureAmount());
+        $this->assertEquals($absolute, $money->getAmount());
     }
 
     /** @test */
@@ -162,8 +162,8 @@ class MoneyTest extends TestCase
             // $m2 is $300 whereas $m1 is still $150
             ->multiply(2);
 
-        $this->assertEquals('1500000', $m1->getPureAmount());
-        $this->assertEquals('3000000', $m2->getPureAmount());
+        $this->assertEquals('1500000', $m1->getAmount());
+        $this->assertEquals('3000000', $m2->getAmount());
         $this->assertFalse($m1->equals($m2));
     }
 

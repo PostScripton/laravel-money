@@ -140,6 +140,6 @@ class ServicesTest extends TestCase
         $usdNow = $rub->convertInto(currency('usd'));
         $usdHistorical = $rub->convertInto(currency('usd'), null, Carbon::createFromDate(2000, 12, 31));
 
-        $this->assertNotEquals($usdNow->getPureAmount(), $usdHistorical->getPureAmount());
+        $this->assertNotEquals($usdNow->getAmount(), $usdHistorical->getAmount());
     }
 }

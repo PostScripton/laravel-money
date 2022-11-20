@@ -20,8 +20,8 @@ $johnReward = $bobReward
     // Multiplies John's reward by 2 without affecting Bob's reward at all
     ->multiply(2);
 
-$bobReward->getPureAmount();    // "1500000"
-$johnReward->getPureAmount();   // "3000000"
+$bobReward->getAmount();    // "1500000"
+$johnReward->getAmount();   // "3000000"
 ```
 
 The next example is wrong for this purpose:
@@ -35,8 +35,8 @@ $johnReward = $bobReward
     // Multiplies both John and Bob because John refers to Bob's object
     ->multiply(2);
 
-$bobReward->getPureAmount();    // "3000000"
-$johnReward->getPureAmount();   // "3000000"
+$bobReward->getAmount();    // "3000000"
+$johnReward->getAmount();   // "3000000"
 ```
 
 ---

@@ -5,53 +5,28 @@ namespace PostScripton\Money;
 use Carbon\Carbon;
 use PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException;
 use PostScripton\Money\Exceptions\ServiceException;
-use PostScripton\Money\Partials\MoneyStatic;
 use PostScripton\Money\PHPDocs\MoneyInterface;
 use PostScripton\Money\Services\ServiceInterface;
+use PostScripton\Money\Traits\Converter;
+use PostScripton\Money\Traits\StaticPart;
 
 class Money implements MoneyInterface
 {
-    use MoneyStatic;
+    use StaticPart;
+    use Converter;
+
+    public final const MIN_DECIMALS = 0;
+
+    public final const MAX_DECIMALS = 4;
 
     private string $amount;
-    private Currency $currency;
-    private ?MoneySettings $settings;
 
-    public function __construct(string $amount, $currency = null, $settings = null)
+    private Currency $currency;
+
+    public function __construct(string $amount, ?Currency $currency = null)
     {
         $this->amount = $amount;
-        $this->setCurrency(self::getDefaultCurrency());
-
-        if (is_null($settings) && ! ($currency instanceof MoneySettings)) {
-            $settings = new MoneySettings();
-        }
-
-        // No parameters passed
-        if (is_null($currency)) {
-            $this->settings = $settings;
-            return;
-        }
-
-        // Is $currency a Currency or Settings?
-        if ($currency instanceof Currency) {
-            $this->setCurrency($currency);
-        } elseif ($currency instanceof MoneySettings) {
-            $settings = $currency;
-        }
-
-        $this->bind($settings);
-    }
-
-    public function bind(MoneySettings $settings): self
-    {
-        $this->settings = $settings;
-
-        return $this;
-    }
-
-    public function settings(): MoneySettings
-    {
-        return $this->settings;
+        $this->setCurrency($currency ?? self::getDefaultCurrency());
     }
 
     public function getCurrency(): Currency
@@ -68,34 +43,12 @@ class Money implements MoneyInterface
 
     public function clone(): Money
     {
-        return money($this->amount, $this->getCurrency(), clone $this->settings());
-    }
-
-    public function getPureAmount(): string
-    {
-        return $this->amount;
+        return money($this->amount, $this->getCurrency());
     }
 
     public function getAmount(): string
     {
-        $money = number_format(
-            (float)($this->getPureAmount() / self::getDefaultDivisor()),
-            $this->settings()->getDecimals(),
-            $this->settings()->getDecimalSeparator(),
-            $this->settings()->getThousandsSeparator()
-        );
-
-        if (! $this->settings()->endsWith0()) {
-            $thousands = preg_quote($this->settings()->getThousandsSeparator());
-            $decimals = preg_quote($this->settings()->getDecimalSeparator());
-
-            # /^-?((\d+|\s*)*\.\d*[1-9]|(\d+|\s*)*)/ - берёт всё число, кроме 0 и .*0 на конце
-            $pattern = '/^-?((\d+|' . $thousands . '*)*' . $decimals . '\d*[1-9]|(\d+|' . $thousands . '*)*)/';
-            preg_match($pattern, $money, $money);
-            $money = $money[0];
-        }
-
-        return $money;
+        return $this->amount;
     }
 
     public function add(Money $money): self
@@ -235,7 +188,7 @@ class Money implements MoneyInterface
 
         $newAmount = $this->amount * $rate;
 
-        return money($newAmount, $currency, clone $this->settings());
+        return money($newAmount, $currency);
     }
 
     public function difference(Money $money): Money
@@ -247,18 +200,8 @@ class Money implements MoneyInterface
         return $this->clone()->subtract($money)->absolute();
     }
 
-    public function toString(): string
-    {
-        return self::bindMoneyWithCurrency($this, $this->getCurrency());
-    }
-
     public function service(): ServiceInterface
     {
         return app(ServiceInterface::class);
-    }
-
-    public function __toString(): string
-    {
-        return $this->toString();
     }
 }

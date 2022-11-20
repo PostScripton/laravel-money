@@ -27,6 +27,6 @@ class MoneyCast implements CastsAttributes
             $value = money($value);
         }
 
-        return $value->getPureAmount();
+        return $value->getAmount();
     }
 }
