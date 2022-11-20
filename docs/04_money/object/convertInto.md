@@ -53,7 +53,7 @@ $rub = money('10000000', currency('RUB'));
 $usd = $rub->convertInto(currency('USD'));
 $historicalUsd = $rub->convertInto(currency('USD'), null, Carbon::createFromDate(2010, 4, 27)))
 
-$usd->getPureAmount() === $historicalUsd->getPureAmount(); // false
+$usd->getAmount() === $historicalUsd->getAmount(); // false
 ```
 
 ### Offline converting
@@ -69,7 +69,7 @@ $backRub = $usd->convertInto(currency('RUB'), $rate / 1);   // "1 000 ₽"
 
 $rub->isSameCurrency($usd);                                 // false
 $rub->isSameCurrency($backRub);                             // true
-$rub->getPureAmount() === $backRub->getPureAmount();        // true
+$rub->getAmount() === $backRub->getAmount();                // true
 ```
 
 ---

@@ -2,19 +2,18 @@
 
 use PostScripton\Money\Currency;
 use PostScripton\Money\Money;
-use PostScripton\Money\MoneySettings;
 
 if (! function_exists('money')) {
     /**
      * Creates a monetary object
-     * @param string $amount
-     * @param null $currency
-     * @param null $settings
+     * @param string $amount <p>
+     * Raw amount: 12345 stands for 1.2345 </p>
+     * @param Currency|null $currency
      * @return Money
      */
-    function money(string $amount, $currency = null, $settings = null): Money
+    function money(string $amount, ?Currency $currency = null): Money
     {
-        return new Money($amount, $currency, $settings);
+        return new Money($amount, $currency);
     }
 }
 
@@ -41,13 +40,5 @@ if (! function_exists('currency')) {
     function currency(string $code): Currency
     {
         return Currency::code($code);
-    }
-}
-
-if (! function_exists('settings')) {
-    /** Creates settings for Money object */
-    function settings(): MoneySettings
-    {
-        return new MoneySettings();
     }
 }

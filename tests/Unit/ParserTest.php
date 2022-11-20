@@ -159,7 +159,7 @@ class ParserTest extends TestCase
         $expectedCurrencyCode = $currencyCode ?? 'USD';
         $money = Parser::parse($money, $currencyCode);
 
-        $this->assertEquals($pureAmount, $money->getPureAmount());
+        $this->assertEquals($pureAmount, $money->getAmount());
         $this->assertEquals($expectedCurrencyCode, $money->getCurrency()->getCode());
     }
 

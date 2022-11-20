@@ -5,15 +5,15 @@ There are *static* methods as well as *object* ones.
 
 1. [💲 Currency](/docs/04_money/currency.md)
 2. Static methods
-    - [Getters](/docs/04_money/static/getters.md)
-    - [`Money::set()`](/docs/04_money/static/set.md)
-    - [`Money::of()`](/docs/04_money/static/of.md)
-    - [`Money::correctInput()`](/docs/04_money/static/correctInput.md)
-    - [`Money::parse()`](/docs/04_money/static/parse.md)
+   - [`Money::getDefaultCurrency()`](/docs/04_money/static/getDefaultCurrency.md)
+   - [`Money::setDefaultCurrency()`](/docs/04_money/static/setFormatter.md)
+   - [`Money::setFormatter()`](/docs/04_money/static/setDefaultCurrency.md)
+   - [`Money::of()`](/docs/04_money/static/of.md)
+   - [`Money::parse()`](/docs/04_money/static/parse.md)
+   - [`Money::correctInput()`](/docs/04_money/static/correctInput.md)
 3. Object methods
     - Getters
         - [`getAmount()`](/docs/04_money/object/getAmount.md)
-        - [`getPureAmount()`](/docs/04_money/object/getPureAmount.md)
     - Calculations
         - [`add()`](/docs/04_money/object/add.md)
         - [`subtract()`](/docs/04_money/object/subtract.md)
@@ -35,11 +35,10 @@ There are *static* methods as well as *object* ones.
         - [`greaterThan()`](/docs/04_money/object/greaterThan.md)
         - [`greaterThanOrEqual()`](/docs/04_money/object/greaterThanOrEqual.md)
         - [`equals()`](/docs/04_money/object/equals.md)
-    - Other
-        - [`bind()`](/docs/04_money/object/bind.md)
+    - [Converting to string](/docs/02_formatting/README.md#other-to-string-methods)
+    - Other `(deprecated)`
         - [`service()`](/docs/04_money/object/service.md)
         - [`convertInto()`](/docs/04_money/object/convertInto.md)
-        - [`toString()`](/docs/04_money/object/toString.md)
 
 ---
 

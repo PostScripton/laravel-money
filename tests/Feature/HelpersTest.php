@@ -14,7 +14,7 @@ class HelpersTest extends TestCase
         $money = money('12345000');
 
         $this->assertInstanceOf(Money::class, $money);
-        $this->assertEquals('12345000', $money->getPureAmount());
+        $this->assertEquals('12345000', $money->getAmount());
     }
 
     /** @test */
@@ -25,16 +25,6 @@ class HelpersTest extends TestCase
         $this->assertInstanceOf(Money::class, $money);
         $this->assertEquals('₽', $money->getCurrency()->getSymbol());
         $this->assertEquals('RUB', $money->getCurrency()->getCode());
-    }
-
-    /** @test */
-    public function createMoneyWithMoneyCurrencyAndSettingsHelpers(): void
-    {
-        $money = money('12345000', currency('RUB'), settings()->setHasSpaceBetween(false));
-
-        $this->assertInstanceOf(Money::class, $money);
-        $this->assertEquals('1 234.5₽', $money->toString());
-        $this->assertFalse($money->settings()->hasSpaceBetween());
     }
 
     /** @test */

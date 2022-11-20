@@ -19,4 +19,6 @@ In Blade:
 
 ---
 
+👀 See [here](/docs/02_formatting/README.md) for full details.
+
 📌 Back to the [contents](/README.md#table-of-contents).

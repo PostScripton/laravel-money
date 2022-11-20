@@ -68,12 +68,7 @@ After all, the config file at `config/money.php` should be modified for your own
     - [📄 Cloning](/docs/01_usage/cloning.md)
     - [🎯 Casting](/docs/01_usage/casting.md)
     - [🚨 Validation rule](/docs/01_usage/validation_rule.md)
-3. [⚙ Settings](/docs/02_settings/README.md)
-    - [Decimals](/docs/02_settings/decimals.md)
-    - [Thousands separator](/docs/02_settings/thousands_separator.md)
-    - [Decimal separator](/docs/02_settings/decimal_separator.md)
-    - [Ends with zero](/docs/02_settings/ends_with_zero.md)
-    - [Space between currency and amount](/docs/02_settings/space_between.md)
+3. [🎨️ Formatting](/docs/02_formatting/README.md)
 4. [💲 Currencies](/docs/03_currencies/README.md)
     - [Information](/docs/03_currencies/information.md)
     - [Position](/docs/03_currencies/position.md)
@@ -83,15 +78,15 @@ After all, the config file at `config/money.php` should be modified for your own
 5. [💵 Money](/docs/04_money/README.md)
     - [💲 Currency](/docs/04_money/currency.md)
     - Static methods
-        - [Getters](/docs/04_money/static/getters.md)
-        - [`Money::set()`](/docs/04_money/static/set.md)
+        - [`Money::getDefaultCurrency()`](/docs/04_money/static/getDefaultCurrency.md)
+        - [`Money::setDefaultCurrency()`](/docs/04_money/static/setFormatter.md)
+        - [`Money::setFormatter()`](/docs/04_money/static/setDefaultCurrency.md)
         - [`Money::of()`](/docs/04_money/static/of.md)
-        - [`Money::correctInput()`](/docs/04_money/static/correctInput.md)
         - [`Money::parse()`](/docs/04_money/static/parse.md)
+        - [`Money::correctInput()`](/docs/04_money/static/correctInput.md)
     - Object methods
         - Getters
             - [`getAmount()`](/docs/04_money/object/getAmount.md)
-            - [`getPureAmount()`](/docs/04_money/object/getPureAmount.md)
         - Calculations
             - [`add()`](/docs/04_money/object/add.md)
             - [`subtract()`](/docs/04_money/object/subtract.md)
@@ -113,11 +108,10 @@ After all, the config file at `config/money.php` should be modified for your own
             - [`greaterThan()`](/docs/04_money/object/greaterThan.md)
             - [`greaterThanOrEqual()`](/docs/04_money/object/greaterThanOrEqual.md)
             - [`equals()`](/docs/04_money/object/equals.md)
-        - Other
-            - [`bind()`](/docs/04_money/object/bind.md)
+        - [Converting to string](/docs/02_formatting/README.md#other-to-string-methods)
+        - Other `(deprecated)`
             - [`service()`](/docs/04_money/object/service.md)
             - [`convertInto()`](/docs/04_money/object/convertInto.md)
-            - [`toString()`](/docs/04_money/object/toString.md)
 6. [API services](/docs/05_services/README.md)
     - [Add your own](/docs/05_services/add.md)
 
