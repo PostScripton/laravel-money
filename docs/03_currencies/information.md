@@ -21,10 +21,10 @@
 **Returns**: `string` - a symbol `$`.
 
 ### `getPosition()`
-**Returns**: `int` - one of [the constants](/docs/03_currencies/position.md#constants).
+**Returns**: `CurrencyPosition`
 
 ### `getDisplay()`
-**Returns**: `int` - one of [the constants](/docs/03_currencies/display.md#constants).
+**Returns**: `CurrencyDisplay`
 
 ## Usage
 
@@ -37,8 +37,8 @@ $usd->getCode();        // "USD"
 $usd->getNumCode();     // "840"
 $usd->getSymbol();      // "$"
 $usd->getSymbols();     // ["$"]
-$usd->getPosition();    // 0 (Currency::POSITION_START)
-$usd->getDisplay();     // 10 (Currency::DISPLAY_SYMBOL)
+$usd->getPosition();    // CurrencyPosition::Start
+$usd->getDisplay();     // CurrencyDisplay::Symbol)
 ```
 
 `getSymbol()` takes an index as its first parameter only if there are more than one symbol for the currency.

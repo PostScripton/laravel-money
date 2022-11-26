@@ -24,7 +24,7 @@ $usd = currency('840');
 Remember that all the settings, which are applied to a currency will be saved for the next times.
 
 ```php
-use PostScripton\Money\Currency;
+use PostScripton\Money\CurrencyDisplay;
 
 $usd = currency('usd');
 $usd->setDisplay(CurrencyDisplay::Code);
