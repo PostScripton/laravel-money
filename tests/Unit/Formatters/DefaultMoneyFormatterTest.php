@@ -22,6 +22,22 @@ class DefaultMoneyFormatterTest extends TestCase
         $this->assertEquals($result, $formatter->format($money));
     }
 
+    public function testFormatOnlyDecimalZerosMustBeTrimmedButNotIntegerOnes(): void
+    {
+        $money = money_parse('1500');
+
+        $formatterForInteger = (new DefaultMoneyFormatter())
+            ->decimals(0)
+            ->endsWithZero(false);
+        $formatterForDecimals = (new DefaultMoneyFormatter())
+            ->decimalSeparator('#')
+            ->decimals(2)
+            ->endsWithZero(false);
+
+        $this->assertEquals('$ 1 500', $formatterForInteger->format($money));
+        $this->assertEquals('$ 1 500', $formatterForDecimals->format($money));
+    }
+
     protected function formatterDataProvider(): array
     {
         return [
