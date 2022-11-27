@@ -118,9 +118,9 @@ class DefaultMoneyFormatter implements MoneyFormatter
             $this->thousandsSeparator,
         );
 
-        if (! $this->endsWithZero) {
+        if (! $this->endsWithZero && str_contains($amount, $this->decimalSeparator)) {
             $amount = preg_replace('/0+$/', '', $amount);
-            $amount = rtrim($amount, '.');
+            $amount = rtrim($amount, $this->decimalSeparator);
         }
 
         return $amount;
