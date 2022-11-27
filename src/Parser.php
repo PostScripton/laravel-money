@@ -28,7 +28,11 @@ class Parser
 
         $amount = str_replace(' ', '', $result['amount']);
         $amount = (string) ($amount * Money::getDefaultDivisor()); // todo rework it with bcmath later
-        $amount = substr($amount, strpos($amount, '.'));
+        $amount = substr(
+            $amount,
+            offset: 0,
+            length: strpos($amount, '.') ?: null
+        );
 
         return money($amount, $currency);
     }
