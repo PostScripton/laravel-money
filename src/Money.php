@@ -3,6 +3,8 @@
 namespace PostScripton\Money;
 
 use Carbon\Carbon;
+use InvalidArgumentException;
+use PostScripton\Money\Calculators\Calculator;
 use PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException;
 use PostScripton\Money\Exceptions\ServiceException;
 use PostScripton\Money\PHPDocs\MoneyInterface;
@@ -25,7 +27,12 @@ class Money implements MoneyInterface
 
     public function __construct(string $amount, ?Currency $currency = null)
     {
-        $this->amount = $amount;
+        if (! is_numeric($amount)) {
+            throw new InvalidArgumentException(sprintf('The amount must be a numeric-string, [%s] given', $amount));
+        }
+
+        $this->amount = app(Calculator::class)->floor($amount);
+
         $this->setCurrency($currency ?? self::getDefaultCurrency());
     }
 
@@ -57,7 +64,7 @@ class Money implements MoneyInterface
             throw new MoneyHasDifferentCurrenciesException();
         }
 
-        $this->amount += $money->amount;
+        $this->amount = app(Calculator::class)->add($this->amount, $money->amount);
 
         return $this;
     }
@@ -68,21 +75,23 @@ class Money implements MoneyInterface
             throw new MoneyHasDifferentCurrenciesException();
         }
 
-        $this->amount -= $money->amount;
+        $this->amount = app(Calculator::class)->subtract($this->amount, $money->amount);
 
         return $this;
     }
 
-    public function multiply(float $number): self
+    public function multiply(string $multiplier): self
     {
-        $this->amount *= $number;
+        $this->amount = app(Calculator::class)->multiply($this->amount, $multiplier);
+        $this->amount = app(Calculator::class)->floor($this->amount);
 
         return $this;
     }
 
-    public function divide(float $number): self
+    public function divide(string $divisor): self
     {
-        $this->amount /= $number;
+        $this->amount = app(Calculator::class)->divide($this->amount, $divisor);
+        $this->amount = app(Calculator::class)->floor($this->amount);
 
         return $this;
     }
@@ -100,21 +109,29 @@ class Money implements MoneyInterface
 
     public function floor(): self
     {
-        $this->amount = floor($this->amount / self::getDefaultDivisor()) * self::getDefaultDivisor();
+        $amount = app(Calculator::class)->divide($this->amount, static::getDefaultDivisor());
+        $amount = app(Calculator::class)->floor($amount);
+        $amount = app(Calculator::class)->multiply($amount, static::getDefaultDivisor());
+
+        $this->amount = $amount;
 
         return $this;
     }
 
     public function ceil(): self
     {
-        $this->amount = ceil($this->amount / self::getDefaultDivisor()) * self::getDefaultDivisor();
+        $amount = app(Calculator::class)->divide($this->amount, static::getDefaultDivisor());
+        $amount = app(Calculator::class)->ceil($amount);
+        $amount = app(Calculator::class)->multiply($amount, static::getDefaultDivisor());
+
+        $this->amount = $amount;
 
         return $this;
     }
 
     public function absolute(): self
     {
-        $this->amount = ltrim($this->amount, '-');
+        $this->amount = app(Calculator::class)->absolute($this->amount);
 
         return $this;
     }
@@ -126,37 +143,37 @@ class Money implements MoneyInterface
 
     public function isNegative(): bool
     {
-        return $this->amount < 0;
+        return app(Calculator::class)->compare($this->amount, '0') < 0;
     }
 
     public function isPositive(): bool
     {
-        return $this->amount > 0;
+        return app(Calculator::class)->compare($this->amount, '0') > 0;
     }
 
     public function isEmpty(): bool
     {
-        return empty($this->amount);
+        return app(Calculator::class)->compare($this->amount, '0') === 0;
     }
 
     public function lessThan(Money $money): bool
     {
-        return $this->amount < $money->amount;
+        return app(Calculator::class)->compare($this->amount, $money->amount) < 0;
     }
 
     public function lessThanOrEqual(Money $money): bool
     {
-        return $this->amount <= $money->amount;
+        return app(Calculator::class)->compare($this->amount, $money->amount) <= 0;
     }
 
     public function greaterThan(Money $money): bool
     {
-        return $this->amount > $money->amount;
+        return app(Calculator::class)->compare($this->amount, $money->amount) > 0;
     }
 
     public function greaterThanOrEqual(Money $money): bool
     {
-        return $this->amount >= $money->amount;
+        return app(Calculator::class)->compare($this->amount, $money->amount) >= 0;
     }
 
     public function equals(Money $money, bool $strict = true): bool
@@ -167,7 +184,7 @@ class Money implements MoneyInterface
             }
         }
 
-        return $this->amount === $money->amount;
+        return app(Calculator::class)->compare($this->amount, $money->amount) === 0;
     }
 
     public function convertInto(Currency $currency, ?float $rate = null, ?Carbon $date = null): Money
@@ -186,7 +203,7 @@ class Money implements MoneyInterface
             $rate = $this->service()->rate($this->getCurrency()->getCode(), $currency->getCode(), $date);
         }
 
-        $newAmount = $this->amount * $rate;
+        $newAmount = app(Calculator::class)->multiply($this->amount, $rate);
 
         return money($newAmount, $currency);
     }

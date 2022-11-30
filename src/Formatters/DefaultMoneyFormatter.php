@@ -2,6 +2,7 @@
 
 namespace PostScripton\Money\Formatters;
 
+use PostScripton\Money\Calculators\Calculator;
 use PostScripton\Money\Currency;
 use PostScripton\Money\Enums\CurrencyDisplay;
 use PostScripton\Money\Enums\CurrencyPosition;
@@ -112,7 +113,7 @@ class DefaultMoneyFormatter implements MoneyFormatter
     protected function formatAmount(Money $money): string
     {
         $amount = number_format(
-            (float) ($money->getAmount() / Money::getDefaultDivisor()),
+            app(Calculator::class)->divide($money->getAmount(), Money::getDefaultDivisor()),
             $this->decimals,
             $this->decimalSeparator,
             $this->thousandsSeparator,

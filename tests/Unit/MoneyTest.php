@@ -2,6 +2,7 @@
 
 namespace PostScripton\Money\Tests\Unit;
 
+use InvalidArgumentException;
 use PostScripton\Money\Currency;
 use PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException;
 use PostScripton\Money\Money;
@@ -17,12 +18,23 @@ class MoneyTest extends TestCase
         $money3 = money('12345000');
         $money4 = money_parse('$ 1234.5');
         $money5 = money('12345000', currency('USD'));
+        $money6 = money('12345000.1234567890');
 
         $this->assertTrue($money1->equals($money2));
         $this->assertTrue($money1->equals($money3));
         $this->assertTrue($money1->equals($money4));
         $this->assertTrue($money1->equals($money5));
-        $this->assertEquals('$ 1 234.5', $money5->toString());
+        $this->assertTrue($money1->equals($money6));
+        $this->assertEquals('12345000', $money6->getAmount());
+    }
+
+    /** @dataProvider creatingMoneyWithExceptionDataProvider */
+    public function testCreatingMoneyWithNonNumericStringThrowsAnException(string $amount): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage(sprintf('The amount must be a numeric-string, [%s] given', $amount));
+
+        new Money($amount);
     }
 
     /** @test */
@@ -62,8 +74,57 @@ class MoneyTest extends TestCase
         $this->assertEquals('$ 123.4', $money);
     }
 
-    /** @test */
-    public function moneyGetsRidOfDecimalsWithFloorMethod(): void
+    public function testMultiply(): void
+    {
+        $money = money_parse('100');
+
+        $money->multiply('2');
+        $this->assertEquals('2000000', $money->getAmount());
+        $this->assertEquals('$ 200', $money->toString());
+
+        $money->multiply('-2');
+        $this->assertEquals('-4000000', $money->getAmount());
+        $this->assertEquals('$ -400', $money->toString());
+    }
+
+    public function testMultiplyByFloat(): void
+    {
+        $money = money_parse('100');
+
+        $money->multiply(0.5);
+        $this->assertEquals('500000', $money->getAmount());
+        $this->assertEquals('$ 50', $money->toString());
+
+        $money->multiply(-0.5);
+        $this->assertEquals('-250000', $money->getAmount());
+        $this->assertEquals('$ -25', $money->toString());
+    }
+
+    public function testMultiplyButNoDecimalsInAmount(): void
+    {
+        $money = money_parse('10');
+        $expectedMoney = money_parse('3.3333');
+
+        $money->multiply((string) (1 / 3));
+
+        $this->assertEquals('33333', $money->getAmount());
+        $this->assertEquals('$ 3.3', $money->toString());
+        $this->assertTrue($expectedMoney->equals($money));
+    }
+
+    public function testDivideButNoDecimalsInAmount(): void
+    {
+        $money = money_parse('100');
+        $expectedMoney = money_parse('33.3333');
+
+        $money->divide('3');
+
+        $this->assertEquals('333333', $money->getAmount());
+        $this->assertEquals('$ 33.3', $money->toString());
+        $this->assertTrue($expectedMoney->equals($money));
+    }
+
+    public function testFloor(): void
     {
         $money = new Money('102500');
 
@@ -76,8 +137,20 @@ class MoneyTest extends TestCase
         $this->assertEquals('$ 10', $money->toString());
     }
 
-    /** @test */
-    public function moneyGetsRidOfDecimalsWithCeilMethod(): void
+    public function testNegativeFloor(): void
+    {
+        $money = new Money('-102500');
+
+        $this->assertEquals('-102500', $money->getAmount());
+        $this->assertEquals('$ -10.3', $money->toString());
+
+        $money->floor();
+
+        $this->assertEquals('-110000', $money->getAmount());
+        $this->assertEquals('$ -11', $money->toString());
+    }
+
+    public function testCeil(): void
     {
         $money = new Money('102500');
 
@@ -88,6 +161,19 @@ class MoneyTest extends TestCase
 
         $this->assertEquals('110000', $money->getAmount());
         $this->assertEquals('$ 11', $money->toString());
+    }
+
+    public function testNegativeCeil(): void
+    {
+        $money = new Money('-102500');
+
+        $this->assertEquals('-102500', $money->getAmount());
+        $this->assertEquals('$ -10.3', $money->toString());
+
+        $money->ceil();
+
+        $this->assertEquals('-100000', $money->getAmount());
+        $this->assertEquals('$ -10', $money->toString());
     }
 
     /** @test */
@@ -182,6 +268,15 @@ class MoneyTest extends TestCase
                 'negative' => '-0',
                 'absolute' => '0',
             ],
+        ];
+    }
+
+    protected function creatingMoneyWithExceptionDataProvider(): array
+    {
+        return [
+            ['amount' => 'qwerty'],
+            ['amount' => '$ 1 234.5'],
+            ['amount' => '$ 1234.5'],
         ];
     }
 }

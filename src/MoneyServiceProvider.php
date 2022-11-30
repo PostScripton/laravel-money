@@ -5,6 +5,8 @@ namespace PostScripton\Money;
 use Exception;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Enum;
+use PostScripton\Money\Calculators\BcMathCalculator;
+use PostScripton\Money\Calculators\Calculator;
 use PostScripton\Money\Enums\CurrencyList;
 use PostScripton\Money\Enums\CurrencyPosition;
 use PostScripton\Money\Exceptions\CustomCurrencyTakenCodesException;
@@ -32,6 +34,10 @@ class MoneyServiceProvider extends PackageServiceProvider
         $this->registerService();
         $this->registerCurrencyList();
         $this->registerCustomCurrencies();
+
+        $this->app->bind(Calculator::class, function () {
+            return new BcMathCalculator();
+        });
 
         Money::setFormatter(new DefaultMoneyFormatter());
         Money::setDefaultCurrency(currency(config('money.default_currency')));

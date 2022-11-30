@@ -3,6 +3,7 @@
 namespace PostScripton\Money;
 
 use Exception;
+use PostScripton\Money\Calculators\Calculator;
 use PostScripton\Money\Rules\Money as MoneyRule;
 
 class Parser
@@ -27,12 +28,7 @@ class Parser
         }
 
         $amount = str_replace(' ', '', $result['amount']);
-        $amount = (string) ($amount * Money::getDefaultDivisor()); // todo rework it with bcmath later
-        $amount = substr(
-            $amount,
-            offset: 0,
-            length: strpos($amount, '.') ?: null
-        );
+        $amount = app(Calculator::class)->multiply($amount, Money::getDefaultDivisor());
 
         return money($amount, $currency);
     }

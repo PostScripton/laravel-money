@@ -18,6 +18,20 @@ $money = money('12345000', currency('RUB'), settings());
 // NOT: money('12345000', settings(), currency('RUB'))
 ```
 
+## Important
+
+It is important to pass **string-integer** as amount for two reasons:
+
+1. Non-numeric string throws `InvalidArgumentException`
+2. All decimals get trimmed
+
+```php
+$money = money('qwerty');   // InvalidArgumentException
+
+$money = money('12345000.1234567890');
+$money->getAmount();        // "12345000"
+```
+
 ---
 
 📌 Back to the [contents](/README.md#table-of-contents).

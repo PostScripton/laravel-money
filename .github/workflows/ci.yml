@@ -48,6 +48,7 @@ jobs:
         with:
           php-version: ${{ matrix.version }}
           coverage: pcov
+          extensions: bcmath
 
       - name: Get Composer Cache Directory
         id: composer-cache
