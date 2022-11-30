@@ -60,20 +60,20 @@ interface MoneyInterface
     /**
      * Multiplies an amount from the money. It's like <p>
      * `$100 * 2 = $200` </p>
-     * @param float $number <p>
+     * @param string $multiplier <p>
      * A number on which the money will be multiplied </p>
      * @return self
      */
-    public function multiply(float $number): self;
+    public function multiply(string $multiplier): self;
 
     /**
      * Divides an amount from the money. It's like <p>
      * `$100 / 2 = $50` </p>
-     * @param float $number <p>
+     * @param string $divisor <p>
      * A number on which the money will be divided </p>
      * @return self
      */
-    public function divide(float $number): self;
+    public function divide(string $divisor): self;
 
     /**
      * Rebases the money on an amount

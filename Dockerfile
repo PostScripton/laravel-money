@@ -11,6 +11,9 @@ RUN apk add --no-cache git \
 RUN pecl install pcov && \
     docker-php-ext-enable pcov
 
+RUN docker-php-ext-install bcmath && \
+    docker-php-ext-enable bcmath
+
 ENV PS1 '\[\033[0;32m\][laravel-money] \[\033[1;35m\]\u@docker\[\033[0m\]:\[\033[0;34m\]\w\[\033[0m\]# '
 
 WORKDIR /src
