@@ -19,10 +19,10 @@ interface MoneyInterface
      * Set a new currency <p>
      * Note that changes only currency itself without converting </p>
      * For converting between currencies use `convertInto()` method
-     * @param Currency $currency
+     * @param Currency|string $currency
      * @return self
      */
-    public function setCurrency(Currency $currency): self;
+    public function setCurrency(Currency|string $currency): self;
 
     /**
      * Creates an absolutely identical instance of the object
@@ -239,18 +239,18 @@ interface MoneyInterface
      * Creates a monetary object
      * @param string $amount <p>
      * Raw amount: 12345 stands for 1.2345 </p>
-     * @param Currency|null $currency
+     * @param Currency|string|null $currency
      * @return self
      */
-    public static function of(string $amount, ?Currency $currency = null): Money;
+    public static function of(string $amount, Currency|string|null $currency = null): Money;
 
     /**
      * Parses the string and turns it into a monetary instance
      * @param string $money
-     * @param string|null $currencyCode
+     * @param Currency|string|null $currency
      * @return self
      */
-    public static function parse(string $money, ?string $currencyCode = null): Money;
+    public static function parse(string $money, Currency|string|null $currency = null): Money;
 
     /**
      * Corrects input &lt;input type="number" /&gt; using default settings

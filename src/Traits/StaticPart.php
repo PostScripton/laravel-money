@@ -18,7 +18,7 @@ trait StaticPart
 
     public static function parse(string $money, Currency|string|null $currency = null): Money
     {
-        return Parser::parse($money, $currencyCode);
+        return Parser::parse($money, $currency);
     }
 
     public static function getDefaultCurrency(): Currency
@@ -26,7 +26,7 @@ trait StaticPart
         return self::$defaultCurrency;
     }
 
-    public static function of(string $amount, ?Currency $currency = null): Money
+    public static function of(string $amount, Currency|string|null $currency = null): Money
     {
         return money($amount, $currency);
     }

@@ -25,7 +25,7 @@ class Money implements MoneyInterface
 
     private Currency $currency;
 
-    public function __construct(string $amount, ?Currency $currency = null)
+    public function __construct(string $amount, Currency|string|null $currency = null)
     {
         if (! is_numeric($amount)) {
             throw new InvalidArgumentException(sprintf('The amount must be a numeric-string, [%s] given', $amount));
@@ -41,9 +41,9 @@ class Money implements MoneyInterface
         return $this->currency;
     }
 
-    public function setCurrency(Currency $currency): self
+    public function setCurrency(Currency|string $currency): self
     {
-        $this->currency = $currency;
+        $this->currency = Currency::get($currency);
 
         return $this;
     }
