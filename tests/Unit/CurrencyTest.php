@@ -167,6 +167,20 @@ class CurrencyTest extends TestCase
         );
     }
 
+    public function testGet(): void
+    {
+        $this->assertEquals('RUB', Currency::get('RUB')->getCode());
+        $this->assertEquals('RUB', Currency::get(currency('RUB'))->getCode());
+        $this->assertNull(Currency::get(null));
+    }
+
+    public function testGetOrDefault(): void
+    {
+        $this->assertEquals('RUB', Currency::getOrDefault('RUB')->getCode());
+        $this->assertEquals('RUB', Currency::getOrDefault(currency('RUB'))->getCode());
+        $this->assertEquals('USD', Currency::getOrDefault(null)->getCode());
+    }
+
     protected function invalidConstructorsDataProvider(): array
     {
         return [
