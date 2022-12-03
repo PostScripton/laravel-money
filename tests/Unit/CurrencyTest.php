@@ -2,8 +2,6 @@
 
 namespace PostScripton\Money\Tests\Unit;
 
-use Exception;
-use Illuminate\Support\Facades\Config;
 use PostScripton\Money\Currencies;
 use PostScripton\Money\Currency;
 use PostScripton\Money\Enums\CurrencyPosition;
@@ -153,29 +151,6 @@ class CurrencyTest extends TestCase
         $this->assertCount(2, $currencyWithSeveralSymbols->getSymbols());
         $this->assertEquals('¥', $currencyWithSeveralSymbols->getSymbols()[0]);
         $this->assertEquals('円', $currencyWithSeveralSymbols->getSymbols()[1]);
-    }
-
-    /** @test */
-    public function getConfigCurrency(): void
-    {
-        Config::set(['money.default_currency' => 'RUB']);
-
-        $defaultCurrency = Currency::getConfigCurrencyCode();
-
-        $this->assertEquals('RUB', $defaultCurrency);
-    }
-
-    /** @test */
-    public function getConfigCurrencyButConfigIsNotPublished(): void
-    {
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage(
-            'Please publish the config file by running "php artisan vendor:publish --tag=money"',
-        );
-
-        Config::set(['money' => null]);
-
-        Currency::getConfigCurrencyCode();
     }
 
     // todo extract into another CurrenciesTest class

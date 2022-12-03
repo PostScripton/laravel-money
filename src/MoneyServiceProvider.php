@@ -40,7 +40,7 @@ class MoneyServiceProvider extends PackageServiceProvider
         });
 
         Money::setFormatter(new DefaultMoneyFormatter());
-        Money::setDefaultCurrency(currency(config('money.default_currency')));
+        Money::setDefaultCurrency(currency(config('money.default_currency', 'USD')));
 
         Validator::extend(MoneyRule::RULE_NAME, (MoneyRule::class . '@passes'), app(MoneyRule::class)->message());
     }

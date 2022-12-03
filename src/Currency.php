@@ -2,7 +2,6 @@
 
 namespace PostScripton\Money;
 
-use Exception;
 use PostScripton\Money\Enums\CurrencyDisplay;
 use PostScripton\Money\Enums\CurrencyPosition;
 use PostScripton\Money\Exceptions\CurrencyDoesNotExistException;
@@ -158,15 +157,5 @@ class Currency
             CurrencyDisplay::Symbol => $this->getSymbol(),
             CurrencyDisplay::Code => $this->getCode(),
         };
-    }
-
-    /** @throws Exception */
-    public static function getConfigCurrencyCode(): string
-    {
-        if (Money::configNotPublished()) {
-            throw new Exception('Please publish the config file by running "php artisan vendor:publish --tag=money"');
-        }
-
-        return config('money.default_currency', 'USD');
     }
 }
