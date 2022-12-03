@@ -3,12 +3,45 @@
 namespace PostScripton\Money\Tests\Unit;
 
 use Exception;
+use PostScripton\Money\Currency;
 use PostScripton\Money\Parser;
 use PostScripton\Money\Tests\TestCase;
 
 class ParserTest extends TestCase
 {
-    public function moneyStringsDataProvider(): array
+    /** @dataProvider moneyStringsDataProvider */
+    public function testParse(string $money, string $pureAmount, ?string $currencyCode = null): void
+    {
+        $expectedCurrencyCode = Currency::getOrDefault($currencyCode)->getCode();
+        $money = Parser::parse($money, $currencyCode);
+
+        $this->assertEquals($pureAmount, $money->getAmount());
+        $this->assertEquals($expectedCurrencyCode, $money->getCurrency()->getCode());
+    }
+
+    /** @dataProvider wrongMoneyStringsDataProvider */
+    public function testParserThrowsAnExceptionWhenWrongStringIsPassed(
+        string $money,
+        ?string $currencyCode = null,
+    ): void {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage("Unable to parse [{$money}] into a monetary object");
+
+        Parser::parse($money, $currencyCode);
+    }
+
+    public function testParseWithVariousWaysToPassCurrencies(): void
+    {
+        $m1 = money_parse('100', 'RUB');
+        $m2 = money_parse('100', currency('RUB'));
+        $m3 = money_parse('100');
+
+        $this->assertEquals('RUB', $m1->getCurrency()->getCode());
+        $this->assertEquals('RUB', $m2->getCurrency()->getCode());
+        $this->assertEquals('USD', $m3->getCurrency()->getCode());
+    }
+
+    protected function moneyStringsDataProvider(): array
     {
         return [
             [
@@ -153,17 +186,7 @@ class ParserTest extends TestCase
         ];
     }
 
-    /** @dataProvider moneyStringsDataProvider */
-    public function testParse(string $money, string $pureAmount, ?string $currencyCode = null): void
-    {
-        $expectedCurrencyCode = $currencyCode ?? 'USD';
-        $money = Parser::parse($money, $currencyCode);
-
-        $this->assertEquals($pureAmount, $money->getAmount());
-        $this->assertEquals($expectedCurrencyCode, $money->getCurrency()->getCode());
-    }
-
-    public function wrongMoneyStringsDataProvider(): array
+    protected function wrongMoneyStringsDataProvider(): array
     {
         return [
             [
@@ -212,16 +235,5 @@ class ParserTest extends TestCase
                 'currencyCode' => 'USD',
             ],
         ];
-    }
-
-    /** @dataProvider wrongMoneyStringsDataProvider */
-    public function testParserThrowsAnExceptionWhenWrongStringIsPassed(
-        string $money,
-        ?string $currencyCode = null,
-    ): void {
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage("Unable to parse [{$money}] into a monetary object");
-
-        Parser::parse($money, $currencyCode);
     }
 }

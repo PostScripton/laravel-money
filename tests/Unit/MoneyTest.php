@@ -28,6 +28,27 @@ class MoneyTest extends TestCase
         $this->assertEquals('12345000', $money6->getAmount());
     }
 
+    public function testCreatingMonetaryObjectAcceptsStringAsCurrency(): void
+    {
+        $m1 = money('12345000', 'RUB');
+        $m2 = Money::of('12345000', 'RUB');
+
+        $this->assertTrue($m1->equals($m2));
+        $this->assertEquals('RUB', $m1->getCurrency()->getCode());
+        $this->assertEquals('RUB', $m2->getCurrency()->getCode());
+    }
+
+    public function testSetCurrency(): void
+    {
+        $money = money('12345000', 'RUB');
+
+        $money->setCurrency(currency('USD'));
+        $this->assertEquals('USD', $money->getCurrency()->getCode());
+
+        $money->setCurrency('EUR');
+        $this->assertEquals('EUR', $money->getCurrency()->getCode());
+    }
+
     /** @dataProvider creatingMoneyWithExceptionDataProvider */
     public function testCreatingMoneyWithNonNumericStringThrowsAnException(string $amount): void
     {

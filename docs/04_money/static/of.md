@@ -15,6 +15,7 @@ Money::of('1234000');                           // "$ 123.4"
 Money::of('12345000');                          // "$ 1 234.5"
 
 Money::of('12345000', Currency::code('RUB'));   // "1 234.5 ₽"
+Money::of('12345000', 'RUB');                   // "1 234.5 ₽"
 ```
 
 Method `of()` is one of the variants to create a monetary object.
