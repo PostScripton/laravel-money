@@ -1,6 +1,6 @@
 # `isSameCurrency()`
 
-checks whether two money objects have the same currency.
+checks whether two monetary objects have the same currency.
 
 ## Methods
 

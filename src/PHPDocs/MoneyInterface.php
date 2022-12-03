@@ -106,7 +106,7 @@ interface MoneyInterface
     public function absolute(): self;
 
     /**
-     * Checks whether two money objects have the same currency
+     * Checks whether two monetary objects have the same currency
      * @param Money $money
      * @return bool
      */

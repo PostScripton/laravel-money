@@ -1,5 +1,5 @@
 # 🖨️ Output
-After creating and manipulating with the Money object, you'd like to print the money out to somewhere.
+After creating and manipulating with the monetary object, you'd like to print the money out to somewhere.
 
 You can use one of the following ways:
 ```php

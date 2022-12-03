@@ -28,7 +28,7 @@
 
 ## Introduction
 
-**Laravel Money** is an open source library that simplifies life to convert numbers from a database (`'balance': 12340`) into money objects.
+**Laravel Money** is an open source library that simplifies life to convert numbers from a database (`'balance': 12340`) into monetary objects.
 With all being said, you can calculate money, output it as a string, convert it between currencies online via API services as well as offline and more!
 
 ## Upgrade guide
