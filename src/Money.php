@@ -33,7 +33,7 @@ class Money implements MoneyInterface
 
         $this->amount = app(Calculator::class)->floor($amount);
 
-        $this->setCurrency($currency ?? self::getDefaultCurrency());
+        $this->setCurrency(Currency::getOrDefault($currency));
     }
 
     public function getCurrency(): Currency

@@ -62,6 +62,20 @@ class Currency
         return $currency;
     }
 
+    public static function get(Currency|string|null $currency): ?Currency
+    {
+        if (is_string($currency)) {
+            return self::code($currency);
+        }
+
+        return $currency;
+    }
+
+    public static function getOrDefault(Currency|string|null $currency): Currency
+    {
+        return self::get($currency) ?? Money::getDefaultCurrency();
+    }
+
     public function getFullName(): string
     {
         return $this->fullName;
