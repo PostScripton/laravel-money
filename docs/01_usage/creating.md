@@ -1,5 +1,5 @@
 # 🧰 Creating
-In order to use this package, you need to create a Money object:
+In order to use this package, you need to create a monetary object:
 
 ```php
 use PostScripton\Money\Money;
@@ -9,13 +9,14 @@ $money = Money::of('12345000');
 $money = money('12345000'); // preferred variant
 ```
 
-You can apply the following parameters for any of the variants above:
-```php
-$money = money('12345000', currency('RUB'));
-$money = money('12345000', settings());
-$money = money('12345000', currency('RUB'), settings());
+You can specify currency as second argument:
 
-// NOT: money('12345000', settings(), currency('RUB'))
+```php
+use PostScripton\Money\Currency;
+
+$money = new Money('12345000'); // if you don't specify then default is used
+$money = Money::of('12345000', Currency::code('RUB'));
+$money = money('12345000', currency('RUB'));
 ```
 
 ## Important
