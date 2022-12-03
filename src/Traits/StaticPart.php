@@ -16,12 +16,7 @@ trait StaticPart
         self::$defaultCurrency = $currency;
     }
 
-    public static function configNotPublished(): bool
-    {
-        return is_null(config('money'));
-    }
-
-    public static function parse(string $money, ?string $currencyCode = null): Money
+    public static function parse(string $money, Currency|string|null $currency = null): Money
     {
         return Parser::parse($money, $currencyCode);
     }
