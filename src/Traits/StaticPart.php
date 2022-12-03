@@ -31,9 +31,9 @@ trait StaticPart
         return self::$defaultCurrency;
     }
 
-    public static function of(string $amount, $currency = null, $settings = null): Money
+    public static function of(string $amount, ?Currency $currency = null): Money
     {
-        return money($amount, $currency, $settings);
+        return money($amount, $currency);
     }
 
     public static function correctInput(string $input): string
