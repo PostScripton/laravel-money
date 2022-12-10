@@ -1,10 +1,10 @@
-# `isEmpty()`
+# `isZero()`
 
 checks whether the money's number is zero.
 
 ## Methods
 
-### `isEmpty()`
+### `isZero()`
 **Returns**: `bool`
 
 ## Usage
@@ -14,9 +14,9 @@ $m1 = money('0');
 $m2 = money('1000000');
 $m3 = money('-10000000');
 
-$m1->isEmpty(); // true
-$m2->isEmpty(); // false
-$m3->isEmpty(); // false
+$m1->isZero(); // true
+$m2->isZero(); // false
+$m3->isZero(); // false
 ```
 
 ---

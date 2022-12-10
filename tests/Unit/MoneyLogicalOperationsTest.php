@@ -12,7 +12,7 @@ class MoneyLogicalOperationsTest extends TestCase
     {
         $money = money('0');
 
-        $this->assertTrue($money->isEmpty());
+        $this->assertTrue($money->isZero());
     }
 
     /** @test */

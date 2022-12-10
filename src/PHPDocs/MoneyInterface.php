@@ -128,7 +128,7 @@ interface MoneyInterface
      * Checks whether the money's number is zero
      * @return bool
      */
-    public function isEmpty(): bool;
+    public function isZero(): bool;
 
     /**
      * Is the current monetary object less than the given one? <p>
