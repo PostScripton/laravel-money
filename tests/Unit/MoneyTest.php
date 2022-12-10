@@ -3,12 +3,9 @@
 namespace PostScripton\Money\Tests\Unit;
 
 use InvalidArgumentException;
-use Mockery;
 use PostScripton\Money\Currency;
 use PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException;
 use PostScripton\Money\Money;
-use PostScripton\Money\Services\ExchangeRateService;
-use PostScripton\Money\Services\ServiceInterface;
 use PostScripton\Money\Tests\TestCase;
 
 class MoneyTest extends TestCase
@@ -287,29 +284,6 @@ class MoneyTest extends TestCase
 
         $this->assertInstanceOf(Money::class, $diff);
         $this->assertTrue(money_parse($result)->equals($diff));
-    }
-
-    public function testDifferenceWithTwoDifferentCurrencies(): void
-    {
-        $this->app->bind(ServiceInterface::class, function () {
-            return Mockery::mock(ExchangeRateService::class)
-                ->makePartial()
-                ->shouldReceive('supports')
-                ->with(['USD', 'RUB'])
-                ->andReturn([])
-                ->shouldReceive('rate')
-                ->with('RUB', 'USD', null)
-                ->andReturn(1 / 65)
-                ->getMock();
-        });
-        $usd = money('500000');
-        $rub = money('1000000', currency('rub'));
-        $rubIntoUsd = $rub->convertInto($usd->getCurrency());
-        $expectedDifference = $usd->clone()->subtract($rubIntoUsd);
-
-        $difference = $usd->difference($rubIntoUsd);
-
-        $this->assertTrue($expectedDifference->equals($difference));
     }
 
     public function testExceptionIsThrownWhenThereAreTwoDifferentCurrencies(): void

@@ -73,43 +73,85 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Service
+    | Default rate exchanger
     |--------------------------------------------------------------------------
     |
-    | This option controls the default service for converting currencies using API.
+    | This option controls the default API provider for converting currencies.
     |
-    | Supported: "exchangeratesapi", "openexchangerates" and "exchangerate"
+    | Supported providers: "fixer", "openexchangerates" and "exchangerate"
     |
     | exchangerate (default)
     |
     */
-    'service' => 'exchangerate',
+    'rate_exchanger' => 'exchangerate',
 
     /*
     |--------------------------------------------------------------------------
-    | Services
+    | Rate exchangers
     |--------------------------------------------------------------------------
     |
-    | This option contains all the API services for converting currencies
+    | This option contains all the API providers for converting currencies.
     |
     */
-    'services' => [
-        'exchangeratesapi' => [
-            // https://exchangeratesapi.io/
-            'class' => \PostScripton\Money\Services\ExchangeRatesAPIService::class,
-            'key' => env('EXCHANGERATESAPI_API_KEY'),
-            'secure' => env('EXCHANGERATESAPI_SECURE', false),
-            'base_restriction' => env('EXCHANGERATESAPI_BASE_RESTRICTION', true),
+    'rate_exchangers' => [
+
+        'fixer' => [
+            // https://fixer.io/
+            'class' => \PostScripton\Money\Clients\RateExchangers\Fixer::class,
+            'key' => env('FIXER_API_KEY'),
+            'free_plan' => env('FIXER_FREE_PLAN', true),
         ],
+
         'openexchangerates' => [
             // https://openexchangerates.org/
-            'class' => \PostScripton\Money\Services\OpenExchangeRatesService::class,
+            'class' => \PostScripton\Money\Clients\RateExchangers\OpenExchangeRates::class,
             'key' => env('OPENEXCHANGERATES_API_KEY'),
-            'base_restriction' => env('OPENEXCHANGERATES_BASE_RESTRICTION', true),
         ],
+
         'exchangerate' => [
             // https://exchangerate.host/
-            'class' => \PostScripton\Money\Services\ExchangeRateService::class,
+            'class' => \PostScripton\Money\Clients\RateExchangers\ExchangeRate::class,
+        ],
+
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Caching exchange rate results
+    |--------------------------------------------------------------------------
+    |
+    | This option allows you to cache the API results of rate exchangers.
+    |
+    | It is highly recommended not to disable caching
+    | because it may lead to exceeding quotas of your API accounts.
+    |
+    */
+    'cache' => [
+        'enabled' => env('MONEY_CACHE_ENABLED', true),
+
+        /*
+        |--------------------------------------------------------------------------
+        | Cache store
+        |--------------------------------------------------------------------------
+        |
+        | This option specifies which cache store driver to use.
+        |
+        | You can specify any of the `store` drivers listed in the cache.php config file.
+        | Using `default` means to use the `default` driver in the cache.php.
+        |
+        */
+        'store' => 'default',
+
+        'rate_exchanger' => [
+            // Request to get all supported currencies by rate exchanger.
+            'supports' => [
+                'ttl' => \DateInterval::createFromDateString('7 days'), // or `null` to store forever
+            ],
+
+            // Request to get a real-time exchange rates. Historical rates are stored forever.
+            'rate' => [
+                'ttl' => \DateInterval::createFromDateString('1 hour'), // or `null` to store forever
+            ],
         ],
     ],
 

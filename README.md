@@ -110,11 +110,9 @@ After all, the config file at `config/money.php` should be modified for your own
             - [`greaterThanOrEqual()`](/docs/04_money/object/greaterThanOrEqual.md)
             - [`equals()`](/docs/04_money/object/equals.md)
         - [Converting to string](/docs/02_formatting/README.md#other-to-string-methods)
-        - Other `(deprecated)`
-            - [`service()`](/docs/04_money/object/service.md)
-            - [`convertInto()`](/docs/04_money/object/convertInto.md)
-6. [API services](/docs/05_services/README.md)
-    - [Add your own](/docs/05_services/add.md)
+        - [Converting currencies](/docs/04_money/object/converting_currencies.md)
+6. [API rate exchangers](/docs/05_rate_exchangers/README.md)
+    - [Add your own](/docs/05_rate_exchangers/add.md)
 
 ## License
 

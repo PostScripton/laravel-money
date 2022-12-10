@@ -54,7 +54,8 @@ class Product extends Model
 ## How to create and output?
 
 ```php
-$money = money('1000000'); // $ 100
+$money = money('1000000');      // $ 100
+$money = money_parse('100');    // $ 100
 
 $newMoney = $money->clone()             // clone it to work with independent object
     ->add(money('500000'))              // $ 150
@@ -76,9 +77,9 @@ $usd = money('1000000'); // $ 100
 
 $date = Carbon::parse('2000-12-31');
 
-$offline = $usd->convertInto(currency('RUB'), 75.79);                   // 7 579 ₽
-$online = $usd->convertInto(currency('RUB'));                           // 7 139.5 ₽ (today is 2021-10-14)
-$onlineHistorical = $usd->convertInto(currency('RUB'), null, $date);    // ~2 816 ₽
+$offline = $usd->offlineConvertTo('RUB', 75.79);    // 7 579 ₽
+$online = $usd->convertTo(currency('RUB'));         // 7 139.5 ₽ (today is 2021-10-14)
+$onlineHistorical = $usd->convertTo('RUB', $date);  // ~2 816 ₽
 ```
 
-👀 See [here](/docs/05_services/README.md) for full details.
+👀 See [here](/docs/05_rate_exchangers/README.md) for full details.
