@@ -102,7 +102,7 @@ After all, the config file at `config/money.php` should be modified for your own
             - [`isSameCurrency()`](/docs/04_money/object/isSameCurrency.md)
             - [`isNegative()`](/docs/04_money/object/isNegative.md)
             - [`isPositive()`](/docs/04_money/object/isPositive.md)
-            - [`isEmpty()`](/docs/04_money/object/isEmpty.md)
+            - [`isZero()`](/docs/04_money/object/isZero.md)
             - [`lessThan()`](/docs/04_money/object/lessThan.md)
             - [`lessThanOrEqual()`](/docs/04_money/object/lessThanOrEqual.md)
             - [`greaterThan()`](/docs/04_money/object/greaterThan.md)

@@ -151,7 +151,7 @@ class Money implements MoneyInterface
         return app(Calculator::class)->compare($this->amount, '0') > 0;
     }
 
-    public function isEmpty(): bool
+    public function isZero(): bool
     {
         return app(Calculator::class)->compare($this->amount, '0') === 0;
     }
