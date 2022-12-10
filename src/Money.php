@@ -2,20 +2,19 @@
 
 namespace PostScripton\Money;
 
-use Carbon\Carbon;
 use InvalidArgumentException;
 use PostScripton\Money\Calculators\Calculator;
 use PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException;
-use PostScripton\Money\Exceptions\ServiceException;
 use PostScripton\Money\PHPDocs\MoneyInterface;
-use PostScripton\Money\Services\ServiceInterface;
 use PostScripton\Money\Traits\Converter;
+use PostScripton\Money\Traits\InteractsWithRateExchanger;
 use PostScripton\Money\Traits\StaticPart;
 
 class Money implements MoneyInterface
 {
     use StaticPart;
     use Converter;
+    use InteractsWithRateExchanger;
 
     public final const MIN_DECIMALS = 0;
 
@@ -206,27 +205,6 @@ class Money implements MoneyInterface
         return app(Calculator::class)->compare($this->amount, $money->amount) === 0;
     }
 
-    public function convertInto(Currency $currency, ?float $rate = null, ?Carbon $date = null): Money
-    {
-        // Convert online
-        if (is_null($rate)) {
-            $notSupported = $this->service()->supports([$currency->getCode(), $this->getCurrency()->getCode()]);
-            if (! empty($notSupported)) {
-                throw new ServiceException(sprintf(
-                    'The service class [%s] doesn\'t support one of the currencies [%s]',
-                    $this->service()->getClassName(),
-                    implode(', ', $notSupported),
-                ));
-            }
-
-            $rate = $this->service()->rate($this->getCurrency()->getCode(), $currency->getCode(), $date);
-        }
-
-        $newAmount = app(Calculator::class)->multiply($this->amount, $rate);
-
-        return money($newAmount, $currency);
-    }
-
     public function difference(Money $money): Money
     {
         if ($this->isDifferentCurrency($money)) {
@@ -234,10 +212,5 @@ class Money implements MoneyInterface
         }
 
         return $this->clone()->subtract($money)->absolute();
-    }
-
-    public function service(): ServiceInterface
-    {
-        return app(ServiceInterface::class);
     }
 }

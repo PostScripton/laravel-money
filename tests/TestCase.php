@@ -3,11 +3,42 @@
 namespace PostScripton\Money\Tests;
 
 use Illuminate\Foundation\Bootstrap\LoadEnvironmentVariables;
+use Illuminate\Support\Facades\Config;
 use PostScripton\Money\MoneyServiceProvider;
 
 class TestCase extends \Orchestra\Testbench\TestCase
 {
     protected string $configName = 'money';
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        Config::set([
+            'cache' => [
+                'default' => 'array',
+
+                'stores' => [
+                    'array' => [
+                        'driver' => 'array',
+                    ],
+                    'database' => [
+                        'driver' => 'database',
+                        'table' => 'cache',
+                    ],
+                    'file' => [
+                        'driver' => 'file',
+                        'path' => 'test/path/file.txt',
+                    ],
+                    'memcached' => [
+                        'driver' => 'memcached',
+                    ],
+                    'redis' => [
+                        'driver' => 'redis',
+                    ],
+                ],
+            ],
+        ]);
+    }
 
     protected function getEnvironmentSetUp($app): void
     {

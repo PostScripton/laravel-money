@@ -5,23 +5,30 @@ namespace PostScripton\Money;
 use Exception;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Enum;
+use PostScripton\Money\Cache\MoneyCache;
+use PostScripton\Money\Cache\RateExchangerCache;
 use PostScripton\Money\Calculators\BcMathCalculator;
 use PostScripton\Money\Calculators\Calculator;
+use PostScripton\Money\Clients\RateExchangers\RateExchanger;
 use PostScripton\Money\Enums\CurrencyList;
 use PostScripton\Money\Enums\CurrencyPosition;
 use PostScripton\Money\Exceptions\CustomCurrencyTakenCodesException;
 use PostScripton\Money\Exceptions\CustomCurrencyValidationException;
-use PostScripton\Money\Exceptions\ServiceException;
+use PostScripton\Money\Exceptions\RateExchangerException;
 use PostScripton\Money\Formatters\DefaultMoneyFormatter;
 use PostScripton\Money\Rules\Money as MoneyRule;
-use PostScripton\Money\Services\AbstractService;
-use PostScripton\Money\Services\ServiceInterface;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
 class MoneyServiceProvider extends PackageServiceProvider
 {
     public const PACKAGE_NAME = 'laravel-money';
+
+    public const VERSION = '4.0.0';
+
+    public const FULL_PACKAGE_NAME = 'postscripton/' . self::PACKAGE_NAME;
+
+    public const FULL_PACKAGE_NAME_WITH_VERSION = self::FULL_PACKAGE_NAME . ':' . self::VERSION;
 
     public function configurePackage(Package $package): void
     {
@@ -31,9 +38,12 @@ class MoneyServiceProvider extends PackageServiceProvider
 
     public function packageBooted(): void
     {
-        $this->registerService();
         $this->registerCurrencyList();
         $this->registerCustomCurrencies();
+        $this->registerRateExchanger();
+
+        $this->app->singleton(MoneyCache::class);
+        $this->app->singleton(RateExchangerCache::class);
 
         $this->app->bind(Calculator::class, function () {
             return new BcMathCalculator();
@@ -45,34 +55,30 @@ class MoneyServiceProvider extends PackageServiceProvider
         Validator::extend(MoneyRule::RULE_NAME, (MoneyRule::class . '@passes'), app(MoneyRule::class)->message());
     }
 
-    protected function registerService(): void
+    protected function registerRateExchanger(): void
     {
-        $this->app->bind(ServiceInterface::class, function () {
-            $config = config('money.services.' . config('money.service'));
+        $this->app->singleton(RateExchanger::class, function () {
+            $config = config('money.rate_exchangers.' . config('money.rate_exchanger'));
 
             if (is_null($config)) {
-                throw new ServiceException(sprintf(
-                    'The service [%s] doesn\'t exist in the "services" property.',
-                    config('money.service'),
-                ));
+                throw new RateExchangerException(
+                    'The rate exchanger doesn\'t exist in the "rate_exchanger" property.',
+                );
             }
 
-            if (! array_key_exists('class', $config ??= [])) {
-                throw new ServiceException(sprintf(
-                    'The service [%s] doesn\'t have the "class" property.',
-                    config('money.service'),
-                ));
+            if (! array_key_exists('class', $config)) {
+                throw new RateExchangerException('The rate exchanger doesn\'t have the "class" property.');
             }
 
             $class = $config['class'];
             if (! class_exists($class)) {
-                throw new ServiceException("The service class [{$class}] doesn't exist.");
+                throw new RateExchangerException("The rate exchanger class [{$class}] doesn't exist.");
             }
-            if (! is_subclass_of($class, ServiceInterface::class)) {
-                throw new ServiceException(sprintf(
-                    'The given service class [%s] doesn\'t inherit the [%s].',
+            if (! is_subclass_of($class, RateExchanger::class)) {
+                throw new RateExchangerException(sprintf(
+                    'The given rate exchanger class [%s] doesn\'t implement the [%s] interface.',
                     $class,
-                    AbstractService::class,
+                    RateExchanger::class,
                 ));
             }
 

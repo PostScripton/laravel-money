@@ -187,21 +187,29 @@ interface MoneyInterface
     public function equals(Money $money, bool $strict = true): bool;
 
     /**
-     * Converts money into another currency using an exchange rate between currencies
+     * Converts money to other currency using an API rate exchanger
      * <p>USD -> RUB = 75.79 / 1</p>
-     * <p>RUB -> USD = 1 / 75.79</p> <br/> <p>
-     * You can do it whether online or offline by not passing or passing the $rate parameter
-     * </p>
-     * @param Currency $currency <p>
-     * Currency you want to convert into </p>
-     * @param float|null $rate <p>
-     * Rate of the money's currency and the chosen one </p>
+     * <p>RUB -> USD = 1 / 75.79</p>
+     * @param Currency|string $to <p>
+     * Currency you want to convert to </p>
      * @param Carbon|null $date <p>
-     * Historical mode. Pass the date you want to get rate of
-     * </p>
-     * @return self
+     * Historical mode. Pass the date you want to get rate of </p>
+     * @return Money
+     * @throws \PostScripton\Money\Exceptions\CurrenciesNotSupportedByRateExchangerException
+     * @throws \PostScripton\Money\Exceptions\RateExchangerException
      */
-    public function convertInto(Currency $currency, ?float $rate = null, ?Carbon $date = null): Money;
+    public function convertTo(Currency|string $to, ?Carbon $date = null): Money;
+
+    /**
+     * Offline converting to other currency
+     * <p>USD -> RUB = 75.79 / 1</p>
+     * <p>RUB -> USD = 1 / 75.79</p>
+     * @param Currency|string $currency <p>
+     * Currency you want to convert to </p>
+     * @param string $rate
+     * @return Money
+     */
+    public function offlineConvertTo(Currency|string $currency, string $rate): Money;
 
     /**
      * Shows the difference between two monetary objects <p>
@@ -214,11 +222,6 @@ interface MoneyInterface
      *
      */
     public function difference(Money $money): Money;
-
-    /**
-     * Allows you to get access to the selected service from the config file
-     */
-    public function service();
 
     /**
      * Returns a formatted string with the applied formatting settings from the config file <p>

@@ -36,9 +36,7 @@ There are *static* methods as well as *object* ones.
         - [`greaterThanOrEqual()`](/docs/04_money/object/greaterThanOrEqual.md)
         - [`equals()`](/docs/04_money/object/equals.md)
     - [Converting to string](/docs/02_formatting/README.md#other-to-string-methods)
-    - Other `(deprecated)`
-        - [`service()`](/docs/04_money/object/service.md)
-        - [`convertInto()`](/docs/04_money/object/convertInto.md)
+    - [Converting currencies](/docs/04_money/object/converting_currencies.md)
 
 ---
 
