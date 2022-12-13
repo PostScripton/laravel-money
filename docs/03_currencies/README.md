@@ -43,7 +43,7 @@ You can also get or change some data from Currency object:
 2. [Position](/docs/03_currencies/position.md)
 3. [Display](/docs/03_currencies/display.md)
 4. [Preferred symbol](/docs/03_currencies/preferred_symbol.md)
-5. [Get current currencies](/docs/03_currencies/get_currencies.md)
+5. [Collection methods](/docs/03_currencies/collection_methods.md)
 
 ---
 

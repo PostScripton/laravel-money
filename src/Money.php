@@ -138,7 +138,7 @@ class Money implements MoneyInterface
 
     public function isSameCurrency(Money $money): bool
     {
-        return $this->getCurrency()->getCode() === $money->getCurrency()->getCode();
+        return Currencies::same($this->getCurrency(), $money->getCurrency());
     }
 
     public function isNegative(): bool

@@ -25,6 +25,22 @@ class Currencies
             ->toArray();
     }
 
+    public static function same(Currency|string ...$currencies): bool
+    {
+        if (count($currencies) <= 1) {
+            return true;
+        }
+
+        $main = Currency::get($currencies[0]);
+        for ($i = 1; $i < count($currencies); $i++) {
+            if ($main->getCode() !== Currency::get($currencies[$i])->getCode()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     private static function loadCurrencies(): Collection
     {
         $list = config('money.currency_list');
