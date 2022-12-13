@@ -179,7 +179,7 @@ class Money implements MoneyInterface
     public function equals(Money $money, bool $strict = true): bool
     {
         if ($strict) {
-            if ($this->getCurrency()->getCode() !== $money->getCurrency()->getCode()) {
+            if (! $this->isSameCurrency($money)) {
                 return false;
             }
         }
