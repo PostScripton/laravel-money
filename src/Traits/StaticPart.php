@@ -82,21 +82,7 @@ trait StaticPart
 
     public static function avg(Money ...$list): ?Money
     {
-        if (empty($list)) {
-            return null;
-        }
-
-        self::checkAllCurrenciesAreTheSame($list);
-
-        $first = $list[0];
-        $sum = array_reduce(
-            array: $list,
-            callback: fn(Money $acc, Money $money) => $acc->add($money),
-            initial: money('0', $first->getCurrency()),
-        );
-        $sum->divide(count($list));
-
-        return money($sum->getAmount(), $first->getCurrency());
+        return self::sum(...$list)?->divide(count($list));
     }
 
     public static function sum(Money ...$list): ?Money
@@ -107,14 +93,11 @@ trait StaticPart
 
         self::checkAllCurrenciesAreTheSame($list);
 
-        $first = $list[0];
-        $sum = array_reduce(
+        return array_reduce(
             array: $list,
             callback: fn(Money $acc, Money $money) => $acc->add($money),
-            initial: money('0', $first->getCurrency()),
+            initial: money('0', $list[0]->getCurrency()),
         );
-
-        return money($sum->getAmount(), $first->getCurrency());
     }
 
     public static function getDefaultDivisor(): int
