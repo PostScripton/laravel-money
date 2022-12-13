@@ -8,6 +8,7 @@ use PostScripton\Money\Currencies;
 use PostScripton\Money\Currency;
 use PostScripton\Money\Enums\CurrencyList;
 use PostScripton\Money\Enums\CurrencyPosition;
+use PostScripton\Money\Exceptions\CurrencyDoesNotExistException;
 use PostScripton\Money\Tests\InteractsWithConfig;
 use PostScripton\Money\Tests\TestCase;
 
@@ -150,7 +151,7 @@ class CurrenciesTest extends TestCase
     }
 
     /** @test */
-    public function getCodesArray1234(): void
+    public function getCodesArray(): void
     {
         $expectedCurrencies = ['USD', 'EUR', 'RUB', 'TST'];
         Config::set(['money.currency_list' => $expectedCurrencies]);
@@ -170,6 +171,58 @@ class CurrenciesTest extends TestCase
         $codes = Currencies::getCodesArray();
 
         $this->assertEquals($expectedCurrencies, $codes);
+    }
+
+    /** @test */
+    public function getAllTheCurrenciesAsArray(): void
+    {
+        $actual = require __DIR__ . '/../../src/Lists/popular_currencies.php';
+        $allCurrencies = Currencies::getCodesArray();
+
+        $this->assertCount(count($actual), $allCurrencies);
+        $this->assertEquals(
+            collect($actual)->map(fn(array $currency) => $currency['iso_code'])->toArray(),
+            $allCurrencies
+        );
+    }
+
+    /** @test */
+    public function same(): void
+    {
+        // Always true
+        $this->assertTrue(Currencies::same());
+        $this->assertTrue(Currencies::same(currency('USD')));
+
+        $this->assertTrue(Currencies::same(
+            currency('USD'),
+            currency('USD'),
+        ));
+        $this->assertFalse(Currencies::same(
+            currency('USD'),
+            currency('RUB'),
+        ));
+        $this->assertFalse(Currencies::same(
+            currency('USD'),
+            currency('RUB'),
+            currency('USD'),
+        ));
+    }
+
+    /** @test */
+    public function sameWithDifferentTypeArguments()
+    {
+        $this->assertTrue(Currencies::same('USD'));
+        $this->assertTrue(Currencies::same('USD', 'USD'));
+        $this->assertTrue(Currencies::same(currency('USD'), 'USD'));
+        $this->assertFalse(Currencies::same('USD', 'RUB', currency('USD')));
+    }
+
+    /** @test */
+    public function sameThrowsAnExceptionOnPassingNonSense()
+    {
+        $this->expectException(CurrencyDoesNotExistException::class);
+
+        Currencies::same('USD', 1234.56, 'USD', true);
     }
 
     protected function setUp(): void
