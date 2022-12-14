@@ -99,7 +99,7 @@ After all, the config file at `config/money.php` should be modified for your own
             - [`absolute()`](/docs/04_money/object/absolute.md)
             - [`clone()`](/docs/04_money/object/clone.md)
         - Logical operations
-            - [`isSameCurrency()`](/docs/04_money/object/isSameCurrency.md)
+            - [Comparing currencies](/docs/04_money/object/comparing_currencies.md)
             - [`isNegative()`](/docs/04_money/object/isNegative.md)
             - [`isPositive()`](/docs/04_money/object/isPositive.md)
             - [`isZero()`](/docs/04_money/object/isZero.md)
