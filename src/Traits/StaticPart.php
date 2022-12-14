@@ -41,38 +41,34 @@ trait StaticPart
 
     public static function min(Money ...$list): ?Money
     {
-        if (empty($list)) {
+        $collection = collect($list);
+
+        if ($collection->isEmpty()) {
             return null;
         }
 
-        $min = $list[0];
+        $first = $collection->shift();
 
-        for ($i = 1; $i < count($list); $i++) {
-            $money = $list[$i];
-            if ($money->lessThan($min)) {
-                $min = $money;
-            }
-        }
-
-        return $min;
+        return $collection->reduce(
+            callback: fn(Money $min, Money $money) => $money->lessThan($min) ? $money : $min,
+            initial: $first,
+        );
     }
 
     public static function max(Money ...$list): ?Money
     {
-        if (empty($list)) {
+        $collection = collect($list);
+
+        if ($collection->isEmpty()) {
             return null;
         }
 
-        $max = $list[0];
+        $first = $collection->shift();
 
-        for ($i = 1; $i < count($list); $i++) {
-            $money = $list[$i];
-            if ($money->greaterThan($max)) {
-                $max = $money;
-            }
-        }
-
-        return $max;
+        return $collection->reduce(
+            callback: fn(Money $max, Money $money) => $money->greaterThan($max) ? $money : $max,
+            initial: $first,
+        );
     }
 
     public static function avg(Money ...$list): ?Money
@@ -82,14 +78,15 @@ trait StaticPart
 
     public static function sum(Money ...$list): ?Money
     {
-        if (empty($list)) {
+        $collection = collect($list);
+
+        if ($collection->isEmpty()) {
             return null;
         }
 
-        return array_reduce(
-            array: $list,
-            callback: fn(Money $acc, Money $money) => $acc->add($money),
-            initial: money('0', $list[0]->getCurrency()),
+        return $collection->reduce(
+            callback: fn(Money $acc, Money $cur) => $acc->add($cur),
+            initial: money('0', $collection->first()->getCurrency()),
         );
     }
 

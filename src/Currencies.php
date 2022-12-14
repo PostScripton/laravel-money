@@ -27,18 +27,17 @@ class Currencies
 
     public static function same(Currency|string ...$currencies): bool
     {
-        if (count($currencies) <= 1) {
+        $collection = collect($currencies);
+
+        if ($collection->count() <= 1) {
             return true;
         }
 
-        $main = Currency::get($currencies[0]);
-        for ($i = 1; $i < count($currencies); $i++) {
-            if ($main->getCode() !== Currency::get($currencies[$i])->getCode()) {
-                return false;
-            }
-        }
+        $first = $collection->shift();
 
-        return true;
+        return $collection->every(
+            fn(Currency|string $current) => Currency::get($current)->getCode() === Currency::get($first)->getCode()
+        );
     }
 
     private static function loadCurrencies(): Collection
