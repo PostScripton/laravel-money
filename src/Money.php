@@ -61,7 +61,7 @@ class Money implements MoneyInterface
     public function add(Money $money): self
     {
         if (! $this->isSameCurrency($money)) {
-            throw new MoneyHasDifferentCurrenciesException();
+            throw new MoneyHasDifferentCurrenciesException($money->getCurrency(), $this->getCurrency());
         }
 
         $this->amount = app(Calculator::class)->add($this->amount, $money->amount);
@@ -72,7 +72,7 @@ class Money implements MoneyInterface
     public function subtract(self $money): self
     {
         if (! $this->isSameCurrency($money)) {
-            throw new MoneyHasDifferentCurrenciesException();
+            throw new MoneyHasDifferentCurrenciesException($money->getCurrency(), $this->getCurrency());
         }
 
         $this->amount = app(Calculator::class)->subtract($this->amount, $money->amount);
@@ -99,7 +99,7 @@ class Money implements MoneyInterface
     public function rebase(self $money): self
     {
         if (! $this->isSameCurrency($money)) {
-            throw new MoneyHasDifferentCurrenciesException();
+            throw new MoneyHasDifferentCurrenciesException($money->getCurrency(), $this->getCurrency());
         }
 
         $this->amount = $money->amount;
@@ -158,30 +158,44 @@ class Money implements MoneyInterface
 
     public function lessThan(Money $money): bool
     {
+        if (! $this->isSameCurrency($money)) {
+            throw new MoneyHasDifferentCurrenciesException($money->getCurrency(), $this->getCurrency());
+        }
+
         return app(Calculator::class)->compare($this->amount, $money->amount) < 0;
     }
 
     public function lessThanOrEqual(Money $money): bool
     {
+        if (! $this->isSameCurrency($money)) {
+            throw new MoneyHasDifferentCurrenciesException($money->getCurrency(), $this->getCurrency());
+        }
+
         return app(Calculator::class)->compare($this->amount, $money->amount) <= 0;
     }
 
     public function greaterThan(Money $money): bool
     {
+        if (! $this->isSameCurrency($money)) {
+            throw new MoneyHasDifferentCurrenciesException($money->getCurrency(), $this->getCurrency());
+        }
+
         return app(Calculator::class)->compare($this->amount, $money->amount) > 0;
     }
 
     public function greaterThanOrEqual(Money $money): bool
     {
+        if (! $this->isSameCurrency($money)) {
+            throw new MoneyHasDifferentCurrenciesException($money->getCurrency(), $this->getCurrency());
+        }
+
         return app(Calculator::class)->compare($this->amount, $money->amount) >= 0;
     }
 
     public function equals(Money $money, bool $strict = true): bool
     {
-        if ($strict) {
-            if (! $this->isSameCurrency($money)) {
-                return false;
-            }
+        if ($strict && ! $this->isSameCurrency($money)) {
+            return false;
         }
 
         return app(Calculator::class)->compare($this->amount, $money->amount) === 0;
@@ -211,7 +225,7 @@ class Money implements MoneyInterface
     public function difference(Money $money): Money
     {
         if (! $this->isSameCurrency($money)) {
-            throw new MoneyHasDifferentCurrenciesException();
+            throw new MoneyHasDifferentCurrenciesException($money->getCurrency(), $this->getCurrency());
         }
 
         return $this->clone()->subtract($money)->absolute();

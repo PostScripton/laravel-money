@@ -135,6 +135,7 @@ interface MoneyInterface
      * NOTE: monetary objects must be the same currency. </p>
      * @param Money $money <p>
      * Money being compared </p>
+     * @throws \PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException
      * @return bool
      */
     public function lessThan(Money $money): bool;
@@ -144,6 +145,7 @@ interface MoneyInterface
      * NOTE: monetary objects must be the same currency. </p>
      * @param Money $money <p>
      * Money being compared </p>
+     * @throws \PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException
      * @return bool
      */
     public function lessThanOrEqual(Money $money): bool;
@@ -153,6 +155,7 @@ interface MoneyInterface
      * NOTE: monetary objects must be the same currency. </p>
      * @param Money $money <p>
      * Money being compared </p>
+     * @throws \PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException
      * @return bool
      */
     public function greaterThan(Money $money): bool;
@@ -162,6 +165,7 @@ interface MoneyInterface
      * NOTE: monetary objects must be the same currency. </p>
      * @param Money $money <p>
      * Money being compared </p>
+     * @throws \PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException
      * @return bool
      */
     public function greaterThanOrEqual(Money $money): bool;

@@ -3,6 +3,7 @@
 namespace PostScripton\Money\Tests\Unit;
 
 use PostScripton\Money\Currency;
+use PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException;
 use PostScripton\Money\Tests\TestCase;
 
 class MoneyLogicalOperationsTest extends TestCase
@@ -10,9 +11,13 @@ class MoneyLogicalOperationsTest extends TestCase
     /** @test */
     public function moneyIsZero(): void
     {
-        $money = money('0');
+        $m1 = money('0');
+        $m2 = money('0.0000');
+        $m3 = money('0.1234');
 
-        $this->assertTrue($money->isZero());
+        $this->assertTrue($m1->isZero());
+        $this->assertTrue($m2->isZero());
+        $this->assertTrue($m3->isZero());
     }
 
     /** @test */
@@ -22,6 +27,11 @@ class MoneyLogicalOperationsTest extends TestCase
         $m2 = money('1000000');
 
         $this->assertTrue($m1->lessThan($m2));
+
+        $this->expectException(MoneyHasDifferentCurrenciesException::class);
+
+        $m3 = money('1000000', 'RUB');
+        $m1->lessThan($m3);
     }
 
     /** @test */
@@ -33,6 +43,11 @@ class MoneyLogicalOperationsTest extends TestCase
 
         $this->assertTrue($m1->lessThanOrEqual($m2));
         $this->assertTrue($m1->lessThanOrEqual($m3));
+
+        $this->expectException(MoneyHasDifferentCurrenciesException::class);
+
+        $m4 = money('1000000', 'RUB');
+        $m1->lessThanOrEqual($m4);
     }
 
     /** @test */
@@ -42,6 +57,11 @@ class MoneyLogicalOperationsTest extends TestCase
         $m2 = money('500000');
 
         $this->assertTrue($m1->greaterThan($m2));
+
+        $this->expectException(MoneyHasDifferentCurrenciesException::class);
+
+        $m3 = money('500000', 'RUB');
+        $m1->greaterThan($m3);
     }
 
     /** @test */
@@ -53,6 +73,11 @@ class MoneyLogicalOperationsTest extends TestCase
 
         $this->assertTrue($m1->greaterThanOrEqual($m2));
         $this->assertTrue($m1->greaterThanOrEqual($m3));
+
+        $this->expectException(MoneyHasDifferentCurrenciesException::class);
+
+        $m4 = money('500000', 'RUB');
+        $m1->greaterThanOrEqual($m4);
     }
 
     /** @test */

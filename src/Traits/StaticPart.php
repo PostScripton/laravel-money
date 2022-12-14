@@ -3,7 +3,6 @@
 namespace PostScripton\Money\Traits;
 
 use PostScripton\Money\Currency;
-use PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException;
 use PostScripton\Money\Money;
 use PostScripton\Money\Parser;
 
@@ -46,8 +45,6 @@ trait StaticPart
             return null;
         }
 
-        self::checkAllCurrenciesAreTheSame($list);
-
         $min = $list[0];
 
         for ($i = 1; $i < count($list); $i++) {
@@ -65,8 +62,6 @@ trait StaticPart
         if (empty($list)) {
             return null;
         }
-
-        self::checkAllCurrenciesAreTheSame($list);
 
         $max = $list[0];
 
@@ -91,8 +86,6 @@ trait StaticPart
             return null;
         }
 
-        self::checkAllCurrenciesAreTheSame($list);
-
         return array_reduce(
             array: $list,
             callback: fn(Money $acc, Money $money) => $acc->add($money),
@@ -103,16 +96,5 @@ trait StaticPart
     public static function getDefaultDivisor(): int
     {
         return 10 ** Money::MAX_DECIMALS;
-    }
-
-    private static function checkAllCurrenciesAreTheSame(array $list): void
-    {
-        $main = $list[0];
-
-        foreach ($list as $money) {
-            if (! $main->isSameCurrency($money)) {
-                throw new MoneyHasDifferentCurrenciesException();
-            }
-        }
     }
 }
