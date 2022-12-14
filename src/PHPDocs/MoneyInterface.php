@@ -113,6 +113,13 @@ interface MoneyInterface
     public function isSameCurrency(Money $money): bool;
 
     /**
+     * Checks whether two monetary objects have different currencies
+     * @param Money $money
+     * @return bool
+     */
+    public function isDifferentCurrency(Money $money): bool;
+
+    /**
      * Checks whether the money's number is negative (less than zero)
      * @return bool
      */

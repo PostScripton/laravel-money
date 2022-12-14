@@ -92,6 +92,17 @@ class MoneyLogicalOperationsTest extends TestCase
     }
 
     /** @test */
+    public function moneyHasDifferentCurrencyFromAnotherMoney(): void
+    {
+        $usd1 = money('1000000');
+        $usd2 = money('1000000');
+        $rub = money('1000000', Currency::code('RUB'));
+
+        $this->assertFalse($usd1->isDifferentCurrency($usd2));
+        $this->assertTrue($usd1->isDifferentCurrency($rub));
+    }
+
+    /** @test */
     public function moneyIsPositive(): void
     {
         $money = money('1000000');
