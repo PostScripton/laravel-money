@@ -10,6 +10,10 @@ subtracts another monetary object from the current one.
 
 **Returns**: `Money`
 
+## Exceptions
+
+1. `MoneyHasDifferentCurrenciesException` - is thrown when a `$money` argument has a different currency.
+
 ## Usage
 
 ```php

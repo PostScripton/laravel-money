@@ -10,6 +10,10 @@ rebases the current monetary object on another money's amount.
 
 **Returns**: `Money`
 
+## Exceptions
+
+1. `MoneyHasDifferentCurrenciesException` - is thrown when a `$money` argument has a different currency.
+
 ## Usage
 
 ```php
