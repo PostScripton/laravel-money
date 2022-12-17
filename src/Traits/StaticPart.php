@@ -36,7 +36,7 @@ trait StaticPart
             return $input;
         }
 
-        return substr($input, 0, strpos($input, '.') + config('money.decimals') + 1);
+        return substr($input, 0, strpos($input, '.') + config('money.formatting.decimals') + 1);
     }
 
     public static function min(Money ...$list): ?Money

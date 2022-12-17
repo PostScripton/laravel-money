@@ -113,60 +113,62 @@ return [
         ],
     ],
 
-    /*
-    |--------------------------------------------------------------------------
-    | Thousands separator
-    |--------------------------------------------------------------------------
-    |
-    | This option controls the default separator between thousands
-    | like 1( )000( )000.
-    |
-    */
-    'thousands_separator' => ' ',
+    'formatting' => [
+        /*
+        |--------------------------------------------------------------------------
+        | Thousands separator
+        |--------------------------------------------------------------------------
+        |
+        | This option controls the default separator between thousands
+        | like 1( )000( )000
+        |
+        */
+        'thousands_separator' => ' ',
 
-    /*
-    |--------------------------------------------------------------------------
-    | Decimal separator
-    |--------------------------------------------------------------------------
-    |
-    | This option controls the default separator between decimals
-    | like 123(.)4.
-    |
-    */
-    'decimal_separator' => '.',
+        /*
+        |--------------------------------------------------------------------------
+        | Decimal separator
+        |--------------------------------------------------------------------------
+        |
+        | This option controls the default separator between decimals
+        | like 123(.)4
+        |
+        */
+        'decimal_separator' => '.',
 
-    /*
-    |--------------------------------------------------------------------------
-    | Number of digits after decimal
-    |--------------------------------------------------------------------------
-    |
-    | This option controls the default number of digits after
-    | the decimal separator like 123.(4)
-    |
-    */
-    'decimals' => 1,
+        /*
+        |--------------------------------------------------------------------------
+        | Number of digits after decimal
+        |--------------------------------------------------------------------------
+        |
+        | This option controls the default number of digits after
+        | the decimal separator like 123.(4)
+        |
+        */
+        'decimals' => 1,
 
-    /*
-    |--------------------------------------------------------------------------
-    | Ends with 0
-    |--------------------------------------------------------------------------
-    |
-    | This option controls whether a money string ends with 0 or not.
-    | When true is provided: 123(.0)
-    | When false is provided: 123()
-    |
-    */
-    'ends_with_0' => false,
+        /*
+        |--------------------------------------------------------------------------
+        | Ends with 0
+        |--------------------------------------------------------------------------
+        |
+        | This option controls whether a money string ends with 0 or not.
+        | When true is provided: 123(.0)
+        | When false is provided: 123()
+        |
+        */
+        'ends_with_0' => false,
 
-    /*
-    |--------------------------------------------------------------------------
-    | Space between currency and number
-    |--------------------------------------------------------------------------
-    |
-    | This option controls whether there is a space between currency symbol and number
-    | When true is provided: $( )100
-    | When false is provided: $()100
-    |
-    */
-    'space_between' => true,
+        /*
+        |--------------------------------------------------------------------------
+        | Space between currency and number
+        |--------------------------------------------------------------------------
+        |
+        | This option controls whether there is a space between currency symbol and number
+        | When true is provided: $( )100
+        | When false is provided: $()100
+        |
+        */
+        'space_between' => true,
+    ],
 ];

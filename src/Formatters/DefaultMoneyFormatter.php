@@ -28,11 +28,11 @@ class DefaultMoneyFormatter implements MoneyFormatter
 
     public function __construct()
     {
-        $this->decimals(config('money.decimals'));
-        $this->thousandsSeparator = config('money.thousands_separator');
-        $this->decimalSeparator = config('money.decimal_separator');
-        $this->endsWithZero = config('money.ends_with_0');
-        $this->spaceBetween = config('money.space_between');
+        $this->decimals(config('money.formatting.decimals'));
+        $this->thousandsSeparator = config('money.formatting.thousands_separator');
+        $this->decimalSeparator = config('money.formatting.decimal_separator');
+        $this->endsWithZero = config('money.formatting.ends_with_0');
+        $this->spaceBetween = config('money.formatting.space_between');
 
         $this->useCurrency = true;
     }
