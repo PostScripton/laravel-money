@@ -19,7 +19,7 @@
 
 <div align="center" style="margin-top: 1rem">
 <a href="https://github.com/PostScripton/laravel-money/actions/workflows/ci.yml?query=branch%3A4.x" target="_blank"> 
-    <img src="https://img.shields.io/github/workflow/status/PostScripton/laravel-money/Continuous%20Integration/4.x?logo=github&style=for-the-badge" alt="GitHub Workflow Status (branch)"> 
+    <img src="https://img.shields.io/github/actions/workflow/status/PostScripton/laravel-money/ci.yml?branch=4.x&logo=github&style=for-the-badge" alt="GitHub Workflow Status (branch)"> 
 </a>
 <a href="https://codecov.io/gh/PostScripton/laravel-money" target="_blank"> 
     <img src="https://img.shields.io/codecov/c/gh/PostScripton/laravel-money/4.x?token=V1ACJR1NM5&logo=codecov&style=for-the-badge" alt="Coverage percent"/> 
