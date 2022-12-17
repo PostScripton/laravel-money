@@ -23,11 +23,11 @@ class MoneyFormattingTest extends TestCase
     public function testConfigSettingsAreUsedAsDefaultForFormatting(): void
     {
         Config::set([
-            'money.thousands_separator' => '',
-            'money.decimal_separator' => ',',
-            'money.decimals' => 2,
-            'money.ends_with_0' => true,
-            'money.space_between' => false,
+            'money.formatting.thousands_separator' => '',
+            'money.formatting.decimal_separator' => ',',
+            'money.formatting.decimals' => 2,
+            'money.formatting.ends_with_0' => true,
+            'money.formatting.space_between' => false,
         ]);
         Money::setFormatter(new DefaultMoneyFormatter());
         $money = money_parse('1234.5');
@@ -38,11 +38,11 @@ class MoneyFormattingTest extends TestCase
     public function testToAmountOnlyString(): void
     {
         Config::set([
-            'money.thousands_separator' => '.',
-            'money.decimal_separator' => ',',
-            'money.decimals' => 2,
-            'money.ends_with_0' => true,
-            'money.space_between' => false,
+            'money.formatting.thousands_separator' => '.',
+            'money.formatting.decimal_separator' => ',',
+            'money.formatting.decimals' => 2,
+            'money.formatting.ends_with_0' => true,
+            'money.formatting.space_between' => false,
         ]);
         $money = money_parse('1234.5678');
 
@@ -52,11 +52,11 @@ class MoneyFormattingTest extends TestCase
     public function testToDecimalString(): void
     {
         Config::set([
-            'money.thousands_separator' => '.',
-            'money.decimal_separator' => ',',
-            'money.decimals' => 2,
-            'money.ends_with_0' => true,
-            'money.space_between' => false,
+            'money.formatting.thousands_separator' => '.',
+            'money.formatting.decimal_separator' => ',',
+            'money.formatting.decimals' => 2,
+            'money.formatting.ends_with_0' => true,
+            'money.formatting.space_between' => false,
         ]);
         $money = money_parse('1234.5678');
 
@@ -70,11 +70,11 @@ class MoneyFormattingTest extends TestCase
     public function testToFinanceString(): void
     {
         Config::set([
-            'money.thousands_separator' => '.',
-            'money.decimal_separator' => ',',
-            'money.decimals' => 2,
-            'money.ends_with_0' => true,
-            'money.space_between' => false,
+            'money.formatting.thousands_separator' => '.',
+            'money.formatting.decimal_separator' => ',',
+            'money.formatting.decimals' => 2,
+            'money.formatting.ends_with_0' => true,
+            'money.formatting.space_between' => false,
         ]);
 
         $usd = money_parse('1234.5678');
@@ -97,11 +97,11 @@ class MoneyFormattingTest extends TestCase
     public function testToNegativeFinanceString(): void
     {
         Config::set([
-            'money.thousands_separator' => '.',
-            'money.decimal_separator' => ',',
-            'money.decimals' => 2,
-            'money.ends_with_0' => true,
-            'money.space_between' => false,
+            'money.formatting.thousands_separator' => '.',
+            'money.formatting.decimal_separator' => ',',
+            'money.formatting.decimals' => 2,
+            'money.formatting.ends_with_0' => true,
+            'money.formatting.space_between' => false,
         ]);
 
         $usd = money_parse('-1234.5678');
@@ -124,11 +124,11 @@ class MoneyFormattingTest extends TestCase
     public function testSettingUpFormatter(): void
     {
         Config::set([
-            'money.thousands_separator' => '.',
-            'money.decimal_separator' => ',',
-            'money.decimals' => 2,
-            'money.ends_with_0' => true,
-            'money.space_between' => false,
+            'money.formatting.thousands_separator' => '.',
+            'money.formatting.decimal_separator' => ',',
+            'money.formatting.decimals' => 2,
+            'money.formatting.ends_with_0' => true,
+            'money.formatting.space_between' => false,
         ]);
         $money = money_parse('1234.56');
         $formatter = (new DefaultMoneyFormatter())
