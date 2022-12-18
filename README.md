@@ -37,7 +37,8 @@ With all being said, you can calculate money, output it as a string, convert it 
 
 ## Requirements
 - PHP: `^8.1`
-- `guzzlehttp/guzzle`: `^7.0`
+- `guzzlehttp/guzzle`: `^7.5`
+- `bcmath` extension
 
 ## Installation
 
