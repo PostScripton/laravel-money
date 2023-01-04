@@ -3,6 +3,7 @@
 namespace PostScripton\Money;
 
 use Exception;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Enum;
 use PostScripton\Money\Calculators\BcMathCalculator;
@@ -43,6 +44,10 @@ class MoneyServiceProvider extends PackageServiceProvider
         Money::setDefaultCurrency(currency(config('money.default_currency', 'USD')));
 
         Validator::extend(MoneyRule::RULE_NAME, (MoneyRule::class . '@passes'), app(MoneyRule::class)->message());
+
+        Blueprint::macro('money', function (string $column = 'price') {
+            return $this->bigInteger($column)->nullable();
+        });
     }
 
     protected function registerService(): void
