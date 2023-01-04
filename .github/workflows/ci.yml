@@ -1,7 +1,8 @@
 name: Continuous Integration
 
 on:
-  push
+  - push
+  - pull_request_target
 
 jobs:
   code-style:
