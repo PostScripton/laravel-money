@@ -12,11 +12,11 @@ class MoneyCastTest extends TestCase
     public function testCast(): void
     {
         $product1 = $this->getTestingModel();
-        $product1->price = money('12345000');
+        $product1->price = money(12345000);
         $product2 = $this->getTestingModel();
-        $product2->price = '12345000';
+        $product2->price = '1 234.5';
         $product3 = $this->getTestingModel();
-        $product3->price = 12345000;
+        $product3->price = money('12345000');
         $product4 = $this->getTestingModel();
         $product4->price = null;
         $expectedMoneyString = '$ 1 234.5';

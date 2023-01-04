@@ -24,7 +24,7 @@ class MoneyCast implements CastsAttributes
 
         $isMonetary = gettype($value) === 'object' && $value instanceof Money;
         if (! $isMonetary) {
-            $value = money($value);
+            $value = money_parse($value);
         }
 
         return $value->getAmount();
