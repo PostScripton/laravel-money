@@ -3,6 +3,7 @@
 namespace PostScripton\Money;
 
 use Exception;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Enum;
 use InvalidArgumentException;
@@ -53,6 +54,13 @@ class MoneyServiceProvider extends PackageServiceProvider
         Currency::setDefault(currency(config('money.default_currency', 'USD')));
 
         Validator::extend(MoneyRule::RULE_NAME, (MoneyRule::class . '@passes'), app(MoneyRule::class)->message());
+
+        Blueprint::macro('money', function (string $column = 'amount') {
+            return $this->bigInteger($column)->nullable();
+        });
+        Blueprint::macro('unsignedMoney', function (string $column = 'amount') {
+            return $this->unsignedBigInteger($column)->nullable();
+        });
     }
 
     protected function registerRateExchanger(): void

@@ -9,7 +9,7 @@ The integer type is **the only choice** because of database performance, precisi
 ```php
 Schema::create('products', function (Blueprint $table) {
     $table->id();
-    $table->bigInteger('price')->default(0);
+    $table->money('price')->default(0);
     $table->timestamps();
 });
 ```
@@ -21,7 +21,7 @@ If you know that you'll be storing a giant **positive** numbers, you can take a 
 Schema::create('payments', function (Blueprint $table) {
     $table->id();
     $table->foreignId('user_id')->constrained();
-    $table->unsignedBigInteger('amount');
+    $table->unsignedMoney('amount');
     $table->enum('transaction_type', ['debit', 'credit']);
     $table->enum('type', ['invoice', 'fee', 'order', 'admin']);
 });
