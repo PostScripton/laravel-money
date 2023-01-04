@@ -45,7 +45,7 @@ class MoneyServiceProvider extends PackageServiceProvider
 
         Validator::extend(MoneyRule::RULE_NAME, (MoneyRule::class . '@passes'), app(MoneyRule::class)->message());
 
-        Blueprint::macro('money', function (string $column = 'price') {
+        Blueprint::macro('money' , function (string $column = 'price') {
             return $this->bigInteger($column)->nullable();
         });
     }
