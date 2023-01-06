@@ -2,7 +2,7 @@
 
 ## Migrations
 
-Integer is preferred because of database performance, precision and so on. The database makes more effort to work with DECIMAL, FLOAT, and DOUBLE types, bear in mind they may lose precision as well.
+The integer type is **the only choice** because of database performance, precision and so on. The database makes more effort to work with DECIMAL, FLOAT, and DOUBLE types, bear in mind they may lose precision as well.
 
 > Using floating point numbers to represent monetary amounts is almost a crime © Robert Martin
 
@@ -11,6 +11,19 @@ Schema::create('products', function (Blueprint $table) {
     $table->id();
     $table->bigInteger('price')->default(0);
     $table->timestamps();
+});
+```
+
+Big Integer is preferred because its size is enormous: 8 bytes which is 2^64-1 in MySQL and PostgreSQL.
+If you know that you'll be storing a giant **positive** numbers, you can take a look at Unsigned Bit Integer. If you need to store negative ones as well, you can specify an additional column to represent a type `debit` (positive) / `credit` (negative).
+
+```php
+Schema::create('payments', function (Blueprint $table) {
+    $table->id();
+    $table->foreignId('user_id')->constrained();
+    $table->unsignedBigInteger('amount');
+    $table->enum('transaction_type', ['debit', 'credit']);
+    $table->enum('type', ['invoice', 'fee', 'order', 'admin']);
 });
 ```
 
