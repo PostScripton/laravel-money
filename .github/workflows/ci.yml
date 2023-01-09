@@ -1,8 +1,10 @@
 name: Continuous Integration
 
 on:
-  - push
-  - pull_request_target
+  push:
+    branches: [ "4.x" ]
+  pull_request:
+    branches: [ "4.x" ]
 
 jobs:
   code-style:
