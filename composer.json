@@ -1,6 +1,6 @@
 {
     "name": "postscripton/laravel-money",
-    "description": "A convenient way to convert numbers from DB or inputs into money strings for humans",
+    "description": "Laravel Money is an open source package that provides you a convinient way to work with numbers from database with high precision and use them as monetary objects. With this package, you can easily operate, compare, format, and even convert monetary objects to other currencies using external API providers.",
     "type": "library",
     "license": "MIT",
     "authors": [
