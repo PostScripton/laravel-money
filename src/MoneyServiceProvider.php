@@ -5,6 +5,7 @@ namespace PostScripton\Money;
 use Exception;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Enum;
+use InvalidArgumentException;
 use PostScripton\Money\Cache\MoneyCache;
 use PostScripton\Money\Cache\RateExchangerCache;
 use PostScripton\Money\Calculators\BcMathCalculator;
@@ -13,7 +14,6 @@ use PostScripton\Money\Clients\RateExchangers\RateExchanger;
 use PostScripton\Money\Enums\CurrencyList;
 use PostScripton\Money\Enums\CurrencyPosition;
 use PostScripton\Money\Exceptions\CustomCurrencyTakenCodesException;
-use PostScripton\Money\Exceptions\CustomCurrencyValidationException;
 use PostScripton\Money\Exceptions\RateExchangerException;
 use PostScripton\Money\Formatters\DefaultMoneyFormatter;
 use PostScripton\Money\Rules\Money as MoneyRule;
@@ -136,7 +136,7 @@ class MoneyServiceProvider extends PackageServiceProvider
         ]);
 
         if ($validator->fails()) {
-            throw new CustomCurrencyValidationException($validator->errors()->first());
+            throw new InvalidArgumentException($validator->errors()->first(), 422);
         }
 
         $this->customCurrenciesShouldNotDuplicate();
