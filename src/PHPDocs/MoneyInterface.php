@@ -243,13 +243,6 @@ interface MoneyInterface
     public static function setFormatter(MoneyFormatter $formatter): void;
 
     /**
-     * Sets a default currency that will be used for creating new monetary objects <p>
-     * By default, is set by the value from the config file </p>
-     * @param Currency $currency
-     */
-    public static function setDefaultCurrency(Currency $currency): void;
-
-    /**
      * Creates a monetary object
      * @param string $amount <p>
      * Raw amount: 12345 stands for 1.2345 </p>
@@ -280,10 +273,4 @@ interface MoneyInterface
      * @return int
      */
     public static function getDefaultDivisor(): int;
-
-    /**
-     * Returns the default currency that is set in the config file
-     * @return Currency
-     */
-    public static function getDefaultCurrency(): Currency;
 }

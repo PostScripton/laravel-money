@@ -71,6 +71,7 @@ After all, the config file at `config/money.php` should be modified for your own
     - [🚨 Validation rule](/docs/01_usage/validation_rule.md)
 3. [🎨️ Formatting](/docs/02_formatting/README.md)
 4. [💲 Currencies](/docs/03_currencies/README.md)
+    - [Default currency](/docs/03_currencies/default_currency.md)
     - [Information](/docs/03_currencies/information.md)
     - [Position](/docs/03_currencies/position.md)
     - [Display](/docs/03_currencies/display.md)
@@ -79,9 +80,7 @@ After all, the config file at `config/money.php` should be modified for your own
 5. [💵 Money](/docs/04_money/README.md)
     - [💲 Currency](/docs/04_money/currency.md)
     - Static methods
-        - [`Money::getDefaultCurrency()`](/docs/04_money/static/getDefaultCurrency.md)
-        - [`Money::setDefaultCurrency()`](/docs/04_money/static/setFormatter.md)
-        - [`Money::setFormatter()`](/docs/04_money/static/setDefaultCurrency.md)
+        - [`Money::setFormatter()`](/docs/04_money/static/setFormatter.md)
         - [`Money::of()`](/docs/04_money/static/of.md)
         - [`Money::parse()`](/docs/04_money/static/parse.md)
         - [`Money::correctInput()`](/docs/04_money/static/correctInput.md)
