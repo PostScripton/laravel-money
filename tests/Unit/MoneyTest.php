@@ -147,7 +147,7 @@ class MoneyTest extends TestCase
 
     public function testFloor(): void
     {
-        $money = new Money('102500');
+        $money = money('102500');
 
         $this->assertEquals('102500', $money->getAmount());
         $this->assertEquals('$ 10.3', $money->toString());
@@ -160,7 +160,7 @@ class MoneyTest extends TestCase
 
     public function testNegativeFloor(): void
     {
-        $money = new Money('-102500');
+        $money = money('-102500');
 
         $this->assertEquals('-102500', $money->getAmount());
         $this->assertEquals('$ -10.3', $money->toString());
@@ -173,7 +173,7 @@ class MoneyTest extends TestCase
 
     public function testCeil(): void
     {
-        $money = new Money('102500');
+        $money = money('102500');
 
         $this->assertEquals('102500', $money->getAmount());
         $this->assertEquals('$ 10.3', $money->toString());
@@ -186,7 +186,7 @@ class MoneyTest extends TestCase
 
     public function testNegativeCeil(): void
     {
-        $money = new Money('-102500');
+        $money = money('-102500');
 
         $this->assertEquals('-102500', $money->getAmount());
         $this->assertEquals('$ -10.3', $money->toString());
@@ -195,6 +195,12 @@ class MoneyTest extends TestCase
 
         $this->assertEquals('-100000', $money->getAmount());
         $this->assertEquals('$ -10', $money->toString());
+    }
+
+    public function testFractionPartOfAmountPassedToConstructorIsCut(): void
+    {
+        $this->assertEquals('102500', money('102500.1234')->getAmount());
+        $this->assertEquals('-102500', money('-102500.1234')->getAmount());
     }
 
     /** @test */
