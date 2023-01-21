@@ -275,7 +275,7 @@ class MoneyTest extends TestCase
     }
 
     /** @dataProvider differenceDataProvider */
-    public function difference(string $first, string $second, string $result): void
+    public function testDifference(string $first, string $second, string $result): void
     {
         $m1 = money_parse($first);
         $m2 = money_parse($second);
