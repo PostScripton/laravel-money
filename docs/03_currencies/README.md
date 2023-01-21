@@ -39,11 +39,12 @@ $usd->getDisplay(); // CurrencyDisplay::Code
 
 You can also get or change some data from Currency object:
 
-1. [Information](/docs/03_currencies/information.md)
-2. [Position](/docs/03_currencies/position.md)
-3. [Display](/docs/03_currencies/display.md)
-4. [Preferred symbol](/docs/03_currencies/preferred_symbol.md)
-5. [Collection methods](/docs/03_currencies/collection_methods.md)
+1. [Default currency](/docs/03_currencies/default_currency.md)
+2. [Information](/docs/03_currencies/information.md)
+3. [Position](/docs/03_currencies/position.md)
+4. [Display](/docs/03_currencies/display.md)
+5. [Preferred symbol](/docs/03_currencies/preferred_symbol.md)
+6. [Collection methods](/docs/03_currencies/collection_methods.md)
 
 ---
 

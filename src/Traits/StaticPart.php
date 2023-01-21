@@ -8,21 +8,9 @@ use PostScripton\Money\Parser;
 
 trait StaticPart
 {
-    private static Currency $defaultCurrency;
-
-    public static function setDefaultCurrency(Currency $currency): void
-    {
-        self::$defaultCurrency = $currency;
-    }
-
     public static function parse(string $money, Currency|string|null $currency = null): Money
     {
         return Parser::parse($money, $currency);
-    }
-
-    public static function getDefaultCurrency(): Currency
-    {
-        return self::$defaultCurrency;
     }
 
     public static function of(string $amount, Currency|string|null $currency = null): Money

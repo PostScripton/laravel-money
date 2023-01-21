@@ -19,6 +19,8 @@ class Currency
     private CurrencyDisplay $display;
     private ?int $preferredSymbol = null;
 
+    private static self $defaultCurrency;
+
     public function __construct(array $currency)
     {
         if (
@@ -40,7 +42,7 @@ class Currency
         $this->display = CurrencyDisplay::Symbol;
     }
 
-    public static function code(string $code): ?Currency
+    public static function code(string $code): ?self
     {
         if (is_numeric($code)) {
             $currency = Currencies::get()
@@ -62,7 +64,7 @@ class Currency
         return $currency;
     }
 
-    public static function get(Currency|string|null $currency): ?Currency
+    public static function get(Currency|string|null $currency): ?self
     {
         if (is_string($currency)) {
             return self::code($currency);
@@ -71,9 +73,14 @@ class Currency
         return $currency;
     }
 
-    public static function getOrDefault(Currency|string|null $currency): Currency
+    public static function getOrDefault(Currency|string|null $currency): self
     {
-        return self::get($currency) ?? Money::getDefaultCurrency();
+        return self::get($currency) ?? self::getDefault();
+    }
+
+    public static function getDefault(): self
+    {
+        return self::$defaultCurrency;
     }
 
     public function getFullName(): string
@@ -171,5 +178,10 @@ class Currency
             CurrencyDisplay::Symbol => $this->getSymbol(),
             CurrencyDisplay::Code => $this->getCode(),
         };
+    }
+
+    public static function setDefault(Currency $currency): void
+    {
+        self::$defaultCurrency = $currency;
     }
 }

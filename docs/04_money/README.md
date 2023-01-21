@@ -5,9 +5,7 @@ There are *static* methods as well as *object* ones.
 
 1. [💲 Currency](/docs/04_money/currency.md)
 2. Static methods
-   - [`Money::getDefaultCurrency()`](/docs/04_money/static/getDefaultCurrency.md)
-   - [`Money::setDefaultCurrency()`](/docs/04_money/static/setFormatter.md)
-   - [`Money::setFormatter()`](/docs/04_money/static/setDefaultCurrency.md)
+   - [`Money::setFormatter()`](/docs/04_money/static/setFormatter.md)
    - [`Money::of()`](/docs/04_money/static/of.md)
    - [`Money::parse()`](/docs/04_money/static/parse.md)
    - [`Money::correctInput()`](/docs/04_money/static/correctInput.md)
