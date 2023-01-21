@@ -30,7 +30,9 @@ class Money implements MoneyInterface
             throw new InvalidArgumentException(sprintf('The amount must be a numeric-string, [%s] given', $amount));
         }
 
-        $this->amount = app(Calculator::class)->floor($amount);
+        $this->amount = app(Calculator::class)->compare($amount, '0') >= 0
+            ? app(Calculator::class)->floor($amount)
+            : app(Calculator::class)->ceil($amount);
 
         $this->setCurrency(Currency::getOrDefault($currency));
     }
