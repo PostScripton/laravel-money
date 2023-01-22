@@ -127,29 +127,4 @@ class MoneyFilteringTest extends TestCase
     {
         $this->assertNull(Money::sum());
     }
-
-    /**
-     * @test
-     * @dataProvider correctInputDataProvider
-     */
-    public function correctInput(string $input, string $output): void
-    {
-        $result = Money::correctInput($input);
-
-        $this->assertEquals($output, $result);
-    }
-
-    protected function correctInputDataProvider(): array
-    {
-        return [
-            [
-                'input' => '1234.567890',
-                'output' => '1234.5',
-            ],
-            [
-                'input' => '1234',
-                'output' => '1234',
-            ],
-        ];
-    }
 }

@@ -260,15 +260,6 @@ interface MoneyInterface
     public static function parse(string $money, Currency|string|null $currency = null): Money;
 
     /**
-     * Corrects input &lt;input type="number" /&gt; using default settings
-     * @param string $input <p>
-     * Input string: "1234.567890" </p>
-     * @return string <p>
-     * Corrected string: "1234.5" </p>
-     */
-    public static function correctInput(string $input): string;
-
-    /**
      * Returns the default divisor (10^4)
      * @return int
      */

@@ -18,15 +18,6 @@ trait StaticPart
         return money($amount, $currency);
     }
 
-    public static function correctInput(string $input): string
-    {
-        if (! str_contains($input, '.')) {
-            return $input;
-        }
-
-        return substr($input, 0, strpos($input, '.') + config('money.formatting.decimals') + 1);
-    }
-
     public static function min(Money ...$list): ?Money
     {
         $collection = collect($list);
