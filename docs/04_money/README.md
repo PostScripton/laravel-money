@@ -8,7 +8,6 @@ There are *static* methods as well as *object* ones.
    - [`Money::setFormatter()`](/docs/04_money/static/setFormatter.md)
    - [`Money::of()`](/docs/04_money/static/of.md)
    - [`Money::parse()`](/docs/04_money/static/parse.md)
-   - [`Money::correctInput()`](/docs/04_money/static/correctInput.md)
 3. Object methods
     - Getters
         - [`getAmount()`](/docs/04_money/object/getAmount.md)
