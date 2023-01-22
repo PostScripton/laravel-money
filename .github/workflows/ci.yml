@@ -10,7 +10,7 @@ jobs:
   code-style:
     strategy:
       matrix:
-        version: [ 8.1 ]
+        version: [ 8.1, 8.2 ]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -40,7 +40,7 @@ jobs:
   tests:
     strategy:
       matrix:
-        version: [ 8.1 ]
+        version: [ 8.1, 8.1 ]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -70,6 +70,7 @@ jobs:
         run: composer app:test
 
       - name: Upload coverage on Codecov
+        if: ${{ matrix.version == '8.2' }}
         uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
