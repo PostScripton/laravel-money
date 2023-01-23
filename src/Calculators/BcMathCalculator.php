@@ -31,7 +31,7 @@ class BcMathCalculator implements Calculator
 
     public function multiply(string $amount, string $multiplier): string
     {
-        return $this->trimZeros(bcmul($amount, $multiplier, self::SCALE));
+        return $this->trimZeros(bcmul($amount, $multiplier, static::SCALE));
     }
 
     public function divide(string $amount, string $divisor): string
@@ -40,7 +40,7 @@ class BcMathCalculator implements Calculator
             throw new InvalidArgumentException('Division by zero');
         }
 
-        return $this->trimZeros(bcdiv($amount, $divisor, self::SCALE));
+        return $this->trimZeros(bcdiv($amount, $divisor, static::SCALE));
     }
 
     public function ceil(string $amount): string
