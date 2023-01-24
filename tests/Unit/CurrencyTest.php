@@ -14,19 +14,15 @@ class CurrencyTest extends TestCase
 {
     use InteractsWithConfig;
 
-    /**
-     * @test
-     * @dataProvider invalidConstructorsDataProvider
-     */
-    public function invalidConstructorThrowsAnExceptions(array $currencyData): void
+    /** @dataProvider invalidConstructorsDataProvider */
+    public function testInvalidConstructorThrowsAnExceptions(array $currencyData): void
     {
         $this->expectException(CurrencyHasWrongConstructorException::class);
 
         new Currency($currencyData);
     }
 
-    /** @test */
-    public function checkingCurrencyPropsByCodeTest(): void
+    public function testCheckingCurrencyPropsByCodeTest(): void
     {
         $cur = Currency::code('RUB');
 
@@ -38,24 +34,21 @@ class CurrencyTest extends TestCase
         $this->assertEquals(CurrencyPosition::End, $cur->getPosition());
     }
 
-    /** @test */
-    public function noCurrencyByISOCodeTest(): void
+    public function testNoCurrencyByISOCodeTest(): void
     {
         $this->expectException(CurrencyDoesNotExistException::class);
 
         Currency::code('NO_SUCH_CODE');
     }
 
-    /** @test */
-    public function noCurrencyByNumCodeTest(): void
+    public function testNoCurrencyByNumCodeTest(): void
     {
         $this->expectException(CurrencyDoesNotExistException::class);
 
         Currency::code('000');
     }
 
-    /** @test */
-    public function gettingSpecificCurrencySymbolDoesNotMatterBecauseThereIsOnlyOne(): void
+    public function testGettingSpecificCurrencySymbolDoesNotMatterBecauseThereIsOnlyOne(): void
     {
         $randomIndex = 1234;
         $currencyWithOneSymbol = currency('USD');
@@ -63,16 +56,14 @@ class CurrencyTest extends TestCase
         $this->assertEquals('$', $currencyWithOneSymbol->getSymbol($randomIndex));
     }
 
-    /** @test */
-    public function gettingFirstCurrencySymbolOutOfSeveralOnesByNotSpecifyingIndex(): void
+    public function testGettingFirstCurrencySymbolOutOfSeveralOnesByNotSpecifyingIndex(): void
     {
         $currencyWithSeveralSymbols = currency('JPY');
 
         $this->assertEquals('¥', $currencyWithSeveralSymbols->getSymbol());
     }
 
-    /** @test */
-    public function gettingSpecificCurrencySymbolOutOfSeveralOnes(): void
+    public function testGettingSpecificCurrencySymbolOutOfSeveralOnes(): void
     {
         $currencyWithSeveralSymbols = currency('JPY');
         $lastIndex = count($currencyWithSeveralSymbols->getSymbols()) - 1;
@@ -80,8 +71,7 @@ class CurrencyTest extends TestCase
         $this->assertEquals('円', $currencyWithSeveralSymbols->getSymbol($lastIndex));
     }
 
-    /** @test */
-    public function gettingRandomCurrencySymbolOutOfSeveralOnesThrowsAnException(): void
+    public function testGettingRandomCurrencySymbolOutOfSeveralOnesThrowsAnException(): void
     {
         $this->expectException(NoSuchCurrencySymbolException::class);
 
@@ -91,8 +81,7 @@ class CurrencyTest extends TestCase
         $currencyWithSeveralSymbols->getSymbol($outOfBoundsIndex);
     }
 
-    /** @test */
-    public function nothingHappensOnSettingPreferredCurrencySymbolWhenThereIsOnlyOne(): void
+    public function testNothingHappensOnSettingPreferredCurrencySymbolWhenThereIsOnlyOne(): void
     {
         $currencyWithOneSymbol = currency('USD');
         $randomIndex = 1234;
@@ -102,8 +91,7 @@ class CurrencyTest extends TestCase
         $this->assertEquals('$', $currencyWithOneSymbol->getSymbol());
     }
 
-    /** @test */
-    public function gettingPreferredCurrencySymbolOutOfSeveralOnes(): void
+    public function testGettingPreferredCurrencySymbolOutOfSeveralOnes(): void
     {
         $currencyWithSeveralSymbols = currency('JPY');
 
@@ -112,8 +100,7 @@ class CurrencyTest extends TestCase
         $this->assertEquals('円', $currencyWithSeveralSymbols->getSymbol());
     }
 
-    /** @test */
-    public function gettingRandomPreferredCurrencySymbolOutOfSeveralOnesThrowsAnException(): void
+    public function testGettingRandomPreferredCurrencySymbolOutOfSeveralOnesThrowsAnException(): void
     {
         $this->expectException(NoSuchCurrencySymbolException::class);
 
@@ -123,8 +110,7 @@ class CurrencyTest extends TestCase
         $currencyWithSeveralSymbols->setPreferredSymbol($outOfBoundsIndex);
     }
 
-    /** @test */
-    public function resettingPreferredSymbol()
+    public function testResettingPreferredSymbol()
     {
         $currencyWithSeveralSymbols = currency('JPY');
         $this->assertEquals('¥', $currencyWithSeveralSymbols->getSymbol());
@@ -136,8 +122,7 @@ class CurrencyTest extends TestCase
         $this->assertEquals('¥', $currencyWithSeveralSymbols->getSymbol());
     }
 
-    /** @test */
-    public function gettingAnArrayOfSymbols(): void
+    public function testGettingAnArrayOfSymbols(): void
     {
         $currencyWithOneSymbol = currency('USD');
         $currencyWithSeveralSymbols = currency('JPY');

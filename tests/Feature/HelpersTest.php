@@ -8,8 +8,7 @@ use PostScripton\Money\Tests\TestCase;
 
 class HelpersTest extends TestCase
 {
-    /** @test */
-    public function createMoneyWithMoneyHelper(): void
+    public function testCreateMoneyWithMoneyHelper(): void
     {
         $money = money('12345000');
 
@@ -17,8 +16,7 @@ class HelpersTest extends TestCase
         $this->assertEquals('12345000', $money->getAmount());
     }
 
-    /** @test */
-    public function createMoneyWithMoneyAndCurrencyHelpers(): void
+    public function testCreateMoneyWithMoneyAndCurrencyHelpers(): void
     {
         $money = money('12345000', currency('RUB'));
 
@@ -27,8 +25,7 @@ class HelpersTest extends TestCase
         $this->assertEquals('RUB', $money->getCurrency()->getCode());
     }
 
-    /** @test */
-    public function modifyCurrencyBeforeCreatingMoney(): void
+    public function testModifyCurrencyBeforeCreatingMoney(): void
     {
         $money = money('12345000', currency('usd')->setPosition(CurrencyPosition::End));
 

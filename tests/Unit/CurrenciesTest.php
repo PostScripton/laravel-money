@@ -16,8 +16,7 @@ class CurrenciesTest extends TestCase
 {
     use InteractsWithConfig;
 
-    /** @test */
-    public function getAllCurrencies(): void
+    public function testGetAllCurrencies(): void
     {
         Config::set(['money.currency_list' => CurrencyList::All]);
 
@@ -28,8 +27,7 @@ class CurrenciesTest extends TestCase
         $this->assertCount(154, $collection);
     }
 
-    /** @test */
-    public function getPopularCurrencies(): void
+    public function testGetPopularCurrencies(): void
     {
         Config::set(['money.currency_list' => CurrencyList::Popular]);
 
@@ -40,8 +38,7 @@ class CurrenciesTest extends TestCase
         $this->assertCount(35, $collection);
     }
 
-    /** @test */
-    public function getCustomCurrencies(): void
+    public function testGetCustomCurrencies(): void
     {
         Config::set(['money.currency_list' => CurrencyList::Custom]);
         Config::set([
@@ -64,8 +61,7 @@ class CurrenciesTest extends TestCase
         $this->assertCount(1, $collection);
     }
 
-    /** @test */
-    public function getEmptyCollectionOnCustomCurrencies(): void
+    public function testGetEmptyCollectionOnCustomCurrencies(): void
     {
         Config::set(['money.currency_list' => CurrencyList::Custom]);
         Config::set(['money.custom_currencies' => []]);
@@ -77,8 +73,7 @@ class CurrenciesTest extends TestCase
         $this->assertCount(0, $collection);
     }
 
-    /** @test */
-    public function getSpecificCurrenciesFromCurrencyList(): void
+    public function testGetSpecificCurrenciesFromCurrencyList(): void
     {
         $desiredCurrencies = ['840', 'EUR', 'RUB', '999'];
         Config::set(['money.currency_list' => $desiredCurrencies]);
@@ -108,8 +103,7 @@ class CurrenciesTest extends TestCase
         }
     }
 
-    /** @test */
-    public function noSpecificCurrenciesInCurrencyList(): void
+    public function testNoSpecificCurrenciesInCurrencyList(): void
     {
         $desiredCurrencies = [];
         Config::set(['money.currency_list' => $desiredCurrencies]);
@@ -121,8 +115,7 @@ class CurrenciesTest extends TestCase
         $this->assertCount(0, $collection);
     }
 
-    /** @test */
-    public function customCurrenciesOverrideDefaultOnes(): void
+    public function testCustomCurrenciesOverrideDefaultOnes(): void
     {
         $expectedFullName = 'My testing dollar';
         $expectedName = 'dollar';
@@ -150,8 +143,7 @@ class CurrenciesTest extends TestCase
         $this->assertEquals($expectedPosition, $currency->getPosition());
     }
 
-    /** @test */
-    public function getCodesArray(): void
+    public function testGetCodesArray(): void
     {
         $expectedCurrencies = ['USD', 'EUR', 'RUB', 'TST'];
         Config::set(['money.currency_list' => $expectedCurrencies]);
@@ -173,8 +165,7 @@ class CurrenciesTest extends TestCase
         $this->assertEquals($expectedCurrencies, $codes);
     }
 
-    /** @test */
-    public function getAllTheCurrenciesAsArray(): void
+    public function testGetAllTheCurrenciesAsArray(): void
     {
         $actual = require __DIR__ . '/../../src/Lists/popular_currencies.php';
         $allCurrencies = Currencies::getCodesArray();
@@ -186,8 +177,7 @@ class CurrenciesTest extends TestCase
         );
     }
 
-    /** @test */
-    public function same(): void
+    public function testSame(): void
     {
         // Always true
         $this->assertTrue(Currencies::same());
@@ -208,8 +198,7 @@ class CurrenciesTest extends TestCase
         ));
     }
 
-    /** @test */
-    public function sameWithDifferentTypeArguments()
+    public function testSameWithDifferentTypeArguments()
     {
         $this->assertTrue(Currencies::same('USD'));
         $this->assertTrue(Currencies::same('USD', 'USD'));
@@ -217,8 +206,7 @@ class CurrenciesTest extends TestCase
         $this->assertFalse(Currencies::same('USD', 'RUB', currency('USD')));
     }
 
-    /** @test */
-    public function sameThrowsAnExceptionOnPassingNonSense()
+    public function testSameThrowsAnExceptionOnPassingNonSense()
     {
         $this->expectException(CurrencyDoesNotExistException::class);
 

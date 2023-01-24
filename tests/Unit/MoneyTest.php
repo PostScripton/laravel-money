@@ -10,8 +10,7 @@ use PostScripton\Money\Tests\TestCase;
 
 class MoneyTest extends TestCase
 {
-    /** @test */
-    public function allTheWaysToCreateMoney(): void
+    public function testAllTheWaysToCreateMoney(): void
     {
         $money1 = new Money('12345000');
         $money2 = Money::of('12345000');
@@ -58,8 +57,7 @@ class MoneyTest extends TestCase
         new Money($amount);
     }
 
-    /** @test */
-    public function baseWaysOfFormattingMoney(): void
+    public function testBaseWaysOfFormattingMoney(): void
     {
         $usd = Currency::code('USD');
         $rub = Currency::code('RUB');
@@ -75,8 +73,7 @@ class MoneyTest extends TestCase
         $this->assertEquals('1 234.5 ₽', money('12345000', $rub)->toString());
     }
 
-    /** @test */
-    public function numbersCanBeFetchedOutOfTheMoney(): void
+    public function testNumbersCanBeFetchedOutOfTheMoney(): void
     {
         $money = Money::of('12345000');
 
@@ -84,8 +81,7 @@ class MoneyTest extends TestCase
         $this->assertEquals('12345000', $money->getAmount());
     }
 
-    /** @test */
-    public function allCastsToString(): void
+    public function testAllCastsToString(): void
     {
         $money = Money::of('1234000');
 
@@ -203,8 +199,7 @@ class MoneyTest extends TestCase
         $this->assertEquals('-102500', money('-102500.1234')->getAmount());
     }
 
-    /** @test */
-    public function rebaseMoney(): void
+    public function testRebaseMoney(): void
     {
         $m1 = money_parse('100');
         $m2 = money_parse('250');
@@ -216,8 +211,7 @@ class MoneyTest extends TestCase
         $this->assertEquals('$ 250', $m1->toString());
     }
 
-    /** @test */
-    public function addingMoneyWithDifferentCurrencyThrowsException(): void
+    public function testAddingMoneyWithDifferentCurrencyThrowsException(): void
     {
         $this->expectException(MoneyHasDifferentCurrenciesException::class);
 
@@ -227,8 +221,7 @@ class MoneyTest extends TestCase
         $m1->add($m2);
     }
 
-    /** @test */
-    public function subtractingMoneyWithDifferentCurrencyThrowsException(): void
+    public function testSubtractingMoneyWithDifferentCurrencyThrowsException(): void
     {
         $this->expectException(MoneyHasDifferentCurrenciesException::class);
 
@@ -238,8 +231,7 @@ class MoneyTest extends TestCase
         $m1->subtract($m2);
     }
 
-    /** @test */
-    public function rebasingMoneyWithDifferentCurrencyThrowsException(): void
+    public function testRebasingMoneyWithDifferentCurrencyThrowsException(): void
     {
         $this->expectException(MoneyHasDifferentCurrenciesException::class);
 
@@ -249,11 +241,8 @@ class MoneyTest extends TestCase
         $m1->rebase($m2);
     }
 
-    /**
-     * @test
-     * @dataProvider absoluteDataProvider
-     */
-    public function moneyAbsoluteAmount(string $negative, string $absolute): void
+    /** @dataProvider absoluteDataProvider */
+    public function testMoneyAbsoluteAmount(string $negative, string $absolute): void
     {
         $money = money($negative);
 
@@ -262,8 +251,7 @@ class MoneyTest extends TestCase
         $this->assertEquals($absolute, $money->getAmount());
     }
 
-    /** @test */
-    public function correctWayToHandleImmutableMoneyObjects(): void
+    public function testCorrectWayToHandleImmutableMoneyObjects(): void
     {
         $m1 = money_parse('100');
 

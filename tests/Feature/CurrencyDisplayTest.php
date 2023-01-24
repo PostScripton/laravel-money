@@ -9,8 +9,7 @@ use PostScripton\Money\Tests\TestCase;
 
 class CurrencyDisplayTest extends TestCase
 {
-    /** @test */
-    public function displayCodeStart(): void
+    public function testDisplayCodeStart(): void
     {
         $currency = Currency::code('USD')
             ->setDisplay(CurrencyDisplay::Code);
@@ -19,8 +18,7 @@ class CurrencyDisplayTest extends TestCase
         $this->assertEquals('USD 123.4', $usd->toString());
     }
 
-    /** @test */
-    public function displayCodeStartInEnd(): void
+    public function testDisplayCodeStartInEnd(): void
     {
         $currency = Currency::code('USD')
             ->setDisplay(CurrencyDisplay::Code)
@@ -30,8 +28,7 @@ class CurrencyDisplayTest extends TestCase
         $this->assertEquals('123.4 USD', $usd->toString());
     }
 
-    /** @test */
-    public function displayCodeEnd(): void
+    public function testDisplayCodeEnd(): void
     {
         $currency = Currency::code('RUB')
             ->setDisplay(CurrencyDisplay::Code);
@@ -40,8 +37,7 @@ class CurrencyDisplayTest extends TestCase
         $this->assertEquals('123.4 RUB', $usd->toString());
     }
 
-    /** @test */
-    public function displayCodeEndInStart(): void
+    public function testDisplayCodeEndInStart(): void
     {
         $currency = Currency::code('RUB')
             ->setDisplay(CurrencyDisplay::Code)

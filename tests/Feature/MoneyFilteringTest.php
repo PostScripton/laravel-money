@@ -8,8 +8,7 @@ use PostScripton\Money\Tests\TestCase;
 
 class MoneyFilteringTest extends TestCase
 {
-    /** @test */
-    public function selectTheMinMoneyOutOfTheManyMoneyObjects(): void
+    public function testSelectTheMinMoneyOutOfTheManyMoneyObjects(): void
     {
         $m1 = money_parse('30');
         $m2 = money_parse('10');
@@ -20,8 +19,7 @@ class MoneyFilteringTest extends TestCase
         $this->assertTrue($min->equals($m2));
     }
 
-    /** @test */
-    public function anExceptionIsThrownWhenDifferentCurrenciesPassedToMinFunction(): void
+    public function testExceptionIsThrownWhenDifferentCurrenciesPassedToMinFunction(): void
     {
         $this->expectException(MoneyHasDifferentCurrenciesException::class);
 
@@ -32,14 +30,12 @@ class MoneyFilteringTest extends TestCase
         Money::min($m1, $m2, $m3);
     }
 
-    /** @test */
-    public function nullIsGivenWhenNoMoneyObjectsPassedToMinFunction(): void
+    public function testNullIsGivenWhenNoMoneyObjectsPassedToMinFunction(): void
     {
         $this->assertNull(Money::min());
     }
 
-    /** @test */
-    public function selectTheMaxMoneyOutOfTheManyMoneyObjects(): void
+    public function testSelectTheMaxMoneyOutOfTheManyMoneyObjects(): void
     {
         $m1 = money_parse('20');
         $m2 = money_parse('30');
@@ -50,8 +46,7 @@ class MoneyFilteringTest extends TestCase
         $this->assertTrue($max->equals($m2));
     }
 
-    /** @test */
-    public function anExceptionIsThrownWhenDifferentCurrenciesPassedToMaxFunction(): void
+    public function testExceptionIsThrownWhenDifferentCurrenciesPassedToMaxFunction(): void
     {
         $this->expectException(MoneyHasDifferentCurrenciesException::class);
 
@@ -62,14 +57,12 @@ class MoneyFilteringTest extends TestCase
         Money::max($m1, $m2, $m3);
     }
 
-    /** @test */
-    public function nullIsGivenWhenNoMoneyObjectsPassedToMaxFunction(): void
+    public function testNullIsGivenWhenNoMoneyObjectsPassedToMaxFunction(): void
     {
         $this->assertNull(Money::max());
     }
 
-    /** @test */
-    public function getAnAverageMoneyOutOfTheManyMoneyObjects(): void
+    public function testGetAnAverageMoneyOutOfTheManyMoneyObjects(): void
     {
         $m1 = money_parse('30');
         $m2 = money_parse('10');
@@ -80,8 +73,7 @@ class MoneyFilteringTest extends TestCase
         $this->assertTrue(money_parse('20')->equals($avg));
     }
 
-    /** @test */
-    public function anExceptionIsThrownWhenDifferentCurrenciesPassedToAvgFunction(): void
+    public function testExceptionIsThrownWhenDifferentCurrenciesPassedToAvgFunction(): void
     {
         $this->expectException(MoneyHasDifferentCurrenciesException::class);
 
@@ -92,14 +84,12 @@ class MoneyFilteringTest extends TestCase
         Money::avg($m1, $m2, $m3);
     }
 
-    /** @test */
-    public function nullIsGivenWhenNoMoneyObjectsPassedToAvgFunction(): void
+    public function testNullIsGivenWhenNoMoneyObjectsPassedToAvgFunction(): void
     {
         $this->assertNull(Money::avg());
     }
 
-    /** @test */
-    public function getASumOfTheManyMoneyObjects(): void
+    public function testGetASumOfTheManyMoneyObjects(): void
     {
         $m1 = money_parse('30');
         $m2 = money_parse('10');
@@ -110,8 +100,7 @@ class MoneyFilteringTest extends TestCase
         $this->assertTrue(money_parse('60')->equals($avg));
     }
 
-    /** @test */
-    public function anExceptionIsThrownWhenDifferentCurrenciesPassedToSumFunction(): void
+    public function testExceptionIsThrownWhenDifferentCurrenciesPassedToSumFunction(): void
     {
         $this->expectException(MoneyHasDifferentCurrenciesException::class);
 
@@ -122,8 +111,7 @@ class MoneyFilteringTest extends TestCase
         Money::sum($m1, $m2, $m3);
     }
 
-    /** @test */
-    public function nullIsGivenWhenNoMoneyObjectsPassedToSumFunction(): void
+    public function testNullIsGivenWhenNoMoneyObjectsPassedToSumFunction(): void
     {
         $this->assertNull(Money::sum());
     }

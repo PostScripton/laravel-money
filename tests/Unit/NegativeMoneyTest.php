@@ -10,8 +10,7 @@ use PostScripton\Money\Tests\TestCase;
 
 class NegativeMoneyTest extends TestCase
 {
-    /** @test */
-    public function negativeWithCurrencyStartAsSymbol(): void
+    public function testNegativeWithCurrencyStartAsSymbol(): void
     {
         $usd = money('-1234000', Currency::code('USD'));
 
@@ -21,8 +20,7 @@ class NegativeMoneyTest extends TestCase
         $this->assertNotTrue($usd->isPositive());
     }
 
-    /** @test */
-    public function negativeWithCurrencyStartAsSymbolNoSpace(): void
+    public function testNegativeWithCurrencyStartAsSymbolNoSpace(): void
     {
         $usd = money('-1234000', Currency::code('USD'));
 
@@ -35,8 +33,7 @@ class NegativeMoneyTest extends TestCase
         $this->assertNotTrue($usd->isPositive());
     }
 
-    /** @test */
-    public function negativeWithCurrencyStartAsCode(): void
+    public function testNegativeWithCurrencyStartAsCode(): void
     {
         $usd = money('-1234000', Currency::code('USD')->setDisplay(CurrencyDisplay::Code));
 
@@ -46,8 +43,7 @@ class NegativeMoneyTest extends TestCase
         $this->assertNotTrue($usd->isPositive());
     }
 
-    /** @test */
-    public function negativeWithCurrencyStartAsCodeNoSpace(): void
+    public function testNegativeWithCurrencyStartAsCodeNoSpace(): void
     {
         $usd = money('-1234000', Currency::code('USD')->setDisplay(CurrencyDisplay::Code));
 
@@ -60,8 +56,7 @@ class NegativeMoneyTest extends TestCase
         $this->assertNotTrue($usd->isPositive());
     }
 
-    /** @test */
-    public function negativeWithCurrencyEndAsSymbol(): void
+    public function testNegativeWithCurrencyEndAsSymbol(): void
     {
         $usd = money('-1234000', Currency::code('RUB'));
 
@@ -71,8 +66,7 @@ class NegativeMoneyTest extends TestCase
         $this->assertNotTrue($usd->isPositive());
     }
 
-    /** @test */
-    public function negativeWithCurrencyEndAsCode(): void
+    public function testNegativeWithCurrencyEndAsCode(): void
     {
         $usd = money('-1234000', Currency::code('RUB')->setDisplay(CurrencyDisplay::Code));
 

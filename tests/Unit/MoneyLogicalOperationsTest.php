@@ -8,8 +8,7 @@ use PostScripton\Money\Tests\TestCase;
 
 class MoneyLogicalOperationsTest extends TestCase
 {
-    /** @test */
-    public function moneyIsZero(): void
+    public function testMoneyIsZero(): void
     {
         $m1 = money('0');
         $m2 = money('0.0000');
@@ -20,8 +19,7 @@ class MoneyLogicalOperationsTest extends TestCase
         $this->assertTrue($m3->isZero());
     }
 
-    /** @test */
-    public function moneyIsLessThanAnotherMoney(): void
+    public function testMoneyIsLessThanAnotherMoney(): void
     {
         $m1 = money('500000');
         $m2 = money('1000000');
@@ -34,8 +32,7 @@ class MoneyLogicalOperationsTest extends TestCase
         $m1->lessThan($m3);
     }
 
-    /** @test */
-    public function moneyIsLessThanOrEqualToAnotherMoney(): void
+    public function testMoneyIsLessThanOrEqualToAnotherMoney(): void
     {
         $m1 = money('500000');
         $m2 = money('500000');
@@ -50,8 +47,7 @@ class MoneyLogicalOperationsTest extends TestCase
         $m1->lessThanOrEqual($m4);
     }
 
-    /** @test */
-    public function moneyIsGreaterThanAnotherMoney(): void
+    public function testMoneyIsGreaterThanAnotherMoney(): void
     {
         $m1 = money('1000000');
         $m2 = money('500000');
@@ -64,8 +60,7 @@ class MoneyLogicalOperationsTest extends TestCase
         $m1->greaterThan($m3);
     }
 
-    /** @test */
-    public function moneyIsGreaterThanOrEqualToAnotherMoney(): void
+    public function testMoneyIsGreaterThanOrEqualToAnotherMoney(): void
     {
         $m1 = money('1000000');
         $m2 = money('1000000');
@@ -80,8 +75,7 @@ class MoneyLogicalOperationsTest extends TestCase
         $m1->greaterThanOrEqual($m4);
     }
 
-    /** @test */
-    public function moneyHasTheSameCurrencyWithAnotherMoney(): void
+    public function testMoneyHasTheSameCurrencyWithAnotherMoney(): void
     {
         $usd1 = money('1000000');
         $usd2 = money('1000000');
@@ -91,8 +85,7 @@ class MoneyLogicalOperationsTest extends TestCase
         $this->assertFalse($usd1->isSameCurrency($rub));
     }
 
-    /** @test */
-    public function moneyHasDifferentCurrencyFromAnotherMoney(): void
+    public function testMoneyHasDifferentCurrencyFromAnotherMoney(): void
     {
         $usd1 = money('1000000');
         $usd2 = money('1000000');
@@ -102,24 +95,21 @@ class MoneyLogicalOperationsTest extends TestCase
         $this->assertTrue($usd1->isDifferentCurrency($rub));
     }
 
-    /** @test */
-    public function moneyIsPositive(): void
+    public function testMoneyIsPositive(): void
     {
         $money = money('1000000');
 
         $this->assertTrue($money->isPositive());
     }
 
-    /** @test */
-    public function moneyIsNegative(): void
+    public function testMoneyIsNegative(): void
     {
         $money = money('-1000000');
 
         $this->assertTrue($money->isNegative());
     }
 
-    /** @test */
-    public function zeroMoneyIsNotBothPositiveAndNegative(): void
+    public function testZeroMoneyIsNotBothPositiveAndNegative(): void
     {
         $money = money('0');
 
@@ -127,8 +117,7 @@ class MoneyLogicalOperationsTest extends TestCase
         $this->assertFalse($money->isNegative());
     }
 
-    /** @test */
-    public function checkIfMoneyObjectsAreTheSame(): void
+    public function testCheckIfMoneyObjectsAreTheSame(): void
     {
         $m1 = money('12345000');
         $m2 = money('12345000');
