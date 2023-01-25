@@ -19,11 +19,11 @@ class MoneyTest extends TestCase
         $money5 = money('12345000', currency('USD'));
         $money6 = money('12345000.1234567890');
 
-        $this->assertTrue($money1->equals($money2));
-        $this->assertTrue($money1->equals($money3));
-        $this->assertTrue($money1->equals($money4));
-        $this->assertTrue($money1->equals($money5));
-        $this->assertTrue($money1->equals($money6));
+        $this->assertMoneyEquals($money1, $money2);
+        $this->assertMoneyEquals($money1, $money3);
+        $this->assertMoneyEquals($money1, $money4);
+        $this->assertMoneyEquals($money1, $money5);
+        $this->assertMoneyEquals($money1, $money6);
         $this->assertEquals('12345000', $money6->getAmount());
     }
 
@@ -32,9 +32,7 @@ class MoneyTest extends TestCase
         $m1 = money('12345000', 'RUB');
         $m2 = Money::of('12345000', 'RUB');
 
-        $this->assertTrue($m1->equals($m2));
-        $this->assertEquals('RUB', $m1->getCurrency()->getCode());
-        $this->assertEquals('RUB', $m2->getCurrency()->getCode());
+        $this->assertMoneyEquals($m1, $m2);
     }
 
     public function testSetCurrency(): void
@@ -124,9 +122,8 @@ class MoneyTest extends TestCase
 
         $money->multiply((string) (1 / 3));
 
-        $this->assertEquals('33333', $money->getAmount());
         $this->assertEquals('$ 3.3', $money->toString());
-        $this->assertTrue($expectedMoney->equals($money));
+        $this->assertMoneyEquals($expectedMoney, $money);
     }
 
     public function testDivideButNoDecimalsInAmount(): void
@@ -136,9 +133,8 @@ class MoneyTest extends TestCase
 
         $money->divide('3');
 
-        $this->assertEquals('333333', $money->getAmount());
         $this->assertEquals('$ 33.3', $money->toString());
-        $this->assertTrue($expectedMoney->equals($money));
+        $this->assertMoneyEquals($expectedMoney, $money);
     }
 
     public function testFloor(): void
@@ -206,9 +202,7 @@ class MoneyTest extends TestCase
 
         $m1->rebase($m2);
 
-        $this->assertTrue($m1->equals(money_parse('250')));
-        $this->assertEquals('2500000', $m1->getAmount());
-        $this->assertEquals('$ 250', $m1->toString());
+        $this->assertMoneyEquals(money_parse('250'), $m1);
     }
 
     public function testAddingMoneyWithDifferentCurrencyThrowsException(): void
@@ -263,9 +257,9 @@ class MoneyTest extends TestCase
             // $m2 is $300 whereas $m1 is still $150
             ->multiply(2);
 
-        $this->assertEquals('1500000', $m1->getAmount());
-        $this->assertEquals('3000000', $m2->getAmount());
-        $this->assertFalse($m1->equals($m2));
+        $this->assertMoneyEquals('150', $m1);
+        $this->assertMoneyEquals('300', $m2);
+        $this->assertMoneyNotEquals($m1, $m2);
     }
 
     /** @dataProvider differenceDataProvider */
@@ -277,7 +271,7 @@ class MoneyTest extends TestCase
         $diff = $m1->difference($m2);
 
         $this->assertInstanceOf(Money::class, $diff);
-        $this->assertTrue(money_parse($result)->equals($diff));
+        $this->assertMoneyEquals(money_parse($result), $diff);
     }
 
     public function testExceptionIsThrownWhenThereAreTwoDifferentCurrencies(): void

@@ -21,7 +21,7 @@ class ConvertCurrenciesTest extends TestCase
 
         $m2 = $m1->convertTo('USD');
 
-        $this->assertTrue($m1->equals($m2));
+        $this->assertMoneyEquals($m1, $m2);
     }
 
     public function testConvertingThrowsExceptionAboutUnsupportedCurrencies(): void
@@ -71,7 +71,7 @@ class ConvertCurrenciesTest extends TestCase
 
         $rub = $usd->convertTo('RUB');
 
-        $this->assertTrue($expectedMoney->equals($rub));
+        $this->assertMoneyEquals($expectedMoney, $rub);
     }
 
     public function testConvertToOtherCurrencyWithRateFromThePast(): void
@@ -91,7 +91,7 @@ class ConvertCurrenciesTest extends TestCase
 
         $rub = $usd->convertTo('RUB', $date);
 
-        $this->assertTrue($expectedMoney->equals($rub));
+        $this->assertMoneyEquals($expectedMoney, $rub);
     }
 
     public function testOfflineConvertingMayLooseAccuracy(): void
@@ -106,7 +106,7 @@ class ConvertCurrenciesTest extends TestCase
         $backRub = $usd->offlineConvertTo('RUB', $rate / 1);
         $this->assertEquals('1 000 ₽', $backRub->toString());
 
-        $this->assertFalse($rub->equals($backRub));
+        $this->assertMoneyNotEquals($rub, $backRub);
         $this->assertTrue($rub->isSameCurrency($backRub));
         $this->assertEquals('9999935', $backRub->getAmount());
     }

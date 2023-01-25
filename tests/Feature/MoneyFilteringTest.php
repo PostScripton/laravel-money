@@ -16,7 +16,7 @@ class MoneyFilteringTest extends TestCase
 
         $min = Money::min($m1, $m2, $m3);
 
-        $this->assertTrue($min->equals($m2));
+        $this->assertMoneyEquals($min, $m2);
     }
 
     public function testExceptionIsThrownWhenDifferentCurrenciesPassedToMinFunction(): void
@@ -43,7 +43,7 @@ class MoneyFilteringTest extends TestCase
 
         $max = Money::max($m1, $m2, $m3);
 
-        $this->assertTrue($max->equals($m2));
+        $this->assertMoneyEquals($max, $m2);
     }
 
     public function testExceptionIsThrownWhenDifferentCurrenciesPassedToMaxFunction(): void
@@ -70,7 +70,7 @@ class MoneyFilteringTest extends TestCase
 
         $avg = Money::avg($m1, $m2, $m3);
 
-        $this->assertTrue(money_parse('20')->equals($avg));
+        $this->assertMoneyEquals(money_parse('20'), $avg);
     }
 
     public function testExceptionIsThrownWhenDifferentCurrenciesPassedToAvgFunction(): void
@@ -97,7 +97,7 @@ class MoneyFilteringTest extends TestCase
 
         $avg = Money::sum($m1, $m2, $m3);
 
-        $this->assertTrue(money_parse('60')->equals($avg));
+        $this->assertMoneyEquals(money_parse('60'), $avg);
     }
 
     public function testExceptionIsThrownWhenDifferentCurrenciesPassedToSumFunction(): void
