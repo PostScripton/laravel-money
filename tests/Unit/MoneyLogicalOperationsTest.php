@@ -123,7 +123,7 @@ class MoneyLogicalOperationsTest extends TestCase
         $m2 = money('12345000');
         $m3 = money('12345000', currency('RUB'));
 
-        $this->assertTrue($m1->equals($m2));
-        $this->assertFalse($m1->equals($m3));
+        $this->assertMoneyEquals($m1, $m2);
+        $this->assertMoneyNotEquals($m1, $m3);
     }
 }
