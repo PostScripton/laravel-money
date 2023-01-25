@@ -280,6 +280,23 @@ class MoneyTest extends TestCase
         $this->assertTrue(money_parse($result)->equals($diff));
     }
 
+    /** @dataProvider providerJsonSerialize */
+    public function testJsonSerialize(Money $money, array $expected): void
+    {
+        $this->assertEquals($expected, $money->jsonSerialize());
+        $this->assertEquals(json_encode($expected), json_encode($money));
+    }
+
+    public function providerJsonSerialize(): array
+    {
+        $this->createApplication();
+
+        return [
+            [Money::parse('10.25', 'USD'), ['amount' => '102500', 'currency' => 'USD']],
+            [Money::of('12345', 'RUB'), ['amount' => '12345', 'currency' => 'RUB']],
+        ];
+    }
+
     public function testExceptionIsThrownWhenThereAreTwoDifferentCurrencies(): void
     {
         $m1 = money('500000');

@@ -3,6 +3,7 @@
 namespace PostScripton\Money;
 
 use InvalidArgumentException;
+use JsonSerializable;
 use PostScripton\Money\Calculators\Calculator;
 use PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException;
 use PostScripton\Money\PHPDocs\MoneyInterface;
@@ -10,7 +11,7 @@ use PostScripton\Money\Traits\Converter;
 use PostScripton\Money\Traits\InteractsWithRateExchanger;
 use PostScripton\Money\Traits\StaticPart;
 
-class Money implements MoneyInterface
+class Money implements MoneyInterface, JsonSerializable
 {
     use StaticPart;
     use Converter;
@@ -214,5 +215,13 @@ class Money implements MoneyInterface
         }
 
         return $this->clone()->subtract($money)->absolute();
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'amount' => $this->getAmount(),
+            'currency' => $this->getCurrency()->getCode(),
+        ];
     }
 }
