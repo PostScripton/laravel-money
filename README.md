@@ -36,6 +36,7 @@ With this package, you can easily operate, compare, format, and even convert mon
 - [`3.x` to `4.x`](/docs/upgrade/3.x_to_4.x.md)
 
 ## Requirements
+
 - PHP: `^8.1`
 - `guzzlehttp/guzzle`: `^7.5`
 - `bcmath` extension
@@ -47,7 +48,9 @@ composer require postscripton/laravel-money
 ```
 
 ### Publishing
+
 Publish the config file through:
+
 ```bash
 php artisan vendor:publish --provider=PostScription\Money\MoneyServiceProvider
 ```
@@ -82,6 +85,7 @@ After all, the config file at `config/money.php` should be modified for your own
     - Static methods
         - [`Money::setFormatter()`](/docs/04_money/static/setFormatter.md)
         - [`Money::of()`](/docs/04_money/static/of.md)
+        - [`Money::zero()`](/docs/04_money/static/zero.md)
         - [`Money::parse()`](/docs/04_money/static/parse.md)
     - Object methods
         - Getters

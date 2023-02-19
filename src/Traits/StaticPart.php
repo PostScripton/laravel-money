@@ -18,6 +18,11 @@ trait StaticPart
         return money($amount, $currency);
     }
 
+    public static function zero(Currency|string|null $currency = null): Money
+    {
+        return static::of('0', $currency);
+    }
+
     public static function min(Money ...$list): ?Money
     {
         $collection = collect($list);

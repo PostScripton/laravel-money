@@ -17,6 +17,18 @@ if (! function_exists('money')) {
     }
 }
 
+if (! function_exists('money_zero')) {
+    /**
+     * Empty monetary object
+     * @param Currency|string|null $currency
+     * @return Money
+     */
+    function money_zero(Currency|string|null $currency = null): Money
+    {
+        return Money::zero($currency);
+    }
+}
+
 if (! function_exists('money_parse')) {
     /**
      * Parses the string and turns it into a monetary instance
