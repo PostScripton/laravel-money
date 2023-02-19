@@ -35,6 +35,23 @@ class MoneyTest extends TestCase
         $this->assertMoneyEquals($m1, $m2);
     }
 
+    public function testZero(): void
+    {
+        $m1 = Money::zero();
+        $m2 = money_zero();
+        $expectedUsd = money('0', 'USD');
+
+        $this->assertMoneyEquals($expectedUsd, $m1);
+        $this->assertMoneyEquals($expectedUsd, $m2);
+
+        $m3 = Money::zero('RUB');
+        $m4 = money_zero(currency('RUB'));
+        $expectedRub = money('0', 'RUB');
+
+        $this->assertMoneyEquals($expectedRub, $m3);
+        $this->assertMoneyEquals($expectedRub, $m4);
+    }
+
     public function testSetCurrency(): void
     {
         $money = money('12345000', 'RUB');

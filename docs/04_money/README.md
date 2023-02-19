@@ -1,13 +1,15 @@
 # 💵 Money
+
 Here we are, prepared and ready to create our own monetary objects.
 
 There are *static* methods as well as *object* ones.
 
 1. [💲 Currency](/docs/04_money/currency.md)
 2. Static methods
-   - [`Money::setFormatter()`](/docs/04_money/static/setFormatter.md)
-   - [`Money::of()`](/docs/04_money/static/of.md)
-   - [`Money::parse()`](/docs/04_money/static/parse.md)
+    - [`Money::setFormatter()`](/docs/04_money/static/setFormatter.md)
+    - [`Money::of()`](/docs/04_money/static/of.md)
+    - [`Money::zero()`](/docs/04_money/static/zero.md)
+    - [`Money::parse()`](/docs/04_money/static/parse.md)
 3. Object methods
     - Getters
         - [`getAmount()`](/docs/04_money/object/getAmount.md)
