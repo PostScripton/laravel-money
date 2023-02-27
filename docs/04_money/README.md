@@ -10,6 +10,10 @@ There are *static* methods as well as *object* ones.
     - [`Money::of()`](/docs/04_money/static/of.md)
     - [`Money::zero()`](/docs/04_money/static/zero.md)
     - [`Money::parse()`](/docs/04_money/static/parse.md)
+    - [`Money::min()`](/docs/04_money/static/min.md)
+    - [`Money::max()`](/docs/04_money/static/max.md)
+    - [`Money::avg()`](/docs/04_money/static/avg.md)
+    - [`Money::sum()`](/docs/04_money/static/sum.md)
 3. Object methods
     - Getters
         - [`getAmount()`](/docs/04_money/object/getAmount.md)

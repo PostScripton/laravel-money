@@ -3,6 +3,7 @@
 namespace PostScripton\Money\PHPDocs;
 
 use Carbon\Carbon;
+use Illuminate\Support\Collection;
 use PostScripton\Money\Currency;
 use PostScripton\Money\Formatters\MoneyFormatter;
 use PostScripton\Money\Money;
@@ -42,8 +43,8 @@ interface MoneyInterface
      * `$100 + $50 = $150` </p>
      * @param Money $money <p>
      * Money that will be added </p>
-     * @throws \PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException
      * @return self
+     * @throws \PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException
      */
     public function add(Money $money): self;
 
@@ -52,8 +53,8 @@ interface MoneyInterface
      * `$150 - $50 = $100` </p>
      * @param Money $money <p>
      * Money that will be subtracted </p>
-     * @throws \PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException
      * @return self
+     * @throws \PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException
      */
     public function subtract(Money $money): self;
 
@@ -79,8 +80,8 @@ interface MoneyInterface
      * Rebases the money on an amount
      * @param Money $money <p>
      * A monetary object to which the current money will be rebased </p>
-     * @throws \PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException
      * @return self
+     * @throws \PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException
      */
     public function rebase(Money $money): self;
 
@@ -142,8 +143,8 @@ interface MoneyInterface
      * NOTE: monetary objects must be the same currency. </p>
      * @param Money $money <p>
      * Money being compared </p>
-     * @throws \PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException
      * @return bool
+     * @throws \PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException
      */
     public function lessThan(Money $money): bool;
 
@@ -152,8 +153,8 @@ interface MoneyInterface
      * NOTE: monetary objects must be the same currency. </p>
      * @param Money $money <p>
      * Money being compared </p>
-     * @throws \PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException
      * @return bool
+     * @throws \PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException
      */
     public function lessThanOrEqual(Money $money): bool;
 
@@ -162,8 +163,8 @@ interface MoneyInterface
      * NOTE: monetary objects must be the same currency. </p>
      * @param Money $money <p>
      * Money being compared </p>
-     * @throws \PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException
      * @return bool
+     * @throws \PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException
      */
     public function greaterThan(Money $money): bool;
 
@@ -172,8 +173,8 @@ interface MoneyInterface
      * NOTE: monetary objects must be the same currency. </p>
      * @param Money $money <p>
      * Money being compared </p>
-     * @throws \PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException
      * @return bool
+     * @throws \PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException
      */
     public function greaterThanOrEqual(Money $money): bool;
 
@@ -217,9 +218,9 @@ interface MoneyInterface
      * In fact, this method is an alias to `->clone()->subtract()->absolute()` </p>
      * @param Money $money <p>
      * The given money must be the same currency as the first one </p>
-     * @throws \PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException
      * @return Money
      *
+     * @throws \PostScripton\Money\Exceptions\MoneyHasDifferentCurrenciesException
      */
     public function difference(Money $money): Money;
 
@@ -265,6 +266,38 @@ interface MoneyInterface
      * @return self
      */
     public static function parse(string $money, Currency|string|null $currency = null): Money;
+
+    /**
+     * Finds the minimum money out of a sequence of monetary objects
+     * @param Money|Collection|null $first
+     * @param Money ...$list
+     * @return Money|null
+     */
+    public static function min(Money|Collection|null $first = null, Money ...$list): ?Money;
+
+    /**
+     * Finds the maximum money out of a sequence of monetary objects
+     * @param Money|Collection|null $first
+     * @param Money ...$list
+     * @return Money|null
+     */
+    public static function max(Money|Collection|null $first = null, Money ...$list): ?Money;
+
+    /**
+     * Calculates the average out of a sequence of monetary objects
+     * @param Money|Collection|null $first
+     * @param Money ...$list
+     * @return Money|null
+     */
+    public static function avg(Money|Collection|null $first = null, Money ...$list): ?Money;
+
+    /**
+     * Calculates the sum out of a sequence of monetary objects
+     * @param Money|Collection|null $first
+     * @param Money ...$list
+     * @return Money|null
+     */
+    public static function sum(Money|Collection|null $first = null, Money ...$list): ?Money;
 
     /**
      * Returns the default divisor (10^4)

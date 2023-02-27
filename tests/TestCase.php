@@ -16,8 +16,16 @@ class TestCase extends \Orchestra\Testbench\TestCase
         $expected = $expected instanceof Money ? $expected : money_parse($expected);
         $actual = $actual instanceof Money ? $actual : money_parse($actual);
 
-        $this->assertEquals($expected->getAmount(), $actual->getAmount());
-        $this->assertEquals($expected->getCurrency()->getCode(), $actual->getCurrency()->getCode());
+        $this->assertEquals(
+            $expected->getAmount(),
+            $actual->getAmount(),
+            'Monetary amounts are not equal',
+        );
+        $this->assertEquals(
+            $expected->getCurrency()->getCode(),
+            $actual->getCurrency()->getCode(),
+            'Currencies are not equal',
+        );
     }
 
     final protected function assertMoneyNotEquals(Money|string $expected, Money|string $actual)
@@ -26,6 +34,11 @@ class TestCase extends \Orchestra\Testbench\TestCase
         $actual = $actual instanceof Money ? $actual : money_parse($actual);
 
         $this->assertFalse($expected->equals($actual), 'Monetary objects are equal');
+    }
+
+    final protected function isExceptionClass(mixed $value): bool
+    {
+        return is_string($value) && str_ends_with($value, 'Exception');
     }
 
     protected function setUp(): void
