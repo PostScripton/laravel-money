@@ -2,6 +2,7 @@
 
 namespace PostScripton\Money\Traits;
 
+use Illuminate\Support\Collection;
 use PostScripton\Money\Currency;
 use PostScripton\Money\Money;
 use PostScripton\Money\Parser;
@@ -23,9 +24,9 @@ trait StaticPart
         return static::of('0', $currency);
     }
 
-    public static function min(Money ...$list): ?Money
+    public static function min(Money|Collection|null $first = null, Money ...$list): ?Money
     {
-        $collection = collect($list);
+        $collection = self::getMoneyCollection($first, ...$list);
 
         if ($collection->isEmpty()) {
             return null;
@@ -39,9 +40,9 @@ trait StaticPart
         );
     }
 
-    public static function max(Money ...$list): ?Money
+    public static function max(Money|Collection|null $first = null, Money ...$list): ?Money
     {
-        $collection = collect($list);
+        $collection = self::getMoneyCollection($first, ...$list);
 
         if ($collection->isEmpty()) {
             return null;
@@ -55,27 +56,40 @@ trait StaticPart
         );
     }
 
-    public static function avg(Money ...$list): ?Money
+    public static function avg(Money|Collection|null $first = null, Money ...$list): ?Money
     {
-        return self::sum(...$list)?->divide(count($list));
+        $collection = self::getMoneyCollection($first, ...$list);
+
+        return self::sum($collection)?->divide($collection->count());
     }
 
-    public static function sum(Money ...$list): ?Money
+    public static function sum(Money|Collection|null $first = null, Money ...$list): ?Money
     {
-        $collection = collect($list);
+        $collection = self::getMoneyCollection($first, ...$list);
 
         if ($collection->isEmpty()) {
             return null;
         }
 
+        $first = $collection->shift();
+
         return $collection->reduce(
-            callback: fn(Money $acc, Money $cur) => $acc->add($cur),
-            initial: money('0', $collection->first()->getCurrency()),
+            callback: fn(Money $sum, Money $money) => $sum->add($money),
+            initial: $first,
         );
     }
 
     public static function getDefaultDivisor(): int
     {
         return 10 ** Money::MAX_DECIMALS;
+    }
+
+    private static function getMoneyCollection(Money|Collection|null $first = null, Money ...$list): Collection
+    {
+        $collection = $first instanceof Collection
+            ? $first->toBase()->push(...$list)
+            : collect($list)->prepend($first);
+
+        return $collection->filter();
     }
 }
