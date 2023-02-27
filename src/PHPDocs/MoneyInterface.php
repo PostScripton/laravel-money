@@ -252,6 +252,13 @@ interface MoneyInterface
     public static function of(string $amount, Currency|string|null $currency = null): Money;
 
     /**
+     * Empty monetary object
+     * @param Currency|string|null $currency
+     * @return Money
+     */
+    public static function zero(Currency|string|null $currency = null): Money;
+
+    /**
      * Parses the string and turns it into a monetary instance
      * @param string $money
      * @param Currency|string|null $currency
