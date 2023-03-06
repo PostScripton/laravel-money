@@ -11,6 +11,7 @@ use PostScripton\Money\Cache\MoneyCache;
 use PostScripton\Money\Cache\RateExchangerCache;
 use PostScripton\Money\Calculators\BcMathCalculator;
 use PostScripton\Money\Calculators\Calculator;
+use PostScripton\Money\Calculators\NativeCalculator;
 use PostScripton\Money\Clients\RateExchangers\RateExchanger;
 use PostScripton\Money\Enums\CurrencyList;
 use PostScripton\Money\Enums\CurrencyPosition;
@@ -37,18 +38,25 @@ class MoneyServiceProvider extends PackageServiceProvider
             ->hasConfigFile();
     }
 
+    public function packageRegistered(): void
+    {
+        $this->app->singleton(MoneyCache::class);
+        $this->app->singleton(RateExchangerCache::class);
+
+        $this->app->singleton(Calculator::class, function () {
+            if (extension_loaded('bcmath')) {
+                return new BcMathCalculator();
+            }
+
+            return new NativeCalculator();
+        });
+    }
+
     public function packageBooted(): void
     {
         $this->registerCurrencyList();
         $this->registerCustomCurrencies();
         $this->registerRateExchanger();
-
-        $this->app->singleton(MoneyCache::class);
-        $this->app->singleton(RateExchangerCache::class);
-
-        $this->app->bind(Calculator::class, function () {
-            return new BcMathCalculator();
-        });
 
         Money::setFormatter(new DefaultMoneyFormatter());
         Currency::setDefault(currency(config('money.default_currency', 'USD')));

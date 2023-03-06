@@ -45,6 +45,10 @@ class BcMathCalculator implements Calculator
 
     public function ceil(string $amount): string
     {
+        if ($this->isZero($amount)) {
+            return '0';
+        }
+
         if ($this->isInteger($amount)) {
             return $amount;
         }
@@ -58,6 +62,10 @@ class BcMathCalculator implements Calculator
 
     public function floor(string $amount): string
     {
+        if ($this->isZero($amount)) {
+            return '0';
+        }
+
         if ($this->isInteger($amount)) {
             return $amount;
         }
@@ -95,6 +103,6 @@ class BcMathCalculator implements Calculator
             return $amount;
         }
 
-        return rtrim(preg_replace('/0+$/', '', $amount), '.');
+        return rtrim(rtrim($amount, '0'), '.');
     }
 }
