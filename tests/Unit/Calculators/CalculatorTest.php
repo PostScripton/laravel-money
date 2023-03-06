@@ -2,85 +2,32 @@
 
 namespace PostScripton\Money\Tests\Unit\Calculators;
 
+use Closure;
 use InvalidArgumentException;
+use PHPUnit\Framework\AssertionFailedError;
 use PostScripton\Money\Calculators\BcMathCalculator;
+use PostScripton\Money\Calculators\Calculator;
+use PostScripton\Money\Calculators\NativeCalculator;
 use PostScripton\Money\Tests\TestCase;
+use Throwable;
 
-class BcMathCalculatorTest extends TestCase
+class CalculatorTest extends TestCase
 {
-    /** @dataProvider compareDataProvider */
+    private const CALCULATORS = [
+        'BcMath' => BcMathCalculator::class,
+        'Native' => NativeCalculator::class,
+    ];
+
+    /** @dataProvider providerCompare */
     public function testCompare(string $a, string $b, int $expected): void
     {
-        $result = app(BcMathCalculator::class)->compare($a, $b);
-
-        $this->assertEquals($expected, $result);
+        $this->runTestsForCalculators(
+            callback: fn(Calculator $calculator) => $calculator->compare($a, $b),
+            expected: $expected,
+        );
     }
 
-    /** @dataProvider addDataProvider */
-    public function testAdd(string $amount, string $addend, string $expected): void
-    {
-        $result = app(BcMathCalculator::class)->add($amount, $addend);
-
-        $this->assertEquals($expected, $result);
-    }
-
-    /** @dataProvider subtractDataProvider */
-    public function testSubtract(string $amount, string $subtrahend, string $expected): void
-    {
-        $result = app(BcMathCalculator::class)->subtract($amount, $subtrahend);
-
-        $this->assertEquals($expected, $result);
-    }
-
-    /** @dataProvider multiplyDataProvider */
-    public function testMultiply(string $amount, string|float $multiplier, string $expected): void
-    {
-        $result = app(BcMathCalculator::class)->multiply($amount, $multiplier);
-
-        $this->assertEquals($expected, $result);
-    }
-
-    /** @dataProvider divideDataProvider */
-    public function testDivide(string $amount, string|float $divisor, string $expected): void
-    {
-        $result = app(BcMathCalculator::class)->divide($amount, $divisor);
-
-        $this->assertEquals($expected, $result);
-    }
-
-    public function testDivideByZero(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Division by zero');
-
-        app(BcMathCalculator::class)->divide('100', '0');
-    }
-
-    /** @dataProvider ceilDataProvider */
-    public function testCeil(string $amount, string $expected): void
-    {
-        $result = app(BcMathCalculator::class)->ceil($amount);
-
-        $this->assertEquals($expected, $result);
-    }
-
-    /** @dataProvider floorDataProvider */
-    public function testFloor(string $amount, string $expected): void
-    {
-        $result = app(BcMathCalculator::class)->floor($amount);
-
-        $this->assertEquals($expected, $result);
-    }
-
-    /** @dataProvider absoluteDataProvider */
-    public function testAbsolute(string $amount, string $expected): void
-    {
-        $result = app(BcMathCalculator::class)->absolute($amount);
-
-        $this->assertEquals($expected, $result);
-    }
-
-    protected function compareDataProvider(): array
+    public function providerCompare(): array
     {
         return [
             ['a' => '10', 'b' => '5', 'expected' => 1],
@@ -89,10 +36,22 @@ class BcMathCalculatorTest extends TestCase
             ['a' => '10.0001', 'b' => '10', 'expected' => 1],
             ['a' => '10', 'b' => '10.0001', 'expected' => -1],
             ['a' => '0', 'b' => '0', 'expected' => 0],
+            ['a' => '-0', 'b' => '0', 'expected' => 0],
+            ['a' => '0', 'b' => '-0', 'expected' => 0],
+            ['a' => '-0', 'b' => '-0', 'expected' => 0],
         ];
     }
 
-    protected function addDataProvider(): array
+    /** @dataProvider providerAdd */
+    public function testAdd(string $amount, string $addend, string $expected): void
+    {
+        $this->runTestsForCalculators(
+            callback: fn(Calculator $calculator) => $calculator->add($amount, $addend),
+            expected: $expected,
+        );
+    }
+
+    public function providerAdd(): array
     {
         return [
             ['amount' => '100', 'addend' => '50', 'expected' => '150'],
@@ -105,7 +64,16 @@ class BcMathCalculatorTest extends TestCase
         ];
     }
 
-    protected function subtractDataProvider(): array
+    /** @dataProvider providerSubtract */
+    public function testSubtract(string $amount, string $subtrahend, string $expected): void
+    {
+        $this->runTestsForCalculators(
+            callback: fn(Calculator $calculator) => $calculator->subtract($amount, $subtrahend),
+            expected: $expected,
+        );
+    }
+
+    public function providerSubtract(): array
     {
         return [
             ['amount' => '100', 'subtrahend' => '50', 'expected' => '50'],
@@ -118,7 +86,16 @@ class BcMathCalculatorTest extends TestCase
         ];
     }
 
-    protected function multiplyDataProvider(): array
+    /** @dataProvider providerMultiply */
+    public function testMultiply(string $amount, string|float $multiplier, string $expected): void
+    {
+        $this->runTestsForCalculators(
+            callback: fn(Calculator $calculator) => $calculator->multiply($amount, $multiplier),
+            expected: $expected,
+        );
+    }
+
+    public function providerMultiply(): array
     {
         return [
             ['amount' => '100', 'multiplier' => '2', 'expected' => '200'],
@@ -141,28 +118,47 @@ class BcMathCalculatorTest extends TestCase
         ];
     }
 
-    protected function divideDataProvider(): array
+    /** @dataProvider providerDivide */
+    public function testDivide(string $amount, string|float $divisor, string|array $expected): void
+    {
+        $this->runTestsForCalculators(
+            callback: fn(Calculator $calculator) => $calculator->divide($amount, $divisor),
+            expected: $expected,
+        );
+    }
+
+    public function providerDivide(): array
     {
         return [
             ['amount' => '100', 'divisor' => '2', 'expected' => '50'],
-            ['amount' => '100', 'divisor' => '1.5', 'expected' => '66.666666666666666666'],
+            ['amount' => '100', 'divisor' => '1.5', 'expected' => ['66.666666666666666666', '66.666666667']],
             ['amount' => '100', 'divisor' => '1', 'expected' => '100'],
             ['amount' => '100', 'divisor' => '0.5', 'expected' => '200'],
             ['amount' => '100', 'divisor' => '0.1', 'expected' => '1000'],
             ['amount' => '100', 'divisor' => '-2', 'expected' => '-50'],
-            ['amount' => '100', 'divisor' => '-1.5', 'expected' => '-66.666666666666666666'],
+            ['amount' => '100', 'divisor' => '-1.5', 'expected' => ['-66.666666666666666666', '-66.666666667']],
             ['amount' => '100', 'divisor' => '-1', 'expected' => '-100'],
             ['amount' => '100', 'divisor' => '-0.5', 'expected' => '-200'],
             ['amount' => '100', 'divisor' => '-0.1', 'expected' => '-1000'],
             ['amount' => '100', 'divisor' => 2, 'expected' => '50'],
-            ['amount' => '100', 'divisor' => 1.5, 'expected' => '66.666666666666666666'],
+            ['amount' => '100', 'divisor' => 1.5, 'expected' => ['66.666666666666666666', '66.666666667']],
             ['amount' => '100', 'divisor' => 1, 'expected' => '100'],
             ['amount' => '100', 'divisor' => 0.5, 'expected' => '200'],
             ['amount' => '100', 'divisor' => 0.1, 'expected' => '1000'],
+            ['amount' => '100', 'divisor' => '0', 'expected' => [InvalidArgumentException::class, 'Division by zero']],
         ];
     }
 
-    protected function ceilDataProvider(): array
+    /** @dataProvider providerCeil */
+    public function testCeil(string $amount, string $expected): void
+    {
+        $this->runTestsForCalculators(
+            callback: fn(Calculator $calculator) => $calculator->ceil($amount),
+            expected: $expected,
+        );
+    }
+
+    public function providerCeil(): array
     {
         return [
             ['amount' => '0', 'expected' => '0'],
@@ -170,7 +166,7 @@ class BcMathCalculatorTest extends TestCase
             ['amount' => '100', 'expected' => '100'],
             ['amount' => '100.25', 'expected' => '101'],
             ['amount' => '100.0001', 'expected' => '101'],
-            ['amount' => '-0', 'expected' => '-0'],
+            ['amount' => '-0', 'expected' => '0'],
             ['amount' => '-0.25', 'expected' => '0'],
             ['amount' => '-100', 'expected' => '-100'],
             ['amount' => '-100.25', 'expected' => '-100'],
@@ -178,7 +174,16 @@ class BcMathCalculatorTest extends TestCase
         ];
     }
 
-    protected function floorDataProvider(): array
+    /** @dataProvider providerFloor */
+    public function testFloor(string $amount, string $expected): void
+    {
+        $this->runTestsForCalculators(
+            callback: fn(Calculator $calculator) => $calculator->floor($amount),
+            expected: $expected,
+        );
+    }
+
+    public function providerFloor(): array
     {
         return [
             ['amount' => '0', 'expected' => '0'],
@@ -186,7 +191,7 @@ class BcMathCalculatorTest extends TestCase
             ['amount' => '100', 'expected' => '100'],
             ['amount' => '100.25', 'expected' => '100'],
             ['amount' => '100.0001', 'expected' => '100'],
-            ['amount' => '-0', 'expected' => '-0'],
+            ['amount' => '-0', 'expected' => '0'],
             ['amount' => '-0.25', 'expected' => '-1'],
             ['amount' => '-100', 'expected' => '-100'],
             ['amount' => '-100.25', 'expected' => '-101'],
@@ -194,7 +199,16 @@ class BcMathCalculatorTest extends TestCase
         ];
     }
 
-    protected function absoluteDataProvider(): array
+    /** @dataProvider providerAbsolute */
+    public function testAbsolute(string $amount, string $expected): void
+    {
+        $this->runTestsForCalculators(
+            callback: fn(Calculator $calculator) => $calculator->absolute($amount),
+            expected: $expected,
+        );
+    }
+
+    public function providerAbsolute(): array
     {
         return [
             ['amount' => '0', 'expected' => '0'],
@@ -204,5 +218,42 @@ class BcMathCalculatorTest extends TestCase
             ['amount' => '-0.25', 'expected' => '0.25'],
             ['amount' => '-100', 'expected' => '100'],
         ];
+    }
+
+    private function runTestsForCalculators(Closure $callback, mixed $expected): void
+    {
+        foreach (self::CALCULATORS as $name => $class) {
+            $isException = is_array($expected) && $this->isExceptionClass($expected[0] ?? null);
+
+            if ($isException) {
+                [$exception, $exceptionMessage] = $expected;
+
+                try {
+                    $callback(app($class));
+
+                    $this->fail(sprintf('No excepted exception thrown [%s]: %s', $exception, $exceptionMessage));
+                } catch (AssertionFailedError $e) {
+                    throw $e;
+                } catch (Throwable $e) {
+                    $this->assertInstanceOf($exception, $e);
+                    $this->assertEquals($exceptionMessage, $e->getMessage());
+                    continue;
+                }
+            }
+
+            $result = $callback(app($class));
+
+            if (is_array($expected)) {
+                $this->assertContains($result, $expected, $this->getEqualsErrorMessage($name));
+                continue;
+            }
+
+            $this->assertEquals($expected, $result, $this->getEqualsErrorMessage($name));
+        }
+    }
+
+    private function getEqualsErrorMessage(string $calculatorName): string
+    {
+        return "{$calculatorName} calculator returned unexpected value";
     }
 }
