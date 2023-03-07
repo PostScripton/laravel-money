@@ -172,11 +172,13 @@ class MoneyServiceProvider extends PackageServiceProvider
             });
 
             if ($sameIsoCode || $sameNumCode) {
-                throw new CustomCurrencyTakenCodesException(
+                throw new Exception(sprintf(
+                    'Some custom currency uses the taken codes of ' .
+                    'the already existing currency: [%s] (%s|%s)',
                     $currency['full_name'],
                     $currency['iso_code'],
                     $currency['num_code'],
-                );
+                ));
             }
         });
     }
