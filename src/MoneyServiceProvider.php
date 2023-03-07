@@ -15,7 +15,6 @@ use PostScripton\Money\Calculators\NativeCalculator;
 use PostScripton\Money\Clients\RateExchangers\RateExchanger;
 use PostScripton\Money\Enums\CurrencyList;
 use PostScripton\Money\Enums\CurrencyPosition;
-use PostScripton\Money\Exceptions\CustomCurrencyTakenCodesException;
 use PostScripton\Money\Exceptions\RateExchangerException;
 use PostScripton\Money\Formatters\DefaultMoneyFormatter;
 use PostScripton\Money\Rules\Money as MoneyRule;
