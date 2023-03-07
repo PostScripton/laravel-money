@@ -64,6 +64,13 @@ class NativeCalculator implements Calculator
         return $this->trimZeros($this->format($result));
     }
 
+    public function negate(string $amount): string
+    {
+        $result = ((float) $amount) * -1;
+
+        return $this->trimZeros($this->format($result));
+    }
+
     private function isZero(string $amount): bool
     {
         return static::compare($amount, '0') === 0;

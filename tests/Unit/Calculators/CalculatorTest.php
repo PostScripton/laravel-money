@@ -220,6 +220,27 @@ class CalculatorTest extends TestCase
         ];
     }
 
+    /** @dataProvider providerNegate */
+    public function testNegate(string $amount, string $expected): void
+    {
+        $this->runTestsForCalculators(
+            callback: fn(Calculator $calculator) => $calculator->negate($amount),
+            expected: $expected,
+        );
+    }
+
+    public function providerNegate(): array
+    {
+        return [
+            ['amount' => '-0', 'expected' => '0'],
+            ['amount' => '0', 'expected' => '0'],
+            ['amount' => '10', 'expected' => '-10'],
+            ['amount' => '-10', 'expected' => '10'],
+            ['amount' => '0.25', 'expected' => '-0.25'],
+            ['amount' => '-0.25', 'expected' => '0.25'],
+        ];
+    }
+
     private function runTestsForCalculators(Closure $callback, mixed $expected): void
     {
         foreach (self::CALCULATORS as $name => $class) {
