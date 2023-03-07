@@ -82,6 +82,19 @@ class BcMathCalculator implements Calculator
         return ltrim($amount, '-');
     }
 
+    public function negate(string $amount): string
+    {
+        if ($this->isZero($amount)) {
+            return '0';
+        }
+
+        if (str_starts_with(haystack: $amount, needle: '-')) {
+            return $this->absolute($amount);
+        }
+
+        return '-' . $amount;
+    }
+
     private function isZero(string $amount): bool
     {
         return static::compare($amount, '0') === 0;

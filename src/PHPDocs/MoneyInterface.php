@@ -107,6 +107,13 @@ interface MoneyInterface
     public function absolute(): self;
 
     /**
+     * Negates the monetary value <p>
+     * `$ 10.25 -> $ -10.25` </p>
+     * @return self
+     */
+    public function negate(): self;
+
+    /**
      * Checks whether two monetary objects have the same currency
      * @param Money $money
      * @return bool

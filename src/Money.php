@@ -138,6 +138,13 @@ class Money implements MoneyInterface, JsonSerializable
         return $this;
     }
 
+    public function negate(): self
+    {
+        $this->amount = app(Calculator::class)->negate($this->amount);
+
+        return $this;
+    }
+
     public function isSameCurrency(Money $money): bool
     {
         return Currencies::same($this->getCurrency(), $money->getCurrency());

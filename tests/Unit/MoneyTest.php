@@ -262,6 +262,25 @@ class MoneyTest extends TestCase
         $this->assertEquals($absolute, $money->getAmount());
     }
 
+    /** @dataProvider providerNegate */
+    public function testNegate(string $amount, string $expected): void
+    {
+        $money = money($amount);
+
+        $money->negate();
+
+        $this->assertMoneyEquals(money($expected), $money);
+    }
+
+    public function providerNegate(): array
+    {
+        return [
+            ['amount' => '12345', 'expected' => '-12345'],
+            ['amount' => '-12345', 'expected' => '12345'],
+            ['amount' => '-0', 'expected' => '0'],
+        ];
+    }
+
     public function testCorrectWayToHandleImmutableMoneyObjects(): void
     {
         $m1 = money_parse('100');

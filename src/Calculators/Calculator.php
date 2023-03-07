@@ -19,4 +19,6 @@ interface Calculator
     public function floor(string $amount): string;
 
     public function absolute(string $amount): string;
+
+    public function negate(string $amount): string;
 }
