@@ -1,5 +1,5 @@
 # `getAmount()`
-gives you the formatted number.
+gives you the amount that is stored within the monetary object.
 
 ## Methods
 
@@ -10,8 +10,8 @@ gives you the formatted number.
 ## Usage
 
 ```php
-$money = money('12345000');
-$money->getAmount(); // "1 234.5"
+$money = money_parse('1 234.5');
+$money->getAmount(); // "12345000"
 ```
 
 ---
