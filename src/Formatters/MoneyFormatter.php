@@ -7,7 +7,7 @@ use PostScripton\Money\Money;
 interface MoneyFormatter
 {
     /**
-     * Represents a given monetary as a string
+     * Represents a given monetary object as a string
      * @param Money $money
      * @return string
      */
