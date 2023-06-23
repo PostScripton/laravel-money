@@ -10,6 +10,10 @@ class Parser
 {
     private const MONEY_REGEX = '/^(?:(?<start_currency>%s)\s?)?(?<amount>%s)(?:\s?(?<end_currency>%s))?$/';
 
+    /**
+     * @throws Exception
+     * @throws \PostScripton\Money\Exceptions\CurrencyDoesNotExistException
+     */
     public static function parse(string $money, Currency|string|null $currency = null): Money
     {
         $currency = Currency::getOrDefault($currency);

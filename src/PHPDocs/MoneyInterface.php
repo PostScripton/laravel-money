@@ -22,6 +22,7 @@ interface MoneyInterface
      * For converting between currencies use `convertInto()` method
      * @param Currency|string $currency
      * @return self
+     * @throws \PostScripton\Money\Exceptions\CurrencyDoesNotExistException
      */
     public function setCurrency(Currency|string $currency): self;
 
@@ -73,6 +74,7 @@ interface MoneyInterface
      * @param string $divisor <p>
      * A number on which the money will be divided </p>
      * @return self
+     * @throws \InvalidArgumentException
      */
     public function divide(string $divisor): self;
 
@@ -203,6 +205,7 @@ interface MoneyInterface
      * @param Carbon|null $date <p>
      * Historical mode. Pass the date you want to get rate of </p>
      * @return Money
+     * @throws \PostScripton\Money\Exceptions\CurrencyDoesNotExistException
      * @throws \PostScripton\Money\Exceptions\CurrenciesNotSupportedByRateExchangerException
      * @throws \PostScripton\Money\Exceptions\RateExchangerException
      */
@@ -216,6 +219,7 @@ interface MoneyInterface
      * Currency you want to convert to </p>
      * @param string $rate
      * @return Money
+     * @throws \PostScripton\Money\Exceptions\CurrencyDoesNotExistException
      */
     public function offlineConvertTo(Currency|string $currency, string $rate): Money;
 
@@ -256,6 +260,8 @@ interface MoneyInterface
      * Raw amount: 12345 stands for 1.2345 </p>
      * @param Currency|string|null $currency
      * @return self
+     * @throws \InvalidArgumentException
+     * @throws \PostScripton\Money\Exceptions\CurrencyDoesNotExistException
      */
     public static function of(string $amount, Currency|string|null $currency = null): Money;
 
@@ -263,6 +269,7 @@ interface MoneyInterface
      * Empty monetary object
      * @param Currency|string|null $currency
      * @return Money
+     * @throws \PostScripton\Money\Exceptions\CurrencyDoesNotExistException
      */
     public static function zero(Currency|string|null $currency = null): Money;
 
@@ -271,6 +278,8 @@ interface MoneyInterface
      * @param string $money
      * @param Currency|string|null $currency
      * @return self
+     * @throws \Exception
+     * @throws \PostScripton\Money\Exceptions\CurrencyDoesNotExistException
      */
     public static function parse(string $money, Currency|string|null $currency = null): Money;
 

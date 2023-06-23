@@ -25,6 +25,10 @@ class Money implements MoneyInterface, JsonSerializable
 
     private Currency $currency;
 
+    /**
+     * @throws InvalidArgumentException
+     * @throws \PostScripton\Money\Exceptions\CurrencyDoesNotExistException
+     */
     public function __construct(string $amount, Currency|string|null $currency = null)
     {
         if (! is_numeric($amount)) {
