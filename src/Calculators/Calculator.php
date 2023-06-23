@@ -12,6 +12,7 @@ interface Calculator
 
     public function multiply(string $amount, string $multiplier): string;
 
+    /** @throws \InvalidArgumentException */
     public function divide(string $amount, string $divisor): string;
 
     public function ceil(string $amount): string;

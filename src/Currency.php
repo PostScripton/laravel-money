@@ -42,6 +42,7 @@ class Currency
         $this->display = CurrencyDisplay::Symbol;
     }
 
+    /** @throws CurrencyDoesNotExistException */
     public static function code(string $code): ?self
     {
         if (is_numeric($code)) {
@@ -64,6 +65,7 @@ class Currency
         return $currency;
     }
 
+    /** @throws CurrencyDoesNotExistException */
     public static function get(Currency|string|null $currency): ?self
     {
         if (is_string($currency)) {
@@ -73,6 +75,7 @@ class Currency
         return $currency;
     }
 
+    /** @throws CurrencyDoesNotExistException */
     public static function getOrDefault(Currency|string|null $currency): self
     {
         return self::get($currency) ?? self::getDefault();

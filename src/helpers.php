@@ -10,6 +10,8 @@ if (! function_exists('money')) {
      * Raw amount: 12345 stands for 1.2345 </p>
      * @param Currency|string|null $currency
      * @return Money
+     * @throws InvalidArgumentException
+     * @throws \PostScripton\Money\Exceptions\CurrencyDoesNotExistException
      */
     function money(string $amount, Currency|string|null $currency = null): Money
     {
@@ -22,6 +24,7 @@ if (! function_exists('money_zero')) {
      * Empty monetary object
      * @param Currency|string|null $currency
      * @return Money
+     * @throws \PostScripton\Money\Exceptions\CurrencyDoesNotExistException
      */
     function money_zero(Currency|string|null $currency = null): Money
     {
@@ -35,6 +38,8 @@ if (! function_exists('money_parse')) {
      * @param string $money
      * @param Currency|string|null $currency
      * @return Money
+     * @throws \Exception
+     * @throws \PostScripton\Money\Exceptions\CurrencyDoesNotExistException
      */
     function money_parse(string $money, Currency|string|null $currency = null): Money
     {
