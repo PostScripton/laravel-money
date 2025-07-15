@@ -193,6 +193,15 @@ class MoneyTest extends TestCase
         $this->assertEquals('$ 11', $money->toString());
     }
 
+    /** @dataProvider compareDataProvider */
+    public function testCompare(string $value1, string $value2, int $result): void
+    {
+        $money1 = money_parse($value1);
+        $money2 = money_parse($value2);
+
+        $this->assertEquals($result, $money2->compare($money1));
+    }
+
     public function testNegativeCeil(): void
     {
         $money = money('-102500');
@@ -397,6 +406,27 @@ class MoneyTest extends TestCase
             [
                 'negative' => '-0',
                 'absolute' => '0',
+            ],
+        ];
+    }
+
+    protected function compareDataProvider(): array
+    {
+        return [
+            [
+                'value1' => '0',
+                'value2' => '10',
+                'result' => 1,
+            ],
+            [
+                'value1' => '10',
+                'value2' => '0',
+                'result' => -1,
+            ],
+            [
+                'value1' => '0',
+                'value2' => '0',
+                'result' => 0,
             ],
         ];
     }
