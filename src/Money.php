@@ -219,6 +219,15 @@ class Money implements MoneyInterface, JsonSerializable
         return app(Calculator::class)->compare($this->amount, $money->amount) === 0;
     }
 
+    public function compare(Money $money, bool $strict = true): int
+    {
+        if ($strict && $this->isDifferentCurrency($money)) {
+            return false;
+        }
+
+        return app(Calculator::class)->compare($this->amount, $money->amount);
+    }
+
     public function difference(Money $money): Money
     {
         if ($this->isDifferentCurrency($money)) {
